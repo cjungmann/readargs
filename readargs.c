@@ -2,6 +2,9 @@
 
 #include <string.h>
 
+EXPORT const char *g_command_name = NULL;
+EXPORT const raCache *g_cache = NULL;
+
 int is_intra_argument(raCache *cache)
 {
    return cache->sub_arg_ptr && cache->sub_arg_ptr > *cache->current_arg;
@@ -185,9 +188,6 @@ EXPORT void ra_show_options(FILE *f, const raCache *cache)
 
 #include "agents.c"
 #include "cache.c"
-
-const char *g_command_name = NULL;
-const raCache *g_cache = NULL;
 
 const char *path = NULL;
 int        count = 0;
