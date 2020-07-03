@@ -81,8 +81,7 @@ void ra_execute_option_read(const raOpt *option, const char *str);
 void ra_show_options(FILE *f, const raCache *cache);
 
 // Error messaging
-void ra_error_missing_target(const char *target_name);
-
+void ra_warn_invalid_input(FILE *f, const raOpt *option, const char *message);
 
 int arguments_required(const raOpt *opt);
 
