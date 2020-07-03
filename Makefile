@@ -12,22 +12,11 @@ MODULES = agents.o cache.o readargs.o
 
 CC = gcc
 
+libreadargs.so : $(patsubst %.c, %.o, $(wildcard *.c))
+	$(CC) $(LIB_CFLAGS) -o $@ $^
 
-
-libreadargs.so: $(MODULES)
-	$(CC) ${LIB_CFLAGS} -o libreadargs.so $(MODULES)
-
-agents.o: agents.c readargs.h
-	$(CC) ${LIB_CFLAGS} -c -o agents.o agents.c
-
-cache.o: cache.c readargs.h
-	$(CC) ${LIB_CFLAGS} -c -o cache.o cache.c
-
-readargs.o: readargs.c readargs.h
-	$(CC) ${LIB_CFLAGS} -c -o readargs.o readargs.c
-
-test:
-	$(CC) ${BASEFLAGS} -ggdb -o test test.c ${LOCAL_LINK}
+%.o : %.c
+	$(CC) -c ${LIB_CFLAGS} $< -o $@
 
 
 # define install_man_pages
@@ -41,10 +30,10 @@ test:
 # 	$(CC) ${LIB_DBFLAGS} -o libreadoptsd.so readopts.c
 # 	$(call build_tests)
 
-install:
-	install -D --mode=755 libreadargs.so /usr/lib
-	install -D --mode=775 readargs.h     /usr/local/include
-	# $(call install_man_pages)
+# install:
+# 	install -D --mode=755 libreadargs.so /usr/lib
+# 	install -D --mode=775 readargs.h     /usr/local/include
+# 	# $(call install_man_pages)
 
 # debug-install:
 # 	$(CC) ${LIB_DBFLAGS} -o libreadoptsd.so readopts.c
@@ -57,7 +46,6 @@ uninstall:
 	# rm -f /usr/share/man/man3/clargs.3.gz
 
 clean:
-	rm -f libreadargs.so
-	rm -f cache.o readargs.o agents.o
-	rm -f cache readargs 
-	rm -f test
+	rm -f *.so
+	rm -f *.o
+	rm -f $(patsubt %, %.c, $(wildcard *.c))
