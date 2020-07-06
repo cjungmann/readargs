@@ -1,51 +1,50 @@
-BASEFLAGS = -Wall -Werror -m64
-LIB_CFLAGS = ${BASEFLAGS} -I. -fPIC -shared -fvisibility=hidden
-LIB_DBFLAGS = ${LIB_CFLAGS} -ggdb
+CFLAGS = -Wall -Werror -pedantic -m64
+LIBFLAGS = -fPIC -shared -fvisibility=hidden
 
-# Allow program to link to local library
-LOCAL_LINK = -Wl,-R -Wl,. libreadargs.so
-LOCAL_LINK_D = -Wl,-R -Wl,. libreadargsd.so
+TARGET = libreadargs.so
 
-CFLAGS = -Wall -Werror -m64 -ggdb -I. -fPIC -shared
+# Test files do not belong in the library build
+OBJ_FILES := $(filter-out test%.c, $(wildcard *.c))
+OBJ_FILES := $(patsubst %.c, %.o, $(OBJ_FILES))
 
-MODULES = agents.o cache.o readargs.o
+ifeq ($(MAKECMDGOALS),debug)
+OBJ_FILES := $(patsubst %.o, %_debug.o, $(OBJ_FILES))
+CFLAGS += -ggdb -DDEBUG
+TARGET := $(subst .so,_debug.so, $(TARGET))
+endif
 
-CC = gcc
+LOCAL_LINK = -Wl,-R -Wl,. $(TARGET)
 
-libreadargs.so : $(patsubst %.c, %.o, $(wildcard *.c))
-	$(CC) $(LIB_CFLAGS) -o $@ $^
+.PHONY: debug
+debug : $(TARGET) $(patsubst %.c,%,$(wildcard test*.c))
 
-%.o : %.c
-	$(CC) -c ${LIB_CFLAGS} $< -o $@
+all : $(TARGET)
 
+# Make libraries
+$(TARGET): $(OBJ_FILES)
+	$(CC) $(CFLAGS) $(LIBFLAGS) -o $@ $(OBJ_FILES)
 
-# define install_man_pages
-# endef
+%_debug.o %.o: %.c
+	$(CC) $(CFLAGS) $(LIBFLAGS) -c -o $@ $<
 
-# define build_tests
-# 	$(CC) ${BASEFLAGS} -ggdb -o test test.c ${LOCAL_LINK_D}
-# endef
+# Make test programs that use the library
+test%: test%.c
+	@echo "[32;1m"Making $@"[m" from "[32;1m"$^"[m"
+	$(CC) $(CFLAGS) -I. -o $@ $< -Wl,-R -Wl,. $(TARGET)
 
-# debug:
-# 	$(CC) ${LIB_DBFLAGS} -o libreadoptsd.so readopts.c
-# 	$(call build_tests)
+.PHONY: install
+install:
+	install -D --mode=755 libreadargs.so /usr/local/lib
+	install -D --mode=755 readargs.h     /usr/local/include
 
-# install:
-# 	install -D --mode=755 libreadargs.so /usr/lib
-# 	install -D --mode=775 readargs.h     /usr/local/include
-# 	# $(call install_man_pages)
-
-# debug-install:
-# 	$(CC) ${LIB_DBFLAGS} -o libreadoptsd.so readopts.c
-# 	install -D --mode=755 libreadoptsd.so /usr/lib
-
+.PHONY: uninstall
 uninstall:
-	rm -f /usr/lib/libreadargs.so
-	rm -f /usr/lib/libreadargsd.so
+	rm -f /usr/local/lib/libreadargs.so
 	rm -f /usr/local/include/readargs.h
-	# rm -f /usr/share/man/man3/clargs.3.gz
 
+.PHONY: clean
 clean:
+	@echo Fixing to $(call fix_source,"agents_debug.o")
 	rm -f *.so
 	rm -f *.o
-	rm -f $(patsubt %, %.c, $(wildcard *.c))
+	rm -f $(patsubst test%.c,test%,$(wildcard test*.c))
