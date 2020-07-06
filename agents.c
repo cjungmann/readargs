@@ -88,7 +88,7 @@ void string_writer(FILE *f, const raOpt *opt)
       fprintf(f, "%s", *(const char**)opt->target);
 }
 
-EXPORT raAgent const ra_string_agent = { 1, string_reader, string_writer };
+EXPORT const raAgent ra_string_agent = { 1, string_reader, string_writer };
 
 /** default --help agent */
 
@@ -97,4 +97,4 @@ void show_help_reader(const raOpt *opt, const char *str)
    ra_show_options(stdout, g_cache);
 }
 
-EXPORT raAgent const ra_show_help_agent = { 0, show_help_reader, NULL };
+EXPORT const raAgent ra_show_help_agent = { 0, show_help_reader, NULL };
