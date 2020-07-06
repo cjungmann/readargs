@@ -52,7 +52,6 @@ int confirm_option_target(const raOpt *opt, const char *target_name)
    }
 }
 
-
 /*** construct ra_int_agent  */
 void int_reader(const raOpt *opt, const char *str)
 {
@@ -71,9 +70,6 @@ void int_writer(FILE *f, const raOpt *opt)
       fprintf(f, "%d", *(int*)opt->target);
 }
 
-EXPORT const raAgent ra_int_agent = { 1, int_reader, int_writer };
-
-
 /** construct ra_string_agent */
 
 void string_reader(const raOpt *opt, const char *str)
@@ -88,7 +84,6 @@ void string_writer(FILE *f, const raOpt *opt)
       fprintf(f, "%s", *(const char**)opt->target);
 }
 
-EXPORT const raAgent ra_string_agent = { 1, string_reader, string_writer };
 
 /** default --help agent */
 
@@ -97,4 +92,7 @@ void show_help_reader(const raOpt *opt, const char *str)
    ra_show_options(stdout, g_cache);
 }
 
+EXPORT const raAgent ra_int_agent       = { 1, int_reader, int_writer };
+EXPORT const raAgent ra_string_agent    = { 1, string_reader, string_writer };
 EXPORT const raAgent ra_show_help_agent = { 0, show_help_reader, NULL };
+
