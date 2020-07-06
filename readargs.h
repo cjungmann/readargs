@@ -55,9 +55,9 @@ extern const char *g_command_name;
 extern const raCache *g_cache;
 
 // Agent implementations
-const raAgent ra_int_agent;
-const raAgent ra_string_agent;
-const raAgent ra_show_help_agent;
+extern const raAgent ra_int_agent;
+extern const raAgent ra_string_agent;
+extern const raAgent ra_show_help_agent;
 
 /* Use for fifth (opt_count) parameter of ra_init_cache(): */
 #define OPTS_COUNT(a) (sizeof((a)) / sizeof(raOpt))
