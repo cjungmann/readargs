@@ -29,7 +29,6 @@ $(TARGET): $(OBJ_FILES)
 
 # Make test programs that use the library
 test%: test%.c
-	@echo "[32;1m"Making $@"[m" from "[32;1m"$^"[m"
 	$(CC) $(CFLAGS) -I. -o $@ $< -Wl,-R -Wl,. $(TARGET)
 
 .PHONY: install
