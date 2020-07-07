@@ -3,6 +3,8 @@
 #include <stdlib.h>   // for atoi()
 #include <string.h>   // for strchr()
 
+extern raScene g_scene;
+
 int str_is_number(const char *str)
 {
    static const char numlist[] = "-0123456789";
@@ -80,7 +82,7 @@ void string_writer(FILE *f, const raOpt *opt)
 
 raStatus show_help_reader(const raOpt *opt, const char *str)
 {
-   ra_show_options(stdout, g_cache);
+   ra_show_options(stdout);
    return RA_SUCCESS;
 }
 
