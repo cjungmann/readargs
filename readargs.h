@@ -7,7 +7,19 @@
 
 typedef struct _readargs_option raOpt;
 
-typedef void (*readargs_reader_t)(const raOpt *opt, const char *str);
+typedef enum {
+   RA_SUCCESS = 0,
+   RA_END_OPTIONS,
+   RA_END_ARGS,
+   RA_UNKNOWN_OPTION,
+   RA_MALFORMED_OPTION,
+   RA_INVALID_ARGUMENT,
+   RA_MISSING_TARGET,
+   RA_MISSING_AGENT,
+   RA_MISSING_READER
+} raStatus;
+
+typedef raStatus (*readargs_reader_t)(const raOpt *opt, const char *str);
 typedef void (*readargs_writer_t)(FILE *f, const raOpt *opt);
 
 typedef struct _readargs_agent
@@ -26,6 +38,24 @@ typedef struct _readargs_option
    void          *target;
 } raOpt;
 
+typedef struct _readargs_scene
+{
+   // Collections of CL arguments and option definitions
+   const char **args;
+   const char **args_end;
+   const raOpt *options;
+   const raOpt *options_end;
+} raScene;
+
+typedef struct _readargs_tour
+{
+   const char **current_arg;
+   const char *sub_arg_ptr;
+   const raOpt *current_option;
+   const raOpt *last_position_option;
+} raTour;
+
+
 typedef struct _readargs_cache
 {
    // Collections of CL arguments and option definitions
@@ -41,13 +71,6 @@ typedef struct _readargs_cache
    const char *sub_arg_ptr;
 } raCache;
 
-typedef enum {
-   RA_SUCCESS = 0,
-   RA_END_OPTIONS,
-   RA_UNKNOWN_OPTION,
-   RA_MALFORMED_OPTION
-} raStatus;
-
 /**
  * Global variables.
  */
@@ -55,6 +78,7 @@ extern const char *g_command_name;
 extern const raCache *g_cache;
 
 // Agent implementations
+extern const raAgent ra_flag_agent;
 extern const raAgent ra_int_agent;
 extern const raAgent ra_string_agent;
 extern const raAgent ra_show_help_agent;
@@ -70,18 +94,36 @@ int ra_init_cache(raCache *cache,
                   const raOpt *start_opt,
                   int opt_count);
 
-const char *ra_command_name(const raCache *cache);
+EXPORT const char *ra_command_name(void);
+EXPORT void ra_set_scene(const char **start_arg,
+                         int arg_count,
+                         const raOpt *start_opt,
+                         int opt_count);
+EXPORT raTour *ra_start_tour(raTour *tour);
+
+EXPORT const char* ra_advance_arg(raTour *tour);
+EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char **value);
+
+
+
+
+
 const char *ra_next_arg(raCache *cache);
 const char *ra_cur_arg(const raCache *cache);
 const raOpt *ra_cur_option(const raCache *cache);
 int ra_next_option(raCache *cache, const raOpt **option, const char **value);
 
-void ra_execute_option_read(const raOpt *option, const char *str);
+raStatus ra_execute_option_read(const raOpt *option, const char *str);
 
-void ra_show_options(FILE *f, const raCache *cache);
+void ra_show_options(FILE *f);
 
 // Error messaging
-void ra_warn_invalid_input(FILE *f, const raOpt *option, const char *message);
+
+void ra_write_warning(FILE *f,
+                      raStatus status,
+                      const raTour *tour,
+                      const raOpt *option,
+                      const char *value);
 
 int arguments_required(const raOpt *opt);
 
