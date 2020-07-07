@@ -2,18 +2,26 @@
 
 #include "readargs.h"
 
-int my_number = 0;
+raStatus show_option_values_reader(const raOpt *option, const char *value)
+{
+   ra_show_option_values(stderr);
+   return RA_SUCCESS;
+}
+
+raAgent show_value_agent = { 0, show_option_values_reader, NULL };
+
+const char *filepath = NULL;
+int        flag = 0;
+int        number = 0;
 
 raOpt options[] = {
-   {'h', "help", "This help output", &ra_show_help_agent, NULL},
-   {'v', "version", "Show current version.", NULL, NULL},
-   {'n', "number", "Set my_number value", &ra_int_agent, &my_number}
+   {'h', "help",     "This help output",      &ra_show_help_agent, NULL},
+   {'v', "version",  "Show current version.", NULL,                NULL},
+   {'f', "flag",     "set the flag.",         &ra_flag_agent,      &flag },
+   {'n', "number",   "Set my_number value",   &ra_int_agent,       &number },
+   {'p', "filepath", "Set file path.",        &ra_string_agent,    &filepath },
+   {'s', "show",     "Show option values",    &show_value_agent,   NULL }
 };
-
-void show_variables(void)
-{
-   printf("my_number: %d.\n", my_number);
-}
 
 int main(int argc, const char **argv)
 {
@@ -45,8 +53,6 @@ int main(int argc, const char **argv)
 
   arguments_end:
 
-   show_variables();
-   
    return 0;
    
 }
