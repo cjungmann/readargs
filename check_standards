@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# enum colors: { black=0, red, green, brown, blue, magenta, cyan, white }
+
+colargs="[36;1m"      # cyan
+colerr="[31;1m"       # bold red
+colerr2="[31;2m"        # normal red
+colsuccess="[32;1m"   # green
+colannounce="[34;1m"  # blue
+coloff="[m"
+
+announce_test()
+{
+    echo -n "[2J[0;0d"
+    echo
+    echo "${colannounce}${1}[m"
+}
+
+intertest_pause()
+{
+    local dummy
+    echo
+    read -n1 -pPress\ ENTER\ for\ the\ next\ test. dummy
+}
+
+run_test()
+{
+    local -a args=( "$@" )
+    echo "Running test with ${colargs}${args[0]}${coloff}. (${#args[@]})"
+    echo "${colargs}${args[@]}${coloff}"
+    echo
+    "${args[@]}" 2> >(while read line; do echo -e "${colerr}stderr:${colerr2} $line${coloff}" >&2; done)
+    if [ "$?" -eq 0 ]; then
+        echo "${colsuccess}Program \"${args[0]}\" ran successfully.[m"
+    else
+        echo "${colerr}Program \"${args[0]}\" returned an error.[m"
+    fi
+}
+
+announce_test "Run test, expecting no errors."
+run_test tar --exclude=.git --exclude=*.tar -cvf a.tar .
+intertest_pause
+
+announce_test "Test passing a non-number to a number option."
+run_test less -bten "$0"
+intertest_pause
+
+announce_test "Run test, expecting error for passing a string value to a number option."
+run_test tar --exclude=.git --exclude=*.tar --level=ten -cvf a.tar .
+intertest_pause
+
+announce_test "Run test, see what happens with unknown option, B."
+run_test tar --exclude=.git --exclude=*.tar -Bcvf a.tar .
+intertest_pause
+
+announce_test "Run test, see what happens with argument-taking option, f, followed by other characters."
+run_test tar --exclude=.git --exclude=*.tar -fcv a.tar .
+
+announce_test "Running grep as an example of exception to --long_option=value rule (grep also accepts --long_option value)."
+run_test grep --file=bogus
+run_test grep --file bogus
+
