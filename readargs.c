@@ -4,118 +4,21 @@
 
 extern raScene g_scene;
 
-int is_intra_argument(raCache *cache)
+EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str)
 {
-   return cache->sub_arg_ptr && cache->sub_arg_ptr > *cache->current_arg;
+   if (option && option->agent)
+   {
+      if (option->agent->reader)
+         return (*option->agent->reader)(option, str);
+      else
+         return RA_MISSING_READER;
+   }
+   else
+      return RA_MISSING_AGENT;
 }
 
-int arguments_required(const raOpt *opt)
-{
-   return opt && opt->agent && opt->agent->args_needed;
-}
 
 int is_named_option(const raOpt *opt) { return opt->letter > 0 || opt->label != NULL; }
-
-
-const raOpt *find_raOpt_by_label(const raCache *cache, const char *str)
-{
-   const raOpt *ptr = cache->options;
-   while (ptr < cache->options_end)
-   {
-      if (strcmp(ptr->label, str) == 0)
-         return ptr;
-
-      ++ptr;
-   }
-
-   return NULL;
-}
-
-const raOpt *find_raOpt_by_letter(const raCache *cache, char letter)
-{
-   const raOpt *ptr = cache->options;
-   while (ptr < cache->options_end)
-   {
-      if (ptr->letter == letter)
-         return ptr;
-
-      ++ptr;
-   }
-
-   return NULL;
-}
-
-EXPORT const char *ra_cur_arg(const raCache *cache)    { return *cache->current_arg; }
-EXPORT const raOpt *ra_cur_option(const raCache *cache) { return cache->current_option; }
-
-EXPORT int ra_next_option(raCache *cache, const raOpt **option, const char **value)
-{
-   const char **options_str = &cache->sub_arg_ptr;
-   const raOpt *opt = NULL;
-   /* const char *val = NULL; */
-
-   if (! *options_str || ! **options_str)
-   {
-      const char *arg = ra_next_arg(cache);
-
-      if (arg)
-      {
-         if (*arg == '-')
-         {
-            ++arg;
-            if (*arg == '-')
-            {
-               ++arg;
-               if (*arg)  // long option, double-dash + label
-               {
-                  opt = find_raOpt_by_label(cache, arg);
-                  if (opt)
-                  {
-                     *option = opt;
-                     return RA_SUCCESS;
-                  }
-               }
-               else       // options terminator, naked double-dash "--"
-               {
-                  ;
-               }
-            }
-            else          // short option, single-dash + letter
-               *options_str = arg;
-         }
-      }
-      else
-         return RA_END_OPTIONS;
-   }                      // end of ! *options_str
-      
-   if (*options_str)
-   {
-      char letter = **options_str;
-      ++*options_str;
-      opt = find_raOpt_by_letter(cache, letter);
-      if (opt)
-      {
-         *option = opt;
-         if (arguments_required(opt))
-         {
-            if (**options_str)
-            {
-               *value = *options_str;
-
-               // clear so next iteration will be new argument
-               *options_str = NULL;
-            }
-            else
-               *value = ra_next_arg(cache);
-         }
-         return RA_SUCCESS;
-      }
-      else
-         return RA_UNKNOWN_OPTION;
-   }
-
-   return 0;
-}
 
 /**
  * used by ra_show_options() to align text in columns.
@@ -137,19 +40,6 @@ int get_max_label_length(void)
    }
 
    return len_max;
-}
-
-EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str)
-{
-   if (option && option->agent)
-   {
-      if (option->agent->reader)
-         return (*option->agent->reader)(option, str);
-      else
-         return RA_MISSING_READER;
-   }
-   else
-      return RA_MISSING_AGENT;
 }
 
 void print_option_help(FILE *f, const raOpt *opt, int max_label)
@@ -186,51 +76,6 @@ EXPORT void ra_show_options(FILE *f)
    }
 }
 
-
-
-#ifdef READARGS_MAIN
-
-#include "agents.c"
-#include "cache.c"
-
-const char *path = NULL;
-int        count = 0;
-
-raOpt options[] = {
-   { 'h', "help", "This help output", &ra_show_help_agent, NULL  },
-   { 'v', "version", "Show version info.", NULL, NULL },
-   { 'n', "number", "Set a number", &ra_int_agent, &count },
-   { 'p', "path", "Set a path", &ra_string_agent, &path }
-};
-
-int main(int argc, const char **argv)
-{
-   raCache cache;
-   ra_init_cache(&cache, argv, argc, options, OPTS_COUNT(options));
-
-   g_command_name = ra_command_name(&cache);
-   g_cache = &cache;
-
-   const raOpt *option;
-   const char *value;
-
-   raStatus status;
-
-   while((status = ra_next_option(&cache, &option, &value)) != RA_END_OPTIONS)
-   {
-      if (status == RA_SUCCESS)
-         ra_execute_option_read(option, value);
-      else
-         printf("Unknown option.\n");
-   }
-
-   printf("\n\nResult of command line arguments:\n");
-   printf("path = %s\n", path);
-   printf("count = %d\n", count);
-
-   return 0;
-}
-#endif
 
 
 /* Local Variables: */
