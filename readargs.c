@@ -17,6 +17,12 @@ EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str)
       return RA_MISSING_AGENT;
 }
 
+EXPORT void ra_execute_option_write(FILE *f, const raOpt *option)
+{
+   if (option && option->agent && option->agent->writer)
+      (*option->agent->writer)(f, option);
+}
+
 
 int is_named_option(const raOpt *opt) { return opt->letter > 0 || opt->label != NULL; }
 
@@ -42,7 +48,7 @@ int get_max_label_length(void)
    return len_max;
 }
 
-void print_option_help(FILE *f, const raOpt *opt, int max_label)
+void print_option_names(FILE *f, const raOpt *opt, int max_label)
 {
    if (opt->letter > 0)
    {
@@ -53,7 +59,11 @@ void print_option_help(FILE *f, const raOpt *opt, int max_label)
    }
    else if (opt->label)
       fprintf(f, "    --%-*s  ", max_label, opt->label);
+}
 
+void print_option_help(FILE *f, const raOpt *opt, int max_label)
+{
+   print_option_names(f, opt, max_label);
    fputs( opt->description, f);
    fputc('\n', f);
 }
@@ -76,6 +86,27 @@ EXPORT void ra_show_options(FILE *f)
    }
 }
 
+int option_value_is_showable(const raOpt* option)
+{
+   return option && option->agent && option->agent->writer;
+}
+
+EXPORT void ra_show_option_values(FILE *f)
+{
+  int len_label = get_max_label_length();
+  const raOpt *ptr = g_scene.options;
+  while ( ptr < g_scene.options_end )
+  {
+     if (option_value_is_showable(ptr))
+     {
+        print_option_names(f, ptr, len_label);
+        ra_execute_option_write(f, ptr);
+        fprintf(f, "\n");
+     }
+        
+     ++ptr;
+  }
+}
 
 
 /* Local Variables: */

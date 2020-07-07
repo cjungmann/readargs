@@ -114,8 +114,10 @@ const raOpt *ra_cur_option(const raCache *cache);
 int ra_next_option(raCache *cache, const raOpt **option, const char **value);
 
 raStatus ra_execute_option_read(const raOpt *option, const char *str);
+void ra_execute_option_write(FILE *f, const raOpt *option);
 
 void ra_show_options(FILE *f);
+void ra_show_option_values(FILE *f);
 
 // Error messaging
 
