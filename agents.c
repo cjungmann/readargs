@@ -74,7 +74,13 @@ raStatus string_reader(const raOpt *opt, const char *str)
 void string_writer(FILE *f, const raOpt *opt)
 {
    if (confirm_option_target(opt))
-      fprintf(f, "%s", *(const char**)opt->target);
+   {
+      const char *val = *(const char**)opt->target;
+      if (val)
+         fprintf(f, "%s", val);
+      else
+         fprintf(f, "(null)");
+   }
 }
 
 
