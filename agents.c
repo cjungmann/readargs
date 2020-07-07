@@ -13,85 +13,78 @@ int str_is_number(const char *str)
    return ptr != NULL;
 }
 
-EXPORT void ra_warn_invalid_input(FILE *f, const raOpt *opt, const char *msg)
+int confirm_option_target(const raOpt *opt) { return opt->target != NULL; }
+
+/** ra_flag_agent function implementations */
+raStatus flag_reader(const raOpt *opt, const char *str)
 {
-   if (opt->letter > 0 || opt->label)
+   if (confirm_option_target(opt))
    {
-      fprintf(f, "%s: option ", g_command_name);
-      if (opt->letter > 0)
-      {
-         fprintf(f, "-%c", opt->letter);
-         if (opt->label)
-            fprintf(f, "/--%s", opt->label);
-      }
-      else if (opt->label)
-         fprintf(f, "--%s", opt->label);
-
-      fputc(' ', f);
-      fputs(msg, f);
-      fputc('\n', f);
+      *(int*)opt->target = 1;
+      return RA_SUCCESS;
    }
-}
-
-void warn_missing_target(const char *target_name)
-{
-   fprintf(stderr, "%s: agent requires cached target", g_command_name);
-   if (target_name)
-      fprintf(stderr, " (%s)", target_name);
-   fprintf(stderr, "\n");
-}
-
-int confirm_option_target(const raOpt *opt, const char *target_name)
-{
-   if (opt->target)
-      return 1;
    else
-   {
-      warn_missing_target(target_name);
-      return 0;
-   }
+      return RA_MISSING_TARGET;
 }
 
-/*** construct ra_int_agent  */
-void int_reader(const raOpt *opt, const char *str)
+void flag_writer(FILE *f, const raOpt *opt)
 {
-   if (confirm_option_target(opt, "int agent"))
+   if (confirm_option_target(opt))
+      fprintf(f, "%s", (*(int*)opt->target ? "true": "false" ));
+}
+
+/** ra_int_agent function implementations  */
+raStatus int_reader(const raOpt *opt, const char *str)
+{
+   if (confirm_option_target(opt))
    {
       if (str_is_number(str))
+      {
          *(int*)opt->target = atoi(str);
+         return RA_SUCCESS;
+      }
       else
-         ra_warn_invalid_input(stderr, opt, "requires a number");
+         return RA_INVALID_ARGUMENT;
    }
+   else
+      return RA_MISSING_TARGET;
 }
 
 void int_writer(FILE *f, const raOpt *opt)
 {
-   if (confirm_option_target(opt, "int agent"))
+   if (confirm_option_target(opt))
       fprintf(f, "%d", *(int*)opt->target);
 }
 
-/** construct ra_string_agent */
+/** ra_string_agent function implementations */
 
-void string_reader(const raOpt *opt, const char *str)
+raStatus string_reader(const raOpt *opt, const char *str)
 {
-   if (confirm_option_target(opt, "string agent"))
+   if (confirm_option_target(opt))
+   {
       *(const char**)opt->target = str;
+      return RA_SUCCESS;
+   }
+   else
+      return RA_MISSING_TARGET;
 }
 
 void string_writer(FILE *f, const raOpt *opt)
 {
-   if (confirm_option_target(opt, "string agent"))
+   if (confirm_option_target(opt))
       fprintf(f, "%s", *(const char**)opt->target);
 }
 
 
 /** default --help agent */
 
-void show_help_reader(const raOpt *opt, const char *str)
+raStatus show_help_reader(const raOpt *opt, const char *str)
 {
    ra_show_options(stdout, g_cache);
+   return RA_SUCCESS;
 }
 
+EXPORT const raAgent ra_flag_agent      = { 0, flag_reader, flag_writer };
 EXPORT const raAgent ra_int_agent       = { 1, int_reader, int_writer };
 EXPORT const raAgent ra_string_agent    = { 1, string_reader, string_writer };
 EXPORT const raAgent ra_show_help_agent = { 0, show_help_reader, NULL };
