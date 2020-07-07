@@ -2,8 +2,7 @@
 
 #include <string.h>
 
-EXPORT const char *g_command_name = NULL;
-EXPORT const raCache *g_cache = NULL;
+extern raScene g_scene;
 
 int is_intra_argument(raCache *cache)
 {
@@ -121,12 +120,12 @@ EXPORT int ra_next_option(raCache *cache, const raOpt **option, const char **val
 /**
  * used by ra_show_options() to align text in columns.
  */
-int get_max_label_length(const raCache *cache)
+int get_max_label_length(void)
 {
    int len_max = 0;
    int len_label;
-   const raOpt *ptr = cache->options;
-   while ( ptr < cache->options_end )
+   const raOpt *ptr = g_scene.options;
+   while ( ptr < g_scene.options_end )
    {
       if (ptr->label)
       {
@@ -140,11 +139,17 @@ int get_max_label_length(const raCache *cache)
    return len_max;
 }
 
-EXPORT void ra_execute_option_read(const raOpt *option, const char *str)
+EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str)
 {
-   const raAgent *agent = ((option && option->agent) ? option->agent : NULL);
-   if (agent && agent->reader)
-      (*agent->reader)(option, str);
+   if (option && option->agent)
+   {
+      if (option->agent->reader)
+         return (*option->agent->reader)(option, str);
+      else
+         return RA_MISSING_READER;
+   }
+   else
+      return RA_MISSING_AGENT;
 }
 
 void print_option_help(FILE *f, const raOpt *opt, int max_label)
@@ -163,16 +168,15 @@ void print_option_help(FILE *f, const raOpt *opt, int max_label)
    fputc('\n', f);
 }
 
-EXPORT void ra_show_options(FILE *f, const raCache *cache)
+EXPORT void ra_show_options(FILE *f)
 {
    // Get max width of names, then
    // pass the information to an
    // option printing function.
-   int len_label = get_max_label_length(cache);
+   int len_label = get_max_label_length();
 
-
-   const raOpt *ptr = cache->options;
-   while ( ptr < cache->options_end )
+   const raOpt *ptr = g_scene.options;
+   while ( ptr < g_scene.options_end )
    {
       if (is_named_option(ptr))
       {
