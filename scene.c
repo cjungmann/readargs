@@ -4,6 +4,31 @@
 
 raScene g_scene;
 
+EXPORT int ra_is_positional_option(const raOpt* opt)
+{
+   return opt->letter<1
+      && (opt->label && *opt->label == '*');
+}
+
+EXPORT int ra_is_named_option(const raOpt *opt)
+{
+   return opt->letter > 0
+      || (opt->label && *opt->label != '*');
+}
+
+EXPORT int ra_is_flag_option(const raOpt *opt)
+{
+   return opt->agent && opt->agent->args_needed==0;
+}
+
+EXPORT int ra_is_value_option(const raOpt *opt)
+{
+   return opt
+      && !(opt->label && *opt->label=='*')
+      && opt->agent
+      && opt->agent->args_needed;
+}
+
 const raOpt *seek_raOpt_by_label(const char *str)
 {
    const raOpt *ptr = g_scene.options;
@@ -32,11 +57,74 @@ const raOpt *seek_raOpt_by_letter(char letter)
    return NULL;
 }
 
-int are_arguments_required(const raOpt *opt)
+static const raOpt *position_options_done = (const raOpt*)(-1);
+
+const raOpt *seek_next_positional_option(raTour *tour)
 {
-   return opt && opt->agent && opt->agent->args_needed;
+   const raOpt *opt = tour->last_position_option;
+   if (opt == position_options_done)
+      return NULL;
+   else if (opt == NULL)
+      opt = g_scene.options - 1;
+
+   while (++opt < g_scene.options_end)
+      if (ra_is_positional_option(opt))
+      {
+         tour->last_position_option = opt;
+         return opt;
+      }
+
+   tour->last_position_option = position_options_done;
+   return NULL;
 }
 
+/**
+ * Count raOpts that are NOT positional.
+ *
+ * Use this function while displaying help to determine
+ * if an options section is required.
+ */
+EXPORT int ra_scene_options_count(void)
+{
+   int count = 0;
+   const raOpt *ptr = g_scene.options;
+   while (ptr < g_scene.options_end)
+   {
+      if (!ra_is_positional_option(ptr))
+         ++count;
+      
+      ++ptr;
+   }
+
+   return count;
+}
+
+/**
+ * Count raOpts that ARE positional.
+ *
+ * Use this function while displaying help to determine
+ * if an arguments section is required.
+ */
+EXPORT int ra_scene_arguments_count(void)
+{
+   int count = 0;
+   const raOpt *ptr = g_scene.options;
+   while (ptr < g_scene.options_end)
+   {
+      if (ra_is_positional_option(ptr))
+         ++count;
+      
+      ++ptr;
+   }
+
+   return count;
+}
+
+/**
+ * Reads the first command line argument and returns
+ * the portion that follows that last '/', or the entire
+ * argument if no '/' characters are found.
+ */
 EXPORT const char *ra_command_name(void)
 {
    const char *str = strrchr(*g_scene.args,'/');
@@ -46,6 +134,9 @@ EXPORT const char *ra_command_name(void)
       return *g_scene.args;
 }
 
+/**
+ * Initialize the readopts environment.
+ */
 EXPORT void ra_set_scene(const char **start_arg,
                          int arg_count,
                          const raOpt *start_opt,
@@ -57,6 +148,13 @@ EXPORT void ra_set_scene(const char **start_arg,
    g_scene.options_end = start_opt + opt_count;
 }
 
+/**
+ * Initialize a new tour of options.
+ * 
+ * This initializes a new set of pointers
+ * that tracks progress through argument/options
+ * processing.
+ */
 EXPORT raTour *ra_start_tour(raTour *tour)
 {
    tour->current_arg = g_scene.args;
@@ -68,6 +166,11 @@ EXPORT raTour *ra_start_tour(raTour *tour)
    return tour;
 }
 
+/**
+ * Returns the next command line argument,
+ * updating the raTour pointers to keep track
+ * of progress.
+ */
 EXPORT const char* ra_advance_arg(raTour *tour)
 {
    tour->sub_arg_ptr = NULL;
@@ -77,6 +180,17 @@ EXPORT const char* ra_advance_arg(raTour *tour)
       return NULL;
 }
 
+/**
+ * Get the next option, with a value if appropriate.
+ * 
+ * When the return value is RA_SUCCESS, the program
+ * should process the option.
+ *
+ * Non-RA_SUCCESS values may indicate the end of the
+ * list of arguments, an error, or the end of options.
+ * Process these values according to the needs of your
+ * program.
+ */
 EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char **value)
 {
    *option = NULL;
@@ -112,6 +226,16 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
             else          // short option, single-dash + letter
                *options_str = arg;
          }
+         else // not an option, read as next positional option
+         {
+            opt = seek_next_positional_option(tour);
+            if (opt)
+            {
+               *option = opt;
+               *value = arg;
+               return RA_SUCCESS;
+            }
+         }
       }
    }
       
@@ -123,7 +247,7 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
       if (opt)
       {
          *option = opt;
-         if (are_arguments_required(opt))
+         if (ra_is_value_option(opt))
          {
             if (**options_str)
             {
@@ -144,6 +268,12 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
    return RA_END_ARGS;
 }
 
+/**
+ * Convenience function for writing out an error.
+ *
+ * This function is used by the default raTour processor,
+ * but it is optional for custom implementations.
+ */
 EXPORT void ra_write_warning(FILE *f,
                              raStatus status,
                              const raTour *tour,
@@ -202,13 +332,17 @@ EXPORT void ra_write_warning(FILE *f,
 const char *path = NULL;
 int        number = 0;
 int        flag = 0;
+const char *input_file = NULL;
+int        repetitions = 0;
 
 raOpt options[] = {
-   { 'h', "help", "This help message",  NULL,             NULL },
-   { 'v', "version", "Version number",  NULL,             NULL },
-   { 'p', "path", "Set file path",      &ra_string_agent, &path },
-   { 'n', "number", "Set number value", &ra_int_agent,    &number },
-   { 'f', "flag", "Set flag to on",     &ra_flag_agent,   &flag }
+   { 'h', "help",    "This help message", NULL,             NULL },
+   { 'v', "version", "Version number",    NULL,             NULL },
+   { 'p', "path",    "Set file path",     &ra_string_agent, &path },
+   { 'n', "number",  "Set number value",  &ra_int_agent,    &number },
+   { 'f', "flag",    "Set flag to on",    &ra_flag_agent,   &flag },
+   { -1,  "*input",  "input file",        &ra_string_agent, &input_file },
+   { -1,  "*reps",   "repetitions",       &ra_int_agent,    &repetitions }
 };
 
 void display_option(const raOpt *option, const char *value, int wellformed)
