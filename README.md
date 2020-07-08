@@ -16,4 +16,12 @@ a double-dash.
 
 [GNU Arguments Standards](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax)
 
+### Examples Representing Standards
+
+Try the following in a console:
+
+- `grep --help` for the useful command
+- `help` alone to see builtin commands
+- `help cd` get help on one of the `help` builtins
+
 
