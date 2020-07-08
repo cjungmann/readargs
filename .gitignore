@@ -1,4 +1,5 @@
 cache
 readargs
+test_simple
 *.o
 *.so
