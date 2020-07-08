@@ -83,17 +83,28 @@ void string_writer(FILE *f, const raOpt *opt)
    }
 }
 
-
 /** default --help agent */
 
 raStatus show_help_reader(const raOpt *opt, const char *str)
 {
-   ra_show_options(stdout);
+   ra_show_help(stdout, 2, RAU_DEFAULT);
    return RA_SUCCESS;
 }
 
-EXPORT const raAgent ra_flag_agent      = { 0, flag_reader, flag_writer };
-EXPORT const raAgent ra_int_agent       = { 1, int_reader, int_writer };
-EXPORT const raAgent ra_string_agent    = { 1, string_reader, string_writer };
-EXPORT const raAgent ra_show_help_agent = { 0, show_help_reader, NULL };
+/** show option values */
+raStatus show_option_values_reader(const raOpt *opt, const char *value)
+{
+   fputs("\nCurrent option values:\n", stdout);
+   ra_show_scene_values(stdout);
+   putc('\n', stdout);
+   return RA_SUCCESS;
+}
 
+
+
+
+EXPORT const raAgent ra_flag_agent        = { 0, flag_reader, flag_writer };
+EXPORT const raAgent ra_int_agent         = { 1, int_reader, int_writer };
+EXPORT const raAgent ra_string_agent      = { 1, string_reader, string_writer };
+EXPORT const raAgent ra_show_help_agent   = { 0, show_help_reader, NULL };
+EXPORT const raAgent ra_show_values_agent = { 0, show_option_values_reader, NULL };
