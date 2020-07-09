@@ -28,15 +28,17 @@ EXPORT void ra_execute_option_write(FILE *f, const raOpt *option)
 
 typedef enum _raOpt_filter
 {
-   ROF_ALL = 0,
-   ROF_OPTIONS,
-   ROF_ARGS,
-   ROF_VALUES = 8
+   ROF_OPTIONS = 1,
+   ROF_ARGS = 2,
+   ROF_ALL = 3,
+   ROF_VALUES = 8,
+   ROF_TYPES = 16
 } OptFilter;
 
 int include_in_option_list(OptFilter set, const raOpt *ptr)
 {
    return set & ROF_ALL
+      || (set & ROF_TYPES && ra_is_writable_option(ptr))
       || (set & ROF_OPTIONS && ra_is_named_option(ptr))
       || (set & ROF_ARGS && ra_is_positional_option(ptr));
 }
@@ -49,7 +51,12 @@ int process_label(const raOpt *ptr, OptFilter set, char *buffer, int len_buffer)
    const char *str = NULL;
    len_label = len_value = 0;
 
-   if (set & ROF_OPTIONS)
+   if (set & ROF_TYPES)
+   {
+      if (!(str = ptr->type))
+         str = ptr->label;
+   }
+   else if (set & ROF_OPTIONS)
       str = ptr->label;
    else if (set & ROF_ARGS)
    {
@@ -199,13 +206,18 @@ int option_value_is_showable(const raOpt* option)
 
 EXPORT void ra_show_scene_values(FILE *f)
 {
-  int len_label = get_max_label_length(ROF_ALL);
+  int len_max = get_max_label_length(ROF_TYPES);
+  int len_buffer = len_max + 1;
+  char *buffer = (char*)alloca(len_buffer);
+
   const raOpt *ptr = g_scene.options;
   while ( ptr < g_scene.options_end )
   {
-     if (option_value_is_showable(ptr))
+     if (ra_is_writable_option(ptr))
      {
-        print_option_names(f, ptr, len_label, ROF_ALL);
+        set_label_value(ptr, ROF_TYPES, buffer, len_buffer);
+
+        fprintf(f, "%*s:  ", len_max, buffer);
         ra_execute_option_write(f, ptr);
         fprintf(f, "\n");
      }
