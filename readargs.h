@@ -111,6 +111,7 @@ int ra_is_positional_option(const raOpt* opt);
 int ra_is_named_option(const raOpt* opt);
 int ra_is_flag_option(const raOpt* opt);
 int ra_is_value_option(const raOpt* opt);
+int ra_is_writable_option(const raOpt* opt);
 
 
 const char *ra_next_arg(raCache *cache);
