@@ -19,14 +19,14 @@ typedef enum {
    RA_MISSING_READER
 } raStatus;
 
-typedef raStatus (*readargs_reader_t)(const raOpt *opt, const char *str);
-typedef void (*readargs_writer_t)(FILE *f, const raOpt *opt);
+typedef raStatus (*raReader)(const raOpt *opt, const char *str);
+typedef void (*raWriter)(FILE *f, const raOpt *opt);
 
 typedef struct _readargs_agent
 {
    int args_needed;
-   readargs_reader_t reader;
-   readargs_writer_t writer;
+   raReader reader;
+   raWriter writer;
 } raAgent;
 
 typedef struct _readargs_option
