@@ -29,6 +29,11 @@ EXPORT int ra_is_value_option(const raOpt *opt)
       && opt->agent->args_needed;
 }
 
+EXPORT int ra_is_writable_option(const raOpt *opt)
+{
+   return opt && opt->agent && opt->agent->writer;
+}
+
 const raOpt *seek_raOpt_by_label(const char *str)
 {
    const raOpt *ptr = g_scene.options;
