@@ -2,6 +2,7 @@
 
 #include "readargs.h"
 
+// Variables to be set with readopts library:
 const char *filepath = NULL;
 int        flag = 0;
 int        number = 0;
@@ -11,10 +12,10 @@ int        repetitions = 1;
 raOpt options[] = {
    {'h', "help",    NULL,    "This help output",     &ra_show_help_agent,  NULL },
    {'v', "version", NULL,    "Show current version.",NULL,                 NULL },
+   {'s', "show",    NULL,    "Show option values",   &ra_show_values_agent,NULL },
    {'f', "flag",    NULL,    "set the flag.",        &ra_flag_agent,       &flag },
    {'n', "number",  "NUMBER","Set my_number value",  &ra_int_agent,        &number },
    {'p', "filepath","FILEPATH","Set file path.",     &ra_string_agent,     &filepath },
-   {'s', "show",    NULL,    "Show option values",   &ra_show_values_agent,NULL },
    { -1, "*input",  "FILE",  "input file",           &ra_string_agent,     &input_file },
    { -1, "*reps",   "NUMBER","repetitions",          &ra_int_agent,        &repetitions }
 };
