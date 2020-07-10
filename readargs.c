@@ -174,7 +174,7 @@ void print_option_names(FILE *f, const raOpt *opt, int max_label, OptFilter set)
       fprintf(f, "    --%-*s  ", max_label, str);
 }
 
-void print_option_help(FILE *f, const raOpt *opt, int max_label, int indent)
+void describe_single_option(FILE *f, const raOpt *opt, int max_label, int indent)
 {
    if (indent>0)
       fprintf(f, "%*s", indent, "");
@@ -184,7 +184,7 @@ void print_option_help(FILE *f, const raOpt *opt, int max_label, int indent)
    fputc('\n', f);
 }
 
-void print_argument_help(FILE *f, const raOpt *opt, int max_label, int indent)
+void describe_single_argument(FILE *f, const raOpt *opt, int max_label, int indent)
 {
    const char *left = NULL;
 
@@ -197,33 +197,6 @@ void print_argument_help(FILE *f, const raOpt *opt, int max_label, int indent)
       left = opt->label;
 
    fprintf(f, "%-*s  %s\n", max_label, left, opt->description);
-}
-
-int option_value_is_showable(const raOpt* option)
-{
-   return option && option->agent && option->agent->writer;
-}
-
-EXPORT void ra_show_scene_values(FILE *f)
-{
-  int len_max = get_max_label_length(ROF_TYPES);
-  int len_buffer = len_max + 1;
-  char *buffer = (char*)alloca(len_buffer);
-
-  const raOpt *ptr = g_scene.options;
-  while ( ptr < g_scene.options_end )
-  {
-     if (ra_is_writable_option(ptr))
-     {
-        set_label_value(ptr, ROF_TYPES, buffer, len_buffer);
-
-        fprintf(f, "%*s:  ", len_max, buffer);
-        ra_execute_option_write(f, ptr);
-        fprintf(f, "\n");
-     }
-        
-     ++ptr;
-  }
 }
 
 /**
@@ -341,9 +314,8 @@ EXPORT void ra_describe_options(FILE *f, int indent)
    while ( ptr < g_scene.options_end )
    {
       if (ra_is_named_option(ptr))
-      {
-         print_option_help(f, ptr, len_label, indent);
-      }
+         describe_single_option(f, ptr, len_label, indent);
+
       ++ptr;
    }
 }
@@ -359,9 +331,8 @@ EXPORT void ra_describe_arguments(FILE *f, int indent)
    while ( ptr < g_scene.options_end )
    {
       if (ra_is_positional_option(ptr))
-      {
-         print_argument_help(f, ptr, len_label, indent);
-      }
+         describe_single_argument(f, ptr, len_label, indent);
+
       ++ptr;
    }
 }
@@ -387,6 +358,28 @@ EXPORT void ra_show_help(FILE *f, int indent, raUsage usage)
    }
 
    
+}
+
+EXPORT void ra_show_scene_values(FILE *f)
+{
+  int len_max = get_max_label_length(ROF_TYPES);
+  int len_buffer = len_max + 1;
+  char *buffer = (char*)alloca(len_buffer);
+
+  const raOpt *ptr = g_scene.options;
+  while ( ptr < g_scene.options_end )
+  {
+     if (ra_is_writable_option(ptr))
+     {
+        set_label_value(ptr, ROF_TYPES, buffer, len_buffer);
+
+        fprintf(f, "%*s:  ", len_max, buffer);
+        ra_execute_option_write(f, ptr);
+        fprintf(f, "\n");
+     }
+        
+     ++ptr;
+  }
 }
 
 
