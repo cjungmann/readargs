@@ -1,9 +1,8 @@
 #include "readargs.h"
+#include "invisible.h"
 
 #include <stdlib.h>   // for atoi()
 #include <string.h>   // for strchr()
-
-extern raScene g_scene;
 
 int str_is_number(const char *str)
 {
@@ -59,7 +58,6 @@ void int_writer(FILE *f, const raOpt *opt)
 }
 
 /** ra_string_agent function implementations */
-
 raStatus string_reader(const raOpt *opt, const char *str)
 {
    if (confirm_option_target(opt))
@@ -84,7 +82,6 @@ void string_writer(FILE *f, const raOpt *opt)
 }
 
 /** default --help agent */
-
 raStatus show_help_reader(const raOpt *opt, const char *str)
 {
    ra_show_help(stdout, 2, RAU_DEFAULT);
@@ -99,9 +96,6 @@ raStatus show_option_values_reader(const raOpt *opt, const char *value)
    putc('\n', stdout);
    return RA_SUCCESS;
 }
-
-
-
 
 EXPORT const raAgent ra_flag_agent        = { 0, flag_reader, flag_writer };
 EXPORT const raAgent ra_int_agent         = { 1, int_reader, int_writer };
