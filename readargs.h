@@ -29,15 +29,32 @@ typedef struct _readargs_agent
    raWriter writer;
 } raAgent;
 
+/** Library's fundamental data structure. */
 typedef struct _readargs_option
 {
-   int           letter;
-   const char    *label;
-   const char    *type;
-   const char    *description;
-   const raAgent *agent;
-   void          *target;
+   int           letter;         /* letter that invokes the option */
+   const char    *label;         /* long-option name invoking option */
+   const char    *type;          /* optional string to describe the value */
+   const char    *description;   /* documents option for help output */
+   const raAgent *agent;         /* contains function pointers that process the option */
+   void          *target;        /* optional pointer to data that will be modified by the agent */
 } raOpt;
+
+/**
+ * Special option types:
+ * - A flag option sets an integer value to 1.
+ *     Identified by the raAgent that has set
+ *     args_needed == 0;
+ *
+ * - A positional argument is invoked when an
+ *     argument is not preceeded by a short or
+ *     long option name.
+ *     This option type is indicated by two
+ *     raOpt settings: raOpt::letter < 0
+ *     and raOpt::label is prefixed with an
+ *     asterisk
+ */
+
 
 typedef struct _readargs_scene
 {
@@ -75,8 +92,7 @@ typedef struct _readargs_cache
 /**
  * Global variables.
  */
-extern const char *g_command_name;
-extern const raCache *g_cache;
+extern raScene g_scene;
 
 // Agent implementations
 extern const raAgent ra_flag_agent;
