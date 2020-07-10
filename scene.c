@@ -1,8 +1,8 @@
 #include "readargs.h"
+#include "invisible.h"
 
 #include <string.h>
-
-raScene g_scene;
+#include <alloca.h>
 
 EXPORT int ra_is_positional_option(const raOpt* opt)
 {
@@ -36,6 +36,19 @@ EXPORT int ra_is_writable_option(const raOpt *opt)
 
 const raOpt *seek_raOpt_by_label(const char *str)
 {
+   char *lstr = strchr(str,'=');
+
+   // We can't change terminate str at '=' because it's constant.
+   // So we make a copy stopping before '=' and pretend it's str.
+   if (lstr)
+   {
+      int len = lstr - str;
+      lstr = (char*)alloca(len+1);
+      memcpy(lstr, str, len);
+      lstr[len] = '\0';
+      str = lstr;
+   }
+
    const raOpt *ptr = g_scene.options;
    while (ptr < g_scene.options_end)
    {
@@ -62,8 +75,17 @@ const raOpt *seek_raOpt_by_letter(char letter)
    return NULL;
 }
 
+/** Marker to indicate completion of positional options.
+ * This value is written to raTour::last_position_option
+ * when there are no more positional argument.
+ */
 static const raOpt *position_options_done = (const raOpt*)(-1);
 
+/** Iteratively returns positional arguments.
+ * This function is called to determine which option
+ * to apply to command line arguments that are not 
+ * labeled options.
+ */
 const raOpt *seek_next_positional_option(raTour *tour)
 {
    const raOpt *opt = tour->last_position_option;
@@ -222,6 +244,16 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
                   if (opt)
                   {
                      *option = opt;
+
+                     if (ra_is_value_option(opt))
+                     {
+                        const char *tstr = strchr(arg,'=');
+                        if (tstr)
+                           *value = tstr+1;
+                        else
+                           *value = ra_advance_arg(tour);
+                     }
+
                      return RA_SUCCESS;
                   }
                }
