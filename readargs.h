@@ -168,7 +168,7 @@ void ra_write_warning(FILE *f,
 int arguments_required(const raOpt *opt);
 
 // Let the library do everything:
-raStatus ra_process_arguments(void);
+int ra_process_arguments(void);
 void ra_show_no_args_message(void);
 
 

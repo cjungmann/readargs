@@ -212,7 +212,7 @@ EXPORT void ra_show_no_args_message(void)
  *
  * Errors are reported through stderr
  */
-EXPORT raStatus ra_process_arguments(void)
+EXPORT int ra_process_arguments(void)
 {
    raTour tour;
    ra_start_tour(&tour);
@@ -220,6 +220,7 @@ EXPORT raStatus ra_process_arguments(void)
    raStatus status;
    const raOpt *option;
    const char *value;
+   int retval = 0;
 
    while(1)
    {
@@ -231,9 +232,10 @@ EXPORT raStatus ra_process_arguments(void)
                goto arguments_end;
             break;
 
-         case RA_CANCEL:
          case RA_END_ARGS:
          case RA_END_OPTIONS:
+            retval = 1;
+         case RA_CANCEL:
             goto arguments_end;
 
          default:
@@ -244,7 +246,7 @@ EXPORT raStatus ra_process_arguments(void)
 
   arguments_end:
 
-   return status;
+   return retval;
 }
 
 

@@ -31,7 +31,7 @@ int main(int argc, const char **argv)
    if (argc > 1)
    {
       // Use the simplest processing
-      if (ra_process_arguments() != RA_CANCEL)
+      if (ra_process_arguments())
       {
          printf("The arguments have been processed.\n"
                 "\n"
