@@ -201,6 +201,52 @@ EXPORT void ra_show_scene_values(FILE *f)
   }
 }
 
+EXPORT void ra_show_no_args_message(void)
+{
+   fprintf(stderr, "Usage: ");
+   ra_describe_usage(stderr, 0, RAU_DEFAULT);
+   fprintf(stderr, "Try '%s --help' for more information.\n", ra_command_name());
+}
+
+/** Loop through arguments with builtin processing
+ *
+ * Errors are reported through stderr
+ */
+EXPORT raStatus ra_process_arguments(void)
+{
+   raTour tour;
+   ra_start_tour(&tour);
+
+   raStatus status;
+   const raOpt *option;
+   const char *value;
+
+   while(1)
+   {
+      switch((status = ra_advance_option(&tour, &option, &value)))
+      {
+         case RA_SUCCESS:
+            status = ra_execute_option_read(option, value);
+            if (status==RA_CANCEL)
+               goto arguments_end;
+            break;
+
+         case RA_CANCEL:
+         case RA_END_ARGS:
+         case RA_END_OPTIONS:
+            goto arguments_end;
+
+         default:
+            ra_write_warning(stderr, status, &tour, option, value);
+            break;
+      }
+   }
+
+  arguments_end:
+
+   return status;
+}
+
 
 /* Local Variables: */
 /* compile-command: "b=readargs; \*/
