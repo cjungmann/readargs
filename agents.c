@@ -85,7 +85,7 @@ void string_writer(FILE *f, const raOpt *opt)
 raStatus show_help_reader(const raOpt *opt, const char *str)
 {
    ra_show_help(stdout, 2, RAU_DEFAULT);
-   return RA_SUCCESS;
+   return RA_CANCEL;
 }
 
 /** show option values */
