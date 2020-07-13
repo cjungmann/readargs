@@ -22,33 +22,28 @@ raOpt options[] = {
 
 int main(int argc, const char **argv)
 {
+   // Prepare the static library environment.
+   // The *scene* must be set before we can use
+   // any of the library output, so we don't check
+   // the argc value until the scene is set.
    ra_set_scene(argv, argc, options, OPTS_COUNT(options));
 
-   raTour tour;
-   ra_start_tour(&tour);
-
-   const raOpt *option;
-   const char *value;
-
-   raStatus status;
-
-   while(1)
+   if (argc > 1)
    {
-      switch((status = ra_advance_option(&tour, &option, &value)))
+      // Use the simplest processing
+      if (ra_process_arguments() != RA_CANCEL)
       {
-         case RA_SUCCESS:
-            status = ra_execute_option_read(option, value);
-            break;
-         case RA_END_ARGS:
-         case RA_END_OPTIONS:
-            goto arguments_end;
-         default:
-            ra_write_warning(stderr, status, &tour, option, value);
-            break;
+         printf("The arguments have been processed.\n"
+                "\n"
+                "The following report shows how the\n"
+                "variables have been affected by your\n"
+                "command line options.\n\n");
+
+         ra_show_scene_values(stdout);
       }
    }
-
-  arguments_end:
+   else
+      ra_show_no_args_message();
 
    return 0;
    
