@@ -9,6 +9,7 @@ typedef struct _readargs_option raOpt;
 
 typedef enum {
    RA_SUCCESS = 0,
+   RA_CANCEL,
    RA_END_OPTIONS,
    RA_END_ARGS,
    RA_UNKNOWN_OPTION,
@@ -165,6 +166,11 @@ void ra_write_warning(FILE *f,
                       const char *value);
 
 int arguments_required(const raOpt *opt);
+
+// Let the library do everything:
+raStatus ra_process_arguments(void);
+void ra_show_no_args_message(void);
+
 
 
 
