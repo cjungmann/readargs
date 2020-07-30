@@ -181,7 +181,7 @@ int get_max_argument_length(void)
  */
 EXPORT void ra_show_scene_values(FILE *f)
 {
-  int len_max = get_max_label_length(ROF_TYPES);
+  int len_max = get_max_label_length(ROF_OPTIONS);
   int len_buffer = len_max + 1;
   char *buffer = (char*)alloca(len_buffer);
 
@@ -190,7 +190,7 @@ EXPORT void ra_show_scene_values(FILE *f)
   {
      if (ra_is_writable_option(ptr))
      {
-        set_label_value(ptr, ROF_TYPES, buffer, len_buffer);
+        set_label_value(ptr, ROF_OPTIONS, buffer, len_buffer);
 
         fprintf(f, "%*s:  ", len_max, buffer);
         ra_execute_option_write(f, ptr);
