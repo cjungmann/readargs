@@ -1,3 +1,10 @@
+# According to guidelines in GNU Standards:
+SHELL = /bin/sh
+.SUFFIXES:
+.SUFFIXES: .c .o
+
+DESTDIR = /usr
+
 CFLAGS = -Wall -Werror -pedantic -m64
 LIBFLAGS = -fPIC -shared -fvisibility=hidden
 
@@ -15,6 +22,19 @@ endif
 
 LOCAL_LINK = -Wl,-R -Wl,. $(TARGET)
 
+define build_install_info
+	makeinfo docs/readargs.txi
+	gzip readargs.info
+	mv readargs.info.gz /usr/share/info
+	install-info --add-once /usr/share/info/readargs.info.gz /usr/share/info/dir
+endef
+
+define remove_info
+	rm -rf /usr/share/info/readargs.info.gz
+	install-info --delete /usr/share/info/readargs.info.gz /usr/share/info/dir
+endef
+
+
 .PHONY: debug
 debug : $(TARGET) $(patsubst %.c,%,$(wildcard test*.c))
 
@@ -22,6 +42,7 @@ all : $(TARGET)
 
 # Make libraries
 $(TARGET): $(OBJ_FILES)
+	@echo SRC Directory is $(srcdir) and DESTDIR is $(DESTDIR)
 	$(CC) $(CFLAGS) $(LIBFLAGS) -o $@ $(OBJ_FILES)
 
 %_debug.o %.o: %.c
@@ -33,13 +54,24 @@ test%: test%.c
 
 .PHONY: install
 install:
-	install -D --mode=755 libreadargs.so /usr/local/lib
-	install -D --mode=755 readargs.h     /usr/local/include
+	install -D --mode=755 libreadargs.so $(DESTDIR)/lib
+	install -D --mode=755 readargs.h     $(DESTDIR)/include
+	$(call build_install_info)
 
 .PHONY: uninstall
 uninstall:
-	rm -f /usr/local/lib/libreadargs.so
-	rm -f /usr/local/include/readargs.h
+	rm -f $(DESTDIR)/lib/libreadargs.so
+	rm -f $(DESTDIR)/include/readargs.h
+	rm -f /usr/share/info/readargs.info.gz
+	$(call remove_info)
+
+.PHONY: install-docs
+install-docs:
+	$(call build_install_info)
+
+.PHONY: uninstall-docs
+uninstall-docs:
+	$(call remove_info)
 
 .PHONY: clean
 clean:
@@ -47,3 +79,4 @@ clean:
 	rm -f *.so
 	rm -f *.o
 	rm -f $(patsubst test%.c,test%,$(wildcard test*.c))
+
