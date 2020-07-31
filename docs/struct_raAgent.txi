@@ -1,0 +1,61 @@
+@node raAgent object
+@section raAgent object
+
+Instances of this object execute whatever action is required
+when an option is invoked.  The basic @samp{raAgent} instance
+has three members.
+
+@menu
+* raAgent struct::
+* Predefined Agents::
+@end menu
+
+
+@node raAgent struct
+@subsection raAgent struct
+
+@example
+typedef struct _readargs_agent
+@{
+   int args_needed;
+   raReader reader;
+   raWriter writer;
+@} raAgent;
+@end example
+
+@itemize @bullet
+@item int args_needed
+
+This is usually either 0 or 1, representing a @emph{flag} option
+that takes no arguments, or a @emph{value} option that does take
+an argument.
+
+For providing @option{--help} display, the library only considers
+the value is zero or not.  A custom agent is free to use this
+member to indicate something else.
+
+@item raReader reader
+
+This is a pointer to a function that processes the option value.
+The function is called with a NULL @code{str} parameter for
+flag options.
+
+@item raWriter writer
+
+This is a pointer to a function that writes the value of the
+option.  This is only required if the developer intends to use
+the function @code{ra_show_scene_values()} to show the user
+the effective option values.
+
+@end itemize
+
+@node Predefined Agents
+@subsection Predefined Agents
+
+There are several builtin agents for servicing different data
+types.
+
+@xref{Builtin Option Agents}
+
+
+

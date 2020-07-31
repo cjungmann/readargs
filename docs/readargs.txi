@@ -42,6 +42,7 @@ options and values according to the GNU/Posix standard.
 * Introduction::
 * Options Interpretation::
 * Fundamentals::
+* Builtin Option Agents::
 * Basic Example::
 @end menu
 
@@ -59,6 +60,7 @@ options available to the user.
 
 @include interpretation.txi
 @include fundamentals.txi
+@include builtin_agents.txi
 @include basic_example.txi
 
 @bye

@@ -1,7 +1,5 @@
 @include struct_raOpt.txi
-
-@node raAgent object
-@section raAgent object
+@include struct_raAgent.txi
 
 @node raScene object
 @section raScene object

@@ -14,54 +14,91 @@ typedef struct _readargs_option
 @{
    int           letter;   /* letter that invokes the option */
    const char    *label;   /* long-option name invoking option */
-   const char    *type;    /* optional string to describe the value */
    const char    *comment; /* documents option for help output */
    const raAgent *agent;   /* object that manages value */
    void          *target;  /* optional data pointer */
+   const char    *type;    /* optional string to describe the value */
 @} raOpt;
 @end example
 
 @menu
 * raOpt letter::
 * raOpt label::
-* raOpt type::
 * raOpt comment::
 * raOpt agent::
 * raOpt target::
+* raOpt type::
 @end menu
 
 
+@c
 @node raOpt letter
 @subsection raOpt letter
 
 This struct element holds a single character value that
 can be used on the command line to invoke this option. For
-a @dfn{letter} value of @emph{b}, the option will be invoked
+a @samp{letter} value of @emph{b}, the option will be invoked
 with @code{-b}.
 
 If the letter invocation is to be ignored for this defined
-option, set the @dfn{letter} option to -1.
+option, set the @samp{letter} option to -1.
 
 @xref{Letter Options}
 
+@c
 @node raOpt label
 @subsection raOpt label
 
 This struct element is a string that will be matched if it follows
-a double-dash on the command line.  When an @dfn{raOpt} array element
+a double-dash on the command line.  When an @samp{raOpt} array element
 has set the @code{label} element to @emph{option}, invocating
-@code{--option} match this array element.
+@code{--option} matches this array element.
 
 @xref{Long Options}
 
+@c
+@node raOpt comment
+@subsection raOpt comment
+
+This struct element is used with a @option{--help} display to
+provide a short explanation of the option.
+
+@c
+@node raOpt agent
+@subsection raOpt agent
+
+This struct element is a @emph{pointer} to an @samp{raAgent} struct
+that is prepared to handle the option.  As a pointer, this element
+will usually be represented by a variable name preceded by a @key{&}
+to take its address.
+
+The @samp{raAgent} struct defines if an option is a value or 
+flat option (takes a value or not, respectively), and provides
+functions for reading and writing the option value.
+
+There are several builtin agents for common data types.  Creating
+custom agents is how the library may be extended.
+
+@xref{raAgent object}
+
+@c
+@node raOpt target
+@subsection raOpt target
+
+@c
 @node raOpt type
 @subsection raOpt type
+
+This optional element provides a string to use with an value option
+depiction in the @option{--help} option.
+
+When this element is set to 
 
 For options that take a value, this optional element provides a
 string to use in the @option{--help} option when depicting its usage.
 
 @noindent
-Given an @dfn{raOpt} is:
+Given an @samp{raOpt} is:
 
 @noindent
 @{'a', "add", "NUMBER", "Number to add", &ra_string_agent, &nvalue@}
@@ -72,17 +109,8 @@ the help depiction will be
 @noindent
 @samp{-a, --add=NUMBER  Number to add}.
 
-If @dfn{type} is set to NULL, the generic string @emph{VALUE} will
+If @samp{type} is set to NULL, the generic string @emph{VALUE} will
 be used in the usage depiction.
-
-@node raOpt comment
-@subsection raOpt comment
-
-@node raOpt agent
-@subsection raOpt agent
-
-@node raOpt target
-@subsection raOpt target
 
 
 

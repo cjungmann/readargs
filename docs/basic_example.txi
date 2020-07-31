@@ -11,10 +11,10 @@ int        value = 0;
 
 @anchor{xoptions}
 raOpt options[] = @{
-  @{'h', "help", NULL, "This help output", &ra_show_help_agent, NULL @},
-  @{'s', "show", NULL, "Show settings", &ra_show_values_agent, NULL @},
-  @{'n', "name", "STRING", "Set name value", &ra_string_agent, &name @},
-  @{'v', "value", "NUMBER", "Set number value", &ra_int_agent, &value @}
+  @{'h', "help",  "This help output", &ra_show_help_agent,    NULL,   NULL    @},
+  @{'s', "show",  "Show settings",    &ra_show_values_agent,  NULL,   NULL    @},
+  @{'n', "name",  "Set name value",   &ra_string_agent,       &name,  "STRING"@},
+  @{'v', "value", "Set number value", &ra_int_agent,          &value, "NUMBER"@}
 @};
 
 int main(int argc, const char **argv)

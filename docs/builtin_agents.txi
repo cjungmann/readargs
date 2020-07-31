@@ -1,0 +1,40 @@
+@node Builtin Option Agents
+@chapter Builtin Option Agents
+
+@menu
+* builtin ra_flag_agent::         Service raOpt objects with true/false integer target
+* builtin ra_int_agent::          Service raOpt objects with an integer target
+* builtin ra_string_agent::       Service raOpt objects with a const char* target
+* builtin ra_show_help_agent::    Service raOpt objects that show a help display
+* builtin ra_show_values_agent::  Service raOpt objects that show the printable option values
+@end menu
+
+@node builtin ra_flag_agent
+@section builtin ra_flag_agent
+
+@table @emph
+
+@item target
+Target must be an integer, initialized to 0 (false).
+@item writer
+When invoked, this raAgent writer will set the @emph{target}
+value to 1 (true).
+@item reader
+When invoked, this raAgent will return @emph{false} if the
+the value of @emph{target} is 0, and will return @emph{true}
+otherwise.
+@end table
+
+@node builtin ra_int_agent
+@section builtin ra_int_agent
+
+@node builtin ra_string_agent
+@section builtin ra_string_agent
+
+@node builtin ra_show_help_agent
+@section builtin ra_show_help_agent
+
+@node builtin ra_show_values_agent
+@section builtin ra_show_values_agent
+
+
