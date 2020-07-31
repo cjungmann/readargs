@@ -35,10 +35,10 @@ typedef struct _readargs_option
 {
    int           letter;   /* letter that invokes the option */
    const char    *label;   /* long-option name invoking option */
-   const char    *type;    /* optional string to describe the value */
    const char    *comment; /* documents option for help output */
    const raAgent *agent;   /* object that manages value */
    void          *target;  /* optional data pointer */
+   const char    *type;    /* optional string to describe the value */
 } raOpt;
 
 /**

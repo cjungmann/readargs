@@ -10,14 +10,14 @@ const char *input_file = NULL;
 int        repetitions = 1;
 
 raOpt options[] = {
-   {'h', "help",    NULL,    "This help output",     &ra_show_help_agent,  NULL },
-   {'v', "version", NULL,    "Show current version.",NULL,                 NULL },
-   {'s', "show",    NULL,    "Show option values",   &ra_show_values_agent,NULL },
-   {'f', "flag",    NULL,    "set the flag.",        &ra_flag_agent,       &flag },
-   {'n', "number",  "NUMBER","Set my_number value",  &ra_int_agent,        &number },
-   {'p', "filepath","FILEPATH","Set file path.",     &ra_string_agent,     &filepath },
-   { -1, "*input",  "FILE",  "input file",           &ra_string_agent,     &input_file },
-   { -1, "*reps",   "NUMBER","repetitions",          &ra_int_agent,        &repetitions }
+   {'h', "help",    "This help output",     &ra_show_help_agent,  NULL,        NULL       },
+   {'v', "version", "Show current version.",NULL,                 NULL,        NULL       },
+   {'s', "show",    "Show option values",   &ra_show_values_agent,NULL,        NULL       },
+   {'f', "flag",    "set the flag.",        &ra_flag_agent,       &flag,       NULL       },
+   {'n', "number",  "Set my_number value",  &ra_int_agent,        &number,     "NUMBER"   },
+   {'p', "filepath","Set file path.",       &ra_string_agent,     &filepath,   "FILEPATH" },
+   { -1, "*input",  "input file",           &ra_string_agent,     &input_file, "FILE"     },
+   { -1, "*reps",   "repetitions",          &ra_int_agent,        &repetitions,"NUMBER"   }
 };
 
 int main(int argc, const char **argv)
