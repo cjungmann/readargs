@@ -111,7 +111,7 @@ void describe_single_option(FILE *f, const raOpt *opt, int max_label, int indent
       fprintf(f, "%*s", indent, "");
 
    print_option_names(f, opt, max_label, ROF_OPTIONS | ROF_VALUES);
-   fputs( opt->description, f);
+   fputs( opt->comment, f);
    fputc('\n', f);
 }
 
@@ -128,7 +128,7 @@ void describe_single_argument(FILE *f, const raOpt *opt, int max_label, int inde
    else if (opt->label)
       left = opt->label;
 
-   fprintf(f, "%-*s  %s\n", max_label, left, opt->description);
+   fprintf(f, "%-*s  %s\n", max_label, left, opt->comment);
 }
 
 /** Write out a usage example.  Called by ra_show_help() */
@@ -158,7 +158,7 @@ EXPORT void ra_describe_usage(FILE *f, int indent, raUsage usage)
    fputc('\n', f);
 }
 
-/** Write out list of available command line options with descriptions.
+/** Write out list of available command line options with comments.
  *  Called by ra_show_help()
  */
 EXPORT void ra_describe_options(FILE *f, int indent)
@@ -178,7 +178,7 @@ EXPORT void ra_describe_options(FILE *f, int indent)
    }
 }
 
-/** Write out list of recognized arguments and their descriptions.
+/** Write out list of recognized arguments and their comments.
  *  Called by ra_show_help()
  */
 EXPORT void ra_describe_arguments(FILE *f, int indent)
