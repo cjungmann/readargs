@@ -1,0 +1,90 @@
+@node raOpt object
+@section raOpt object
+
+An instance of this struct defines the methods of
+invoking the option (letter and/or long option), a comment
+string used for @option{--help} output, and an agent for
+recording the user's command.
+
+An array of these objects defines the set of available
+command line options.  (@pxref{Basic Example})
+
+@example
+typedef struct _readargs_option
+@{
+   int           letter;   /* letter that invokes the option */
+   const char    *label;   /* long-option name invoking option */
+   const char    *type;    /* optional string to describe the value */
+   const char    *comment; /* documents option for help output */
+   const raAgent *agent;   /* object that manages value */
+   void          *target;  /* optional data pointer */
+@} raOpt;
+@end example
+
+@menu
+* raOpt letter::
+* raOpt label::
+* raOpt type::
+* raOpt comment::
+* raOpt agent::
+* raOpt target::
+@end menu
+
+
+@node raOpt letter
+@subsection raOpt letter
+
+This struct element holds a single character value that
+can be used on the command line to invoke this option. For
+a @dfn{letter} value of @emph{b}, the option will be invoked
+with @code{-b}.
+
+If the letter invocation is to be ignored for this defined
+option, set the @dfn{letter} option to -1.
+
+@xref{Letter Options}
+
+@node raOpt label
+@subsection raOpt label
+
+This struct element is a string that will be matched if it follows
+a double-dash on the command line.  When an @dfn{raOpt} array element
+has set the @code{label} element to @emph{option}, invocating
+@code{--option} match this array element.
+
+@xref{Long Options}
+
+@node raOpt type
+@subsection raOpt type
+
+For options that take a value, this optional element provides a
+string to use in the @option{--help} option when depicting its usage.
+
+@noindent
+Given an @dfn{raOpt} is:
+
+@noindent
+@{'a', "add", "NUMBER", "Number to add", &ra_string_agent, &nvalue@}
+
+@noindent
+the help depiction will be
+
+@noindent
+@samp{-a, --add=NUMBER  Number to add}.
+
+If @dfn{type} is set to NULL, the generic string @emph{VALUE} will
+be used in the usage depiction.
+
+@node raOpt comment
+@subsection raOpt comment
+
+@node raOpt agent
+@subsection raOpt agent
+
+@node raOpt target
+@subsection raOpt target
+
+
+
+
+

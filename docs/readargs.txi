@@ -1,0 +1,64 @@
+\input texinfo
+@setfilename readargs.info
+@settitle readargs library
+
+@c @dircategory and @direntry signal how to incorporate
+@c this content into the larger info environment.
+@c Consult the root `info` for direction, but in general
+@c try to add to an existing category and make the entry
+@c conform to existing entries.
+@dircategory Libraries
+@direntry
+* readargs: (readargs).       Documentation for readargs command line processing library
+@end direntry
+
+@c copyright notice.  to be included in @titlepage with @insertcopying
+@copying
+Offline Manual for readargs
+
+Copyright @copyright{} 2020 Charles P Jungmann
+@end copying
+
+@titlepage
+@title Using readargs
+@author Charles P. Jungmann
+@page
+@insertcopying
+@end titlepage
+
+
+@ifnottex
+@node Top
+@top Using readargs
+
+This manual is a reference for using the @emph{readargs} library.
+
+@emph{readargs} interprets command line arguments, identifying
+options and values according to the GNU/Posix standard.
+@end ifnottex
+
+@contents
+@menu
+* Introduction::
+* Options Interpretation::
+* Fundamentals::
+* Basic Example::
+@end menu
+
+@node Introduction
+@chapter Introduction
+
+This C library is designed to make it easy to handle command line
+options according to 
+@url{http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax, Posix standards with GNU long options}.
+Although powerful, the library is also extensible for unique
+requirements.
+
+A developer will create an array of structs that describe the
+options available to the user.
+
+@include interpretation.txi
+@include fundamentals.txi
+@include basic_example.txi
+
+@bye

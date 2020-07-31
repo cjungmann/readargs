@@ -1,0 +1,41 @@
+@node Basic Example
+@chapter Basic Example
+
+@example
+#include <stdio.h>
+#include <readargs.h>
+
+// Options definition section @xref{raOpt object}.
+const char *name = NULL;
+int        value = 0;
+
+@anchor{xoptions}
+raOpt options[] = @{
+  @{'h', "help", NULL, "This help output", &ra_show_help_agent, NULL @},
+  @{'s', "show", NULL, "Show settings", &ra_show_values_agent, NULL @},
+  @{'n', "name", "STRING", "Set name value", &ra_string_agent, &name @},
+  @{'v', "value", "NUMBER", "Set number value", &ra_int_agent, &value @}
+@};
+
+int main(int argc, const char **argv)
+@{
+   if (argc < 2)
+   @{
+      ra_show_no_args_message();
+      return 1;
+   @}
+   else
+   @{
+      ra_set_scene(argv, argc, options, OPTS_COUNT(options));
+      if (ra_process_arguments())
+      @{
+         printf("name is \"%s\"\n"
+                "value is %d\n",
+                name, value);
+      @}
+   @}
+
+   return 0;
+@}
+
+@end example

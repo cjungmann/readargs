@@ -1,0 +1,60 @@
+@node Options Interpretation
+@chapter Options Interpretation
+
+The goal of this library is to interpret command line options
+in accordance with the standards laid out in the following document:
+
+@uref{https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax,GNU argument syntax}
+
+@menu
+* Letter Options::
+* Long Options::
+* Positional Options::
+@end menu
+
+@node Letter Options
+@section Letter Options
+
+For @emph{flag} options that do not take a value, several
+option letters can be combined into a single option invocation,
+that is, @code{-bcde} will invoke @option{b}, @option{c},
+@option{d}, and @option{e}.
+
+For options that @strong{do} take a value, in accordance with
+Posix standards, the value is read either from the remaining
+characters in the option, or the command line argument that
+follows the option.
+
+For example, an option of @code{-bfoo} is the same as
+@code{-b foo}.
+
+If a user combines several option letters in a single invocation,
+flag options must precede value options or the letters following
+the first value option will be taken as the value, ignoring the
+flag option intentions of the following letters.
+
+For example, if @option{b} is a value option, a command line
+invocation @code{-bcde} will apply the value @emph{cde} to option
+@option{b}, even if @option{c}, @option{d}, and @option{e} are
+flag options.
+
+@node Long Options
+@section Long Options
+
+A long option is a word or phrase following a double-dash.
+@option{--option}.  According to the GNU standard, the value, 
+if needed, is separated from the option name by an equals sign
+@emph{=}.  So for @code{--option=multiple}, the value @emph{multiple}
+will be applied to option @option{option}.
+
+Many programs also accept a space-separated value, so this library
+will also accept that construction.  Thus, the following two option
+invocations are equivalent:
+
+@code{--option=multiple} and @code{--option multiple}.
+
+@node Positional Options
+@section Positional Options
+
+Command line arguments that are not options or associated with
+options will be applied to positional options.
