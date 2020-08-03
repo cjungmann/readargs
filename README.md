@@ -24,7 +24,7 @@ in the project.
 One of the features of this library is generated documentation
 displays.  There are functions for generating a usage display
 and a help display.  In this program listing, these functions
-used by the *ra_show_help_agent* which is invoked when a user
+called by the *ra_show_help_agent* which is invoked when a user
 enters a *-h* or *--help** option.
 
 ~~~c
