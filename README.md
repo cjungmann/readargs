@@ -9,8 +9,10 @@ My goal is to allow for a simple use case using only a few library
 functions, but to also allow customization for special cases.
 
 At first, the "documentation" will be sample C programs that
-demonstrate various customizations.  ---Eventually, I'll make
-simple **man** pages to help me remember syntax and variations.---
+demonstrate various customizations.  <strike>Eventually, I'll make
+simple **man** pages to help me remember syntax and variations.</strike>
+I am working on an **info** manual according to the recommendation
+in the [GNU Standards Document](https://www.gnu.org/prep/standards/html_node/GNU-Manuals.html)
 
 ## Sample Files
 
@@ -36,10 +38,18 @@ a long option whose value is in the following argument
 
 ### Examples Representing Standards
 
+While I have used command line options for a long time, I have never
+paid much attention to how command line options work.  While I
+add features to my version, I refer to how other well-known
+commands handle unusual options.
+
 Try the following in a console:
 
-- `grep --help` for the useful command
-- `help` alone to see builtin commands
-- `help cd` get help on one of the `help` builtins
+- `grep --help` for an example of *--_help* output
+- `help` alone to see builtin commands, from which some
+  examples might be found.
+- `help cd` get help on one of the *help* builtins
+- `xsltproc --help` to see options, especially *--param*,
+  which takes two values.
 
 
