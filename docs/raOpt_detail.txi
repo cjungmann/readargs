@@ -1,5 +1,5 @@
-@node raOpt object
-@section raOpt object
+@node raOpt Detail
+@section raOpt Detail
 
 An instance of this struct defines the methods of
 invoking the option (letter and/or long option), a comment
@@ -79,7 +79,7 @@ functions for reading and writing the option value.
 There are several builtin agents for common data types.  Creating
 custom agents is how the library may be extended.
 
-@xref{raAgent object}
+@xref{raAgent Detail}
 
 @c
 @node raOpt target

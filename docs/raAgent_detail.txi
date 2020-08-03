@@ -1,8 +1,8 @@
-@node raAgent object
-@section raAgent object
+@node raAgent Detail
+@section raAgent Detail
 
-Instances of this object execute whatever action is required
-when an option is invoked.  The basic @samp{raAgent} instance
+Instances of this type execute whatever action is required
+when an option is invoked.  The basic @code{raAgent} instance
 has three members.
 
 @menu
@@ -44,7 +44,7 @@ flag options.
 
 This is a pointer to a function that writes the value of the
 option.  This is only required if the developer intends to use
-the function @code{ra_show_scene_values()} to show the user
+the function @code{ra_show_scene_values} to show the user
 the effective option values.
 
 @end itemize

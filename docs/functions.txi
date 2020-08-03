@@ -1,0 +1,33 @@
+@node Library Functions
+@chapter Library Functions
+
+@menu
+* ra_process_arguments::       processes command line arguments
+* ra_set_scene::               register global variable with command line arguments
+                               list of option instructions
+* ra_show_no_args_message::    display usage message from option instructions
+@end menu
+
+@node ra_process_arguments
+@section ra_process_arguments
+
+@deftypefun int ra_process_arguments (void)
+This function is where everything happens.  It matches command
+line arguments with registered options and passes control to
+@emph{agent}s that respond to the matched options.
+@end deftypefun
+
+@deftypefun void ra_set_scene @
+            ({const char**} start_arg, @
+            int arg_count, @
+            {const raOpt *} start_opt, @
+            int opt_count)
+This function should be called in @
+@end deftypefun
+            
+
+@node ra_set_scene
+@section ra_set_scene
+
+@node ra_show_no_args_message
+@section ra_show_no_args_message

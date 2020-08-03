@@ -1,14 +1,17 @@
 @node Basic Example
 @chapter Basic Example
 
+The following basic @emph{readargs} implementation explains how
+to use this library.
+
 @example
 #include <stdio.h>
 #include <readargs.h>
 
-// Options definition section @xref{raOpt object}.
 const char *name = NULL;
 int        value = 0;
 
+// Options definition section @xref{raOpt summary}.
 @anchor{xoptions}
 raOpt options[] = @{
   @{'h', "help",  "This help output", &ra_show_help_agent,    NULL,   NULL    @},
@@ -21,12 +24,17 @@ int main(int argc, const char **argv)
 @{
    if (argc < 2)
    @{
+      // Using builtin usage message @xref{ra_show_no_args_message}
       ra_show_no_args_message();
       return 1;
    @}
    else
    @{
+      // Register the arguments and option instructions to
+      // the global raScene variable @xref{ra_set_scene}, @xref{raScene summary}
       ra_set_scene(argv, argc, options, OPTS_COUNT(options));
+
+      // Call the function that starts everything @xref{ra_process_arguments}
       if (ra_process_arguments())
       @{
          printf("name is \"%s\"\n"

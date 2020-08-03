@@ -1,8 +1,130 @@
-@include struct_raOpt.txi
-@include struct_raAgent.txi
+@node readargs Types
+@chapter readargs Types
 
-@node raScene object
-@section raScene object
+@c raReader function pointer type
+@anchor{raStatus summary}
+@deftp {Function Pointer} raStatus (*raReadeer)(const raOpt *opt, const char *str)
+The library will call function pointer of this type when processing
+command line arguments.
+@end deftp
 
-@node raCache object
-@section raCache object
+@deftp {Function Pointer} void (*raWriter)(FILE *f, const raOpt *opt)
+The library will call function pointer of this type when displaying
+the scene-registered variables.
+@end deftp
+
+@c raOpt 
+@anchor{raOpt summary}
+@deftp {Data Type} raOpt
+
+This data type associates an agent, a target, and a comment
+with an option letter or long-option label.  A set of @code{raOpt}
+objects defines the command line processing of a command.
+
+@table @code
+@item int letter
+The letter that invokes the option.  If this value is @code{0}, there
+is no letter invocation.  If this value is @code{-1} and @var{label} is
+@code{NULL}, the option is a position option.
+
+@item const char *label
+This is the long-option invocation, matched when this string
+is preceded by a double-dash.  If this value if @code{NULL}, there will
+be no long-option access to this option.
+
+@item const char *comment
+Used for the description of the option when showing the
+help display.
+
+@item const raAgent *agent
+A pointer to an @code{raAgent}, which coordinates the interaction
+of the command line settings and the application.
+
+There are several builtin agents, @xref{Builtin Option Agents}.
+
+Developers can also make custom agents.  @xref{raAgent Detail}.
+
+@end table
+@end deftp
+
+@c raAgent
+@anchor{raAgent summary}
+@deftp {Data Type} raAgent
+
+This data type contains tools needed to manage the
+settings of an option as defined by an @code{raOpt}.
+
+Minimally, it contains three members, but customized
+versions can longer according to the option's needs.
+
+@table @code
+@item int args_needed
+Minimally, this can be @code{0} or not @code{0}, with @code{0}
+indicating a @emph{flag} option that takes no arguments.
+Some customized versions may differentiate between @code{1}
+and something else.
+
+@item raReader reader
+This is a pointer to a function that processes the command
+line argument according to the matched option.
+
+@item raWriter writer
+This is a pointer to a function that writes the option
+value of the matched option.
+
+@end table
+@end deftp
+
+@c raScene
+@anchor{raScene summary}
+@deftp {Data Type} raScene
+
+This data type describes a static singleton global
+variable that preserves the sets of command line arguments
+and option definitions.
+
+@table @code
+@item const char **args
+Points to the first of the list of command line arguments
+
+@item const char **args_end
+Points to memory just past the last of the command line arguments.
+It is used to test if a given argument is within bounds.
+
+@item const raOpt *options
+Points to the first of the list of option definitions
+
+@item const raOpt *options_end
+Like @code{args_end}, this member is used to test if a given
+option is within bounds.
+
+@end table
+@end deftp
+
+@c raTour
+@anchor{raTour summary}
+@deftp {Data Type} raTour
+
+This data type tracks progress through a given @emph{tour} of
+command line arguments.
+
+@table @code
+@item const char **current_arg
+A pointer to one of the arguments found in the @code{raScene}.
+
+@item const cahr *sub_arg_ptr
+For arguments that are a list of single-letter options, this
+member tracks the progress through the set for each iteration
+of the options parsing loop.
+
+@item const raOpt *current_option
+Pointer to @code{raOpt} on which the current processing is
+working.
+
+@item const raOpt *last_position_option
+This keeps track of already processed position options
+to know which is next and to ensure each position option
+is used only once.
+@end table
+@end deftp
+
