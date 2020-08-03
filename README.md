@@ -9,8 +9,8 @@ My goal is to allow for a simple use case using only a few library
 functions, but to also allow customization for special cases.
 
 At first, the "documentation" will be sample C programs that
-demonstrate various customizations.  Eventually, I'll make
-simple **man** pages to help me remember syntax and variations.
+demonstrate various customizations.  ---Eventually, I'll make
+simple **man** pages to help me remember syntax and variations.---
 
 ## Sample Files
 
