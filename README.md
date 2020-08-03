@@ -14,6 +14,50 @@ simple **man** pages to help me remember syntax and variations.</strike>
 I am working on an **info** manual according to the recommendation
 in the [GNU Standards Document](https://www.gnu.org/prep/standards/html_node/GNU-Manuals.html)
 
+## Simple Example
+
+The following is a minimal example of a program using
+**readargs** to process the command line arguments. It is
+a shortened version of the **test_simple.c** file included
+in the project.
+
+Note that there are functions for generating a
+usage display and a help display.
+
+~~~c
+#include <stdio.h>
+#include <readargs.h>
+
+const char *filepath = NULL;
+int        iterations = 1;
+
+raOpt options[] = {
+   {'h', "help",     "This help output",   &ra_show_help_agent,   NULL,        NULL       },
+   {'s', "show",     "Show option values", &ra_show_values_agent, NULL,        NULL       },
+   {'p', "filepath", "Set file path.",     &ra_string_agent,      &filepath,   "FILEPATH" },
+   { -1, "*iter",    "iterations",         &ra_int_agent,         &iterations, "NUMBER"   }
+};
+
+int main(int argc, const char **argv)
+{
+   ra_set_scene(argv, argc, options, OPTS_COUNT(options));
+   if (argc > 1)
+   {
+      if (ra_process_arguments())
+      {
+         // The variables are set, begin the program.
+
+         // This function just shows the current option values.
+         ra_show_scene_values(stdout);
+      }
+   }
+   else
+      ra_show_no_args_message();
+
+   return 0;
+}
+~~~
+
 ## Sample Files
 
 The sample source files will be named **test_.c**, starting with
