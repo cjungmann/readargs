@@ -75,6 +75,48 @@ const raOpt *seek_raOpt_by_letter(char letter)
    return NULL;
 }
 
+/** Find matching option, if any.  May return a positional option if available.
+ *
+ * This function is meant to be used for an option with
+ * an optional value to determine if the value following
+ * the option invocation is another option.
+ *
+ * Using this function is not required, it's just offered
+ * in case a project requires discretion in handling the 
+ * optional value.
+ */
+EXPORT const raOpt *ra_seek_raOpt(const char *str, const raTour *tour)
+{
+   const raOpt *opt = NULL;
+   
+   if (*str == '-')         // is option
+   {
+      ++str;
+
+      if (*str == '-')    // may be long option
+      {
+         ++str;
+
+         if (!*str)         // is double-dash, cannot be an option
+            return NULL;
+         else
+            opt = seek_raOpt_by_label(str);
+      }
+      else                  // is short option
+         opt = seek_raOpt_by_letter(*str);
+   }
+   else                     // may be positional option
+   {
+      // Make tour copy to preserve constness
+      // for positional option search.
+      raTour ltour = *tour;
+
+      opt = seek_next_positional_option(&ltour);
+   }
+
+   return opt;
+}
+
 /** Marker to indicate completion of positional options.
  * This value is written to raTour::last_position_option
  * when there are no more positional argument.
@@ -207,6 +249,23 @@ EXPORT const char* ra_advance_arg(raTour *tour)
       return NULL;
 }
 
+/** Decrement current_arg so it will be considered for the next option.
+ *
+ * This function is used for an option that has an optional value,
+ * so the agent can consider the option's value and decide whether
+ * or not it is the value or it is the next option.
+ */
+EXPORT raStatus ra_retreat_arg(raTour *tour)
+{
+   if (tour->current_arg > g_scene.args)
+   {
+      --tour->current_arg;
+      return RA_SUCCESS;
+   }
+   else
+      return RA_BEFORE_ARGS;
+}
+
 /**
  * Get the next option, with a value if appropriate.
  * 
@@ -303,6 +362,16 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
    }
 
    return RA_END_ARGS;
+}
+
+EXPORT const char* ra_current_arg(const raTour *tour)
+{
+   return *(tour->current_arg);
+}
+
+EXPORT const raOpt *ra_current_option(const raTour *tour)
+{
+   return tour->current_option;
 }
 
 /**
