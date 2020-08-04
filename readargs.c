@@ -7,12 +7,12 @@
 EXPORT raScene g_scene;
 
 /** Optional, easy-to-use function for executing the read option of an raOpt. */
-EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str)
+EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str, raTour *tour)
 {
    if (option && option->agent)
    {
       if (option->agent->reader)
-         return (*option->agent->reader)(option, str);
+         return (*option->agent->reader)(option, str, tour);
       else
          return RA_MISSING_READER;
    }
@@ -227,7 +227,7 @@ EXPORT int ra_process_arguments(void)
       switch((status = ra_advance_option(&tour, &option, &value)))
       {
          case RA_SUCCESS:
-            status = ra_execute_option_read(option, value);
+            status = ra_execute_option_read(option, value, &tour);
             if (status==RA_CANCEL)
                goto arguments_end;
             break;
