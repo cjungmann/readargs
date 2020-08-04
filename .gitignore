@@ -1,5 +1,6 @@
 cache
 readargs
 test_simple
+test_vargs
 *.o
 *.so
