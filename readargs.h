@@ -5,13 +5,16 @@
 
 #include <stdio.h>
 
+// Forward declarations for function pointer typedefs
 typedef struct _readargs_option raOpt;
+typedef struct _readargs_tour raTour;
 
 typedef enum {
    RA_SUCCESS = 0,
    RA_CANCEL,
    RA_END_OPTIONS,
    RA_END_ARGS,
+   RA_BEFORE_ARGS,
    RA_UNKNOWN_OPTION,
    RA_MALFORMED_OPTION,
    RA_INVALID_ARGUMENT,
@@ -20,7 +23,7 @@ typedef enum {
    RA_MISSING_READER
 } raStatus;
 
-typedef raStatus (*raReader)(const raOpt *opt, const char *str);
+typedef raStatus (*raReader)(const raOpt *opt, const char *str, raTour *tour);
 typedef void (*raWriter)(FILE *f, const raOpt *opt);
 
 typedef struct _readargs_agent
@@ -75,21 +78,6 @@ typedef struct _readargs_tour
 } raTour;
 
 
-typedef struct _readargs_cache
-{
-   // Collections of CL arguments and option definitions
-   const char **args;
-   const char **args_end;
-   const raOpt *options;
-   const raOpt *options_end;
-
-   // Progress-tracking member variables
-   const char **current_arg;
-   const raOpt *current_option;
-   const raOpt *last_position_option;
-   const char *sub_arg_ptr;
-} raCache;
-
 /**
  * Global variables.
  */
@@ -106,22 +94,21 @@ extern const raAgent ra_show_values_agent;
 #define OPTS_COUNT(a) (sizeof((a)) / sizeof(raOpt))
 
 
-/** raCache manipulating functions */
-int ra_init_cache(raCache *cache,
-                  const char **start_arg,
+const char *ra_command_name(void);
+void ra_set_scene(const char **start_arg,
                   int arg_count,
                   const raOpt *start_opt,
                   int opt_count);
+raTour *ra_start_tour(raTour *tour);
 
-EXPORT const char *ra_command_name(void);
-EXPORT void ra_set_scene(const char **start_arg,
-                         int arg_count,
-                         const raOpt *start_opt,
-                         int opt_count);
-EXPORT raTour *ra_start_tour(raTour *tour);
+const char* ra_advance_arg(raTour *tour);
+raStatus ra_retreat_arg(raTour *tour);
+raStatus ra_advance_option(raTour *tour, const raOpt **option, const char **value);
 
-EXPORT const char* ra_advance_arg(raTour *tour);
-EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char **value);
+const char* ra_current_arg(const raTour *tour);
+const raOpt *ra_current_option(const raTour *tour);
+
+const raOpt *ra_seek_raOpt(const char *str, const raTour *tour);
 
 // Option characteristic test functions:
 int ra_is_positional_option(const raOpt* opt);
@@ -130,16 +117,10 @@ int ra_is_flag_option(const raOpt* opt);
 int ra_is_value_option(const raOpt* opt);
 int ra_is_writable_option(const raOpt* opt);
 
-
-const char *ra_next_arg(raCache *cache);
-const char *ra_cur_arg(const raCache *cache);
-const raOpt *ra_cur_option(const raCache *cache);
-int ra_next_option(raCache *cache, const raOpt **option, const char **value);
-
 int ra_scene_options_count(void);
 int ra_scene_arguments_count(void);
 
-raStatus ra_execute_option_read(const raOpt *option, const char *str);
+raStatus ra_execute_option_read(const raOpt *option, const char *str, raTour *tour);
 void ra_execute_option_write(FILE *f, const raOpt *option);
 
 void ra_show_scene_values(FILE *f);

@@ -17,7 +17,7 @@ int str_is_number(const char *str)
 int confirm_option_target(const raOpt *opt) { return opt->target != NULL; }
 
 /** ra_flag_agent function implementations */
-raStatus flag_reader(const raOpt *opt, const char *str)
+raStatus flag_reader(const raOpt *opt, const char *str, raTour *tour)
 {
    if (confirm_option_target(opt))
    {
@@ -35,7 +35,7 @@ void flag_writer(FILE *f, const raOpt *opt)
 }
 
 /** ra_int_agent function implementations  */
-raStatus int_reader(const raOpt *opt, const char *str)
+raStatus int_reader(const raOpt *opt, const char *str, raTour *tour)
 {
    if (confirm_option_target(opt))
    {
@@ -58,7 +58,7 @@ void int_writer(FILE *f, const raOpt *opt)
 }
 
 /** ra_string_agent function implementations */
-raStatus string_reader(const raOpt *opt, const char *str)
+raStatus string_reader(const raOpt *opt, const char *str, raTour *tour)
 {
    if (confirm_option_target(opt))
    {
@@ -82,14 +82,14 @@ void string_writer(FILE *f, const raOpt *opt)
 }
 
 /** default --help agent */
-raStatus show_help_reader(const raOpt *opt, const char *str)
+raStatus show_help_reader(const raOpt *opt, const char *str, raTour *tour)
 {
    ra_show_help(stdout, 2, RAU_DEFAULT);
    return RA_CANCEL;
 }
 
 /** show option values */
-raStatus show_option_values_reader(const raOpt *opt, const char *value)
+raStatus show_option_values_reader(const raOpt *opt, const char *value, raTour *tour)
 {
    fputs("\nCurrent option values:\n", stdout);
    ra_show_scene_values(stdout);
