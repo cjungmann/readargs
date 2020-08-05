@@ -139,4 +139,17 @@ into a Linux console to see what I'm considering.
 - `xsltproc --help` to see options, especially *--param*,
   which takes two values.
 
+## Installation
 
+At this point, this is designed on and for use in the Linux
+environment.  If there is any interest, I may consider supporting
+other environments.  Given an appropriate system, these steps
+will install this library:
+
+- Clone [the project](https://github.com/cjungmann/readargs)
+- Go to the directory and call `make`
+- Run test commands without further installation
+- Install for system-wide use: `sudo make install`
+- Install documentation only: `sudo make install-docs`
+  - Call `info readargs` to read the info file.
+- Uninstall with `sudo make uninstall`
