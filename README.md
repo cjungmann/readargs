@@ -8,6 +8,45 @@ a useful help screen to document the available options.
 My goal is to allow for a simple use case using only a few library
 functions, but to also allow customization for special cases.
 
+## Why Use This Library?
+
+With standrd **getopt** and **getopt_long** and other argument
+processing tools, one might not consider other options.  This library
+includes the following features:
+
+- Argument parsing follows the [GNU Arguments Standards](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax)
+  and the end user can put the options and non-options in any order.
+
+- Options are set up with an array of structs which can be *much
+  easier to scan than extended switch code*.
+
+- The target variable is associated with the option struct, 
+  making it possible to write as well as read an option's value.
+
+- One element of the options struct is an *agent* that handles the
+  interpretation of the option and may include a *writer* that is
+  used to display the option's current value.  There are some builtin
+  agents that handle flag, integer and string values, as well as
+  *help* and *show values* agents which are mentioned below.
+
+  - The *help* agent calls library functions that generate command
+    usage and options help displays.
+
+  - The *show values* agent prints the option values as affected
+    by the preceding arguments, and can be invoked multiple times
+    on the same set of arguments.  This is useful during
+    development, and may also be useful for end users to help
+    confirm appropriateness of option settings.
+
+- New agents can be designed to handle unusual needs.  Agents
+  can set variables, of course, but may also execute code
+  according to the developer's imagination.  There is a sample
+  C source file (*test_vargs.c*) that includes custom agents
+  for handling an optional-value option and a multiple-value
+  option.
+
+## Documentation
+
 At first, the "documentation" will be sample C programs that
 demonstrate various customizations.  <strike>Eventually, I'll make
 simple **man** pages to help me remember syntax and variations.</strike>
@@ -78,21 +117,22 @@ a double-dash.
 
 The library allows for an exception from these standards:
 the standard says that a long option should be followed
-by an *'='* character and the option value, without intervening
+by an '*=*' character and the option value, without intervening
 spaces (`--option=simple`).  I noticed that **grep** recognizes
 a long option whose value is in the following argument
 (`grep --file patterns.txt` is the same as `grep --file=patterns.txt`).
 
-### Examples Representing Standards
+### Standards Research
 
-While I have used command line options for a long time, I have never
-paid much attention to how command line options work.  While I
-add features to my version, I refer to how other well-known
-commands handle unusual options.
+While I have used command line options for a long time, I have
+never paid much attention to how command line options work.  While
+I add features to my version, I am referring to other established
+commands to see how they handle bad or incomplete options entry.
 
-Try the following in a console:
+I have used the following examples.  Type the `highlighted text`
+into a Linux console to see what I'm considering.
 
-- `grep --help` for an example of *--_help* output
+- `grep --help` for an example of *--help* output
 - `help` alone to see builtin commands, from which some
   examples might be found.
 - `help cd` get help on one of the *help* builtins
