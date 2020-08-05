@@ -17,11 +17,11 @@ includes the following features:
 - Argument parsing follows the [GNU Arguments Standards](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax)
   and the end user can put the options and non-options in any order.
 
-- Options are set up with an array of structs which can be *much
-  easier to scan than extended switch code*.
+- Options are set up with an array of structs which can be much
+  easier to scan than extended switch code.
 
 - The target variable is associated with the option struct, 
-  making it possible to write as well as read an option's value.
+  making it possible to read as well as write an option's value.
 
 - One element of the options struct is an *agent* that handles the
   interpretation of the option and may include a *writer* that is
