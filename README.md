@@ -11,8 +11,8 @@ functions, but to also allow customization for special cases.
 ## Why Use This Library?
 
 With standrd **getopt** and **getopt_long** and other argument
-processing tools, one might not consider other options.  This library
-includes the following features:
+processing tools, one might not consider yet another arguments
+library.  This library may entice you with the following features:
 
 - Argument parsing follows the [GNU Arguments Standards](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax)
   and the end user can put the options and non-options in any order.
