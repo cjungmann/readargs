@@ -27,12 +27,12 @@ includes the following features:
   interpretation of the option and may include a *writer* that is
   used to display the option's current value.  There are some builtin
   agents that handle flag, integer and string values, as well as
-  *help* and *show values* agents which are mentioned below.
+  **help** and **show values** agents that notify the user:
 
-  - The *help* agent calls library functions that generate command
+  - The **help** agent calls library functions that generate command
     usage and options help displays.
 
-  - The *show values* agent prints the option values as affected
+  - The **show values** agent prints the option values as affected
     by the preceding arguments, and can be invoked multiple times
     on the same set of arguments.  This is useful during
     development, and may also be useful for end users to help
