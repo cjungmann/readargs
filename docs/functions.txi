@@ -2,32 +2,22 @@
 @chapter Library Functions
 
 @menu
-* ra_process_arguments::       processes command line arguments
+basic functions
 * ra_set_scene::               register global variable with command line arguments
                                list of option instructions
-* ra_show_no_args_message::    display usage message from option instructions
+* ra_process_arguments::       processes command line arguments
+
+display function
+* ra_describe_arguments::      display non-options
+* ra_describe_options::        display list of options with comments
+* ra_describe_usage::          display usage template
+* ra_scene_options_count::     returns number of options
+* ra_scene_arguments_count::   returns number of argument (non-options)
+* ra_show_help::               builds full help screen with @code{ra_display_usage},
+                               @code{ra_display_options}, and @code{ra_display__arguments}
+* ra_show_no_args_message::    boilerplate message for no arguments
+* ra_show_scene_values::       display current option values
 @end menu
 
-@node ra_process_arguments
-@section ra_process_arguments
-
-@deftypefun int ra_process_arguments (void)
-This function is where everything happens.  It matches command
-line arguments with registered options and passes control to
-@emph{agent}s that respond to the matched options.
-@end deftypefun
-
-@deftypefun void ra_set_scene @
-            ({const char**} start_arg, @
-            int arg_count, @
-            {const raOpt *} start_opt, @
-            int opt_count)
-This function should be called in @
-@end deftypefun
-            
-
-@node ra_set_scene
-@section ra_set_scene
-
-@node ra_show_no_args_message
-@section ra_show_no_args_message
+@include functions_basic.txi
+@include functions_help.txi
