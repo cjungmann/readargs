@@ -41,9 +41,9 @@ options and values according to the GNU/Posix standard.
 @menu
 * Introduction::
 * Basic Example::             Learn usage from a simple test case
-* readargs Types::            Data types that support argument processing
-* Builtin Option Agents::     
+* Data Types::                Data types that support argument processing
 * Library Functions::         
+* Builtin Option Agents::     
 * Advanced Usage::            Customization
 * Options Interpretation::    Explains how the library reads arguments
 @end menu
@@ -62,8 +62,8 @@ options available to the user.
 
 @include basic_example.txi
 @include types.txi
-@include builtin_agents.txi
 @include functions.txi
+@include builtin_agents.txi
 @include advanced.txi
 @include interpretation.txi
 
