@@ -146,8 +146,9 @@ environment.  If there is any interest, I may consider supporting
 other environments.  Given an appropriate system, these steps
 will install this library:
 
-- Clone [the project](https://github.com/cjungmann/readargs)
-- Go to the directory and call `make`
+- `git clone https://github.com/cjungmann/readargs`
+- `cd readargs`
+- `make`
 - Run test commands without further installation
 - Install for system-wide use: `sudo make install`
 - Install documentation only: `sudo make install-docs`
