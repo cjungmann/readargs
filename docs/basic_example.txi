@@ -11,7 +11,7 @@ to use this library.
 const char *name = NULL;
 int        value = 0;
 
-// Options definition section @xref{raOpt summary}.
+// Options definition section @xref{raOpt}.
 @anchor{xoptions}
 raOpt options[] = @{
   @{'h', "help",  "This help output", &ra_show_help_agent,    NULL,   NULL    @},
@@ -31,7 +31,7 @@ int main(int argc, const char **argv)
    else
    @{
       // Register the arguments and option instructions to
-      // the global raScene variable @xref{ra_set_scene}, @xref{raScene summary}
+      // the global raScene variable @xref{ra_set_scene}, @xref{raScene}
       ra_set_scene(argv, argc, options, OPTS_COUNT(options));
 
       // Call the function that starts everything @xref{ra_process_arguments}
