@@ -1,0 +1,53 @@
+@node ra_describe_arguments
+@section ra_describe_arguments
+
+@deftypefun void ra_describe_arguments ({FILE*} f, int indent)
+@end deftypefun
+
+@node ra_describe_options
+@section ra_describe_options
+
+@deftypefun void ra_describe_options ({FILE*} f, int indent)
+@end deftypefun
+
+@node ra_describe_usage
+@section ra_describe_usage
+
+@deftypefun void ra_describe_usage ({FILE*} f, int indent, raUsage usage)
+@end deftypefun
+
+@node ra_scene_options_count
+@section ra_scene_options_count
+
+@deftypefun int ra_scene_options_count (void)
+Call this function before calling @code{ra_describe_options} so
+@code{ra_describe_options} can be skipped if there are no options.
+@end deftypefun
+
+@node ra_scene_arguments_count
+@section ra_scene_arguments_count
+
+@deftypefun int ra_scene_arguments_count (void)
+Call this function before calling @code{ra_describe_arguments} so
+@code{ra_describe_arguments} can be skipped if there are no arguments.
+@end deftypefun
+
+@node ra_show_help
+@section ra_show_help
+
+@deftypefun void ra_show_help ({FILE*} f, int indent, raUsage usage)
+@end deftypefun
+
+@node ra_show_no_args_message
+@section ra_show_no_args_message
+
+@deftypefun void ra_show_no_args_message (void)
+@end deftypefun
+
+
+@node ra_show_scene_values
+@section ra_show_scene_values
+
+@deftypefun void ra_show_scene_values ({FILE *} f)
+@end deftypefun
+
