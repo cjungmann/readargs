@@ -133,8 +133,8 @@ typedef enum _readargs_usage_format
    RAU_LONG
 } raUsage;
 
-void ra_describe_options(FILE *f, int indent);
 void ra_describe_arguments(FILE *f, int indent);
+void ra_describe_options(FILE *f, int indent);
 void ra_describe_usage(FILE *f, int indent, raUsage usage);
 void ra_show_help(FILE *f, int indent, raUsage usage);
 

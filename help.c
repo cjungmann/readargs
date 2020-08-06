@@ -131,6 +131,46 @@ void describe_single_argument(FILE *f, const raOpt *opt, int max_label, int inde
    fprintf(f, "%-*s  %s\n", max_label, left, opt->comment);
 }
 
+/** Write out list of recognized arguments and their comments.
+ *  Called by ra_show_help()
+ */
+EXPORT void ra_describe_arguments(FILE *f, int indent)
+{
+   // Get max width of names, then
+   // pass the information to an
+   // option printing function.
+   int len_label = get_max_argument_length();
+
+   const raOpt *ptr = g_scene.options;
+   while ( ptr < g_scene.options_end )
+   {
+      if (ra_is_positional_option(ptr))
+         describe_single_argument(f, ptr, len_label, indent);
+
+      ++ptr;
+   }
+}
+
+/** Write out list of available command line options with comments.
+ *  Called by ra_show_help()
+ */
+EXPORT void ra_describe_options(FILE *f, int indent)
+{
+   // Get max width of names, then
+   // pass the information to an
+   // option printing function.
+   int len_label = get_max_label_length(ROF_OPTIONS | ROF_VALUES);
+
+   const raOpt *ptr = g_scene.options;
+   while ( ptr < g_scene.options_end )
+   {
+      if (ra_is_named_option(ptr))
+         describe_single_option(f, ptr, len_label, indent);
+
+      ++ptr;
+   }
+}
+
 /** Write out a usage example.  Called by ra_show_help() */
 EXPORT void ra_describe_usage(FILE *f, int indent, raUsage usage)
 {
@@ -156,46 +196,6 @@ EXPORT void ra_describe_usage(FILE *f, int indent, raUsage usage)
    }
 
    fputc('\n', f);
-}
-
-/** Write out list of available command line options with comments.
- *  Called by ra_show_help()
- */
-EXPORT void ra_describe_options(FILE *f, int indent)
-{
-   // Get max width of names, then
-   // pass the information to an
-   // option printing function.
-   int len_label = get_max_label_length(ROF_OPTIONS | ROF_VALUES);
-
-   const raOpt *ptr = g_scene.options;
-   while ( ptr < g_scene.options_end )
-   {
-      if (ra_is_named_option(ptr))
-         describe_single_option(f, ptr, len_label, indent);
-
-      ++ptr;
-   }
-}
-
-/** Write out list of recognized arguments and their comments.
- *  Called by ra_show_help()
- */
-EXPORT void ra_describe_arguments(FILE *f, int indent)
-{
-   // Get max width of names, then
-   // pass the information to an
-   // option printing function.
-   int len_label = get_max_argument_length();
-
-   const raOpt *ptr = g_scene.options;
-   while ( ptr < g_scene.options_end )
-   {
-      if (ra_is_positional_option(ptr))
-         describe_single_argument(f, ptr, len_label, indent);
-
-      ++ptr;
-   }
 }
 
 /** Write out minimal help screen from raOpts array
