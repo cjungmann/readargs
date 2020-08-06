@@ -1,25 +1,110 @@
-@node readargs Types
-@chapter readargs Types
+@node Data Types
+@chapter Data Types
+
+@menu
+Function pointer types
+* raReader::      saves changes to an option's value
+* raWriter::      displays an option's value
+
+struct types
+* raAgent::       contains elements needed to process an option
+* raOpt::         holds details of an defined option
+* raScene::       preserves static values from @code{main} for navigating tours
+* raTour::        tracks progress through command line arguments
+@end menu
 
 @c raReader function pointer type
-@anchor{raStatus summary}
-@deftp {Function Pointer} raStatus (*raReadeer)(const raOpt *opt, const char *str)
-The library will call function pointer of this type when processing
-command line arguments.
+@node raReader
+@section raReader
+Function pointer called by the library to save an option's value,
+this is a @strong{mandatory} member of the @ref{raAgent} struct.
+
+@deftp {Function Pointer Type} raStatus (*raReadeer)(const raOpt *opt, const char *str, raTour *tour)
+
+@table @code
+@item const raOpt *opt
+This is the currently-matched option, which give access
+to the @code{target} void pointer element.  In most cases,
+the @code{reader} function casts and sets the @code{target}
+according to the value in @code{str}
+
+@item const char *str
+The command line argument string that is to be used for setting
+the @code{target}.  This is not always a separate command line
+argument because in some cases the option value is the remainder
+of the characters in a grouped short option invocation.
+
+@item raTour *tour
+The @code{raTour} object that is tracking the current pass
+through the command line arguments.  This can be used to consume
+or restore argument acccording to the needs of the particular
+item type.
+@end table
+
 @end deftp
 
-@deftp {Function Pointer} void (*raWriter)(FILE *f, const raOpt *opt)
-The library will call function pointer of this type when displaying
-the scene-registered variables.
+@c raWriter function pointer type
+@node raWriter
+@section raWriter
+Function pointer called by the library to write an option's value,
+this is an @emph{optional} member of the @ref{raAgent} struct.
+
+@deftp {Function Pointer Type} void (*raWriter)(FILE *f, const raOpt *opt)
+
+@table @code
+@item FILE *f
+Stream pointer to which the value is to be written.
+
+@item const raOpt *opt
+The current @code{raOpt} option, through which the @code{target}
+can be accessed for writing out the value.
+
+@end table
 @end deftp
+
+@c raAgent
+@node raAgent
+@section raAgent
+struct containing elements needed for the library to
+interact with the command line arguments.  A pointer to
+an instance of @code{raAgent} is one element of the
+@code{raOpt} struct (@pxref{raOpt}).
+
+Minimally, it contains three members, but customized
+versions can longer according to the option's needs.
+
+@deftp {Data Type} raAgent
+
+@table @code
+@item int args_needed
+Minimally, this can be @code{0} or not @code{0}, with @code{0}
+indicating a @emph{flag} option that takes no arguments.
+Some customized versions may differentiate between @code{1}
+and something else.
+
+@item raReader reader
+This is a pointer to a function that processes the command
+line argument according to the matched option.
+
+@item raWriter writer
+This is a pointer to a function that writes the option
+value of the matched option.
+
+@end table
+@end deftp
+
+There are several builtin agents, @xref{Builtin Option Agents}.
+
+Developers can also make custom agents.  @xref{raAgent Detail}.
 
 @c raOpt 
-@anchor{raOpt summary}
-@deftp {Data Type} raOpt
-
+@node raOpt
+@section raOpt
 This data type associates an agent, a target, and a comment
 with an option letter or long-option label.  A set of @code{raOpt}
 objects defines the command line processing of a command.
+
+@deftp {Data Type} raOpt
 
 @table @code
 @item int letter
@@ -40,48 +125,17 @@ help display.
 A pointer to an @code{raAgent}, which coordinates the interaction
 of the command line settings and the application.
 
-There are several builtin agents, @xref{Builtin Option Agents}.
-
-Developers can also make custom agents.  @xref{raAgent Detail}.
-
-@end table
-@end deftp
-
-@c raAgent
-@anchor{raAgent summary}
-@deftp {Data Type} raAgent
-
-This data type contains tools needed to manage the
-settings of an option as defined by an @code{raOpt}.
-
-Minimally, it contains three members, but customized
-versions can longer according to the option's needs.
-
-@table @code
-@item int args_needed
-Minimally, this can be @code{0} or not @code{0}, with @code{0}
-indicating a @emph{flag} option that takes no arguments.
-Some customized versions may differentiate between @code{1}
-and something else.
-
-@item raReader reader
-This is a pointer to a function that processes the command
-line argument according to the matched option.
-
-@item raWriter writer
-This is a pointer to a function that writes the option
-value of the matched option.
-
 @end table
 @end deftp
 
 @c raScene
-@anchor{raScene summary}
-@deftp {Data Type} raScene
-
+@node raScene
+@section raScene
 This data type describes a static singleton global
 variable that preserves the sets of command line arguments
 and option definitions.
+
+@deftp {Data Type} raScene
 
 @table @code
 @item const char **args
@@ -102,11 +156,13 @@ option is within bounds.
 @end deftp
 
 @c raTour
-@anchor{raTour summary}
-@deftp {Data Type} raTour
+@node raTour
+@section raTour
 
 This data type tracks progress through a given @emph{tour} of
 command line arguments.
+
+@deftp {Data Type} raTour
 
 @table @code
 @item const char **current_arg
