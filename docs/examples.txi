@@ -9,4 +9,4 @@ example source listings.
 @end menu
 
 
-@include example_basic.txi
+@include examples_basic.txi
