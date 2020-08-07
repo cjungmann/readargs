@@ -40,7 +40,7 @@ options and values according to the GNU/Posix standard.
 @contents
 @menu
 * Introduction::
-* Basic Example::             Learn usage from a simple test case
+* Code Examples::             Learn library usage through examples
 * Data Types::                Data types that support argument processing
 * Library Functions::         
 * Builtin Option Agents::     
@@ -60,7 +60,7 @@ requirements.
 A developer will create an array of structs that describe the
 options available to the user.
 
-@include basic_example.txi
+@include examples.txi
 @include types.txi
 @include functions.txi
 @include builtin_agents.txi
