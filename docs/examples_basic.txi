@@ -1,5 +1,5 @@
 @node Basic Example
-@chapter Basic Example
+@section Basic Example
 
 The following basic @emph{readargs} implementation explains how
 to use this library.
@@ -12,7 +12,6 @@ const char *name = NULL;
 int        value = 0;
 
 // Options definition section @xref{raOpt}.
-@anchor{xoptions}
 raOpt options[] = @{
   @{'h', "help",  "This help output", &ra_show_help_agent,    NULL,   NULL    @},
   @{'s', "show",  "Show settings",    &ra_show_values_agent,  NULL,   NULL    @},
