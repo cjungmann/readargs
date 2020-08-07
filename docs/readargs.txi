@@ -43,6 +43,7 @@ options and values according to the GNU/Posix standard.
 * Code Examples::             Learn library usage through examples
 * Data Types::                Data types that support argument processing
 * Library Functions::         
+* Preparing Options::
 * Builtin Option Agents::     
 * Advanced Usage::            Customization
 * Options Interpretation::    Explains how the library reads arguments
@@ -63,6 +64,7 @@ options available to the user.
 @include examples.txi
 @include types.txi
 @include functions.txi
+@include options.txi
 @include builtin_agents.txi
 @include advanced.txi
 @include interpretation.txi
