@@ -1,0 +1,6 @@
+@node Preparing Options
+@chapter Preparing Options
+
+The options to which your program will respond are determined
+by an array of @code{raOpt} structs.
+
