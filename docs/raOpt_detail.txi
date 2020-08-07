@@ -41,7 +41,7 @@ a @samp{letter} value of @emph{b}, the option will be invoked
 with @code{-b}.
 
 If the letter invocation is to be ignored for this defined
-option, set the @samp{letter} option to -1.
+option, set the @samp{letter} option to 0.
 
 @xref{Letter Options}
 
