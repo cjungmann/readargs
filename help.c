@@ -4,40 +4,40 @@
 #include <string.h>
 #include <alloca.h>
 
-/** Prints available option IDs, either or both the letter and label
- * Called by describe_single_option().
+/** Prints available action IDs, either or both the letter and label
+ * Called by describe_single_action().
  */
-void print_option_names(FILE *f, const raOpt *opt, int max_label, OptFilter set)
+void print_action_names(FILE *f, const raAction *act, int max_label, ActFilter set)
 {
-   int len_label = get_label_length(opt, set);
+   int len_label = get_label_length(act, set);
    char *str = (char*)alloca(len_label+1);
-   set_label_value(opt, set, str, len_label+1);
+   set_label_value(act, set, str, len_label+1);
 
-   if (opt->letter > 0)
+   if (act->letter > 0)
    {
       if (str)
-         fprintf(f, "-%c, --%-*s  ", opt->letter, max_label, str);
+         fprintf(f, "-%c, --%-*s  ", act->letter, max_label, str);
       else
-         fprintf(f, "-%c    %-*s  ", opt->letter, max_label, "");
+         fprintf(f, "-%c    %-*s  ", act->letter, max_label, "");
    }
    else if (str)
       fprintf(f, "    --%-*s  ", max_label, str);
 }
 
-/** Write out list of flag options in form "[-abcde]"
+/** Write out list of flag actions in form "[-abcde]"
  * Used by ra_describe_usage()
  *
- * Only creates output if there is at least flag option.
+ * Only creates output if there is at least flag action.
  */
-void print_usage_flag_options(FILE *f)
+void print_usage_flag_actions(FILE *f)
 {
    int count = 0;
-   const raOpt *ptr;
+   const raAction *ptr;
 
-   ptr = g_scene.options;
-   while (ptr < g_scene.options_end)
+   ptr = g_scene.actions;
+   while (ptr < g_scene.actions_end)
    {
-      if (ra_is_flag_option(ptr) && ptr->letter > 0)
+      if (ra_is_flag_action(ptr) && ptr->letter > 0)
          ++count;
 
       ++ptr;
@@ -46,10 +46,10 @@ void print_usage_flag_options(FILE *f)
    if (count)
    {
       fprintf(f, " [-");
-      ptr = g_scene.options;
-      while (ptr < g_scene.options_end)
+      ptr = g_scene.actions;
+      while (ptr < g_scene.actions_end)
       {
-         if (ra_is_flag_option(ptr) && ptr->letter > 0)
+         if (ra_is_flag_action(ptr) && ptr->letter > 0)
             fputc(ptr->letter, f);
 
          ++ptr;
@@ -58,17 +58,17 @@ void print_usage_flag_options(FILE *f)
    }
 }
 
-/** Prints any value options found for ra_describe_usage()
+/** Prints any value actions found for ra_describe_usage()
  * with RAU_LONG usage.
  */
-void print_usage_value_options(FILE *f)
+void print_usage_value_actions(FILE *f)
 {
-   const raOpt *ptr;
+   const raAction *ptr;
 
-   ptr = g_scene.options;
-   while (ptr < g_scene.options_end)
+   ptr = g_scene.actions;
+   while (ptr < g_scene.actions_end)
    {
-      if (ra_is_value_option(ptr))
+      if (ra_is_value_action(ptr))
       {
          fprintf(f, " [");
          if (ptr->letter)
@@ -88,12 +88,12 @@ void print_usage_value_options(FILE *f)
 
 void print_usage_arguments(FILE *f)
 {
-   const raOpt *ptr;
+   const raAction *ptr;
 
-   ptr = g_scene.options;
-   while (ptr < g_scene.options_end)
+   ptr = g_scene.actions;
+   while (ptr < g_scene.actions_end)
    {
-      if (ra_is_positional_option(ptr))
+      if (ra_is_positional_action(ptr))
       {
          if (ptr->type)
             fprintf(f, " %s", ptr->type);
@@ -104,31 +104,31 @@ void print_usage_arguments(FILE *f)
 
 
 
-/** Per-line function used by ra_describe_options() */
-void describe_single_option(FILE *f, const raOpt *opt, int max_label, int indent)
+/** Per-line function used by ra_describe_actions() */
+void describe_single_action(FILE *f, const raAction *act, int max_label, int indent)
 {
    if (indent>0)
       fprintf(f, "%*s", indent, "");
 
-   print_option_names(f, opt, max_label, ROF_OPTIONS | ROF_VALUES);
-   fputs( opt->comment, f);
+   print_action_names(f, act, max_label, ROF_ACTIONS | ROF_VALUES);
+   fputs( act->comment, f);
    fputc('\n', f);
 }
 
 /** Per-line function used by ra_describe_arguments() */
-void describe_single_argument(FILE *f, const raOpt *opt, int max_label, int indent)
+void describe_single_argument(FILE *f, const raAction *act, int max_label, int indent)
 {
    const char *left = NULL;
 
    if (indent>0)
       fprintf(f, "%*s", indent, "");
 
-   if (opt->type)
-      left = opt->type;
-   else if (opt->label)
-      left = opt->label;
+   if (act->type)
+      left = act->type;
+   else if (act->label)
+      left = act->label;
 
-   fprintf(f, "%-*s  %s\n", max_label, left, opt->comment);
+   fprintf(f, "%-*s  %s\n", max_label, left, act->comment);
 }
 
 /** Write out list of recognized arguments and their comments.
@@ -138,34 +138,34 @@ EXPORT void ra_describe_arguments(FILE *f, int indent)
 {
    // Get max width of names, then
    // pass the information to an
-   // option printing function.
+   // action printing function.
    int len_label = get_max_argument_length();
 
-   const raOpt *ptr = g_scene.options;
-   while ( ptr < g_scene.options_end )
+   const raAction *ptr = g_scene.actions;
+   while ( ptr < g_scene.actions_end )
    {
-      if (ra_is_positional_option(ptr))
+      if (ra_is_positional_action(ptr))
          describe_single_argument(f, ptr, len_label, indent);
 
       ++ptr;
    }
 }
 
-/** Write out list of available command line options with comments.
+/** Write out list of available command line actions with comments.
  *  Called by ra_show_help()
  */
-EXPORT void ra_describe_options(FILE *f, int indent)
+EXPORT void ra_describe_actions(FILE *f, int indent)
 {
    // Get max width of names, then
    // pass the information to an
-   // option printing function.
-   int len_label = get_max_label_length(ROF_OPTIONS | ROF_VALUES);
+   // action printing function.
+   int len_label = get_max_label_length(ROF_ACTIONS | ROF_VALUES);
 
-   const raOpt *ptr = g_scene.options;
-   while ( ptr < g_scene.options_end )
+   const raAction *ptr = g_scene.actions;
+   while ( ptr < g_scene.actions_end )
    {
-      if (ra_is_named_option(ptr))
-         describe_single_option(f, ptr, len_label, indent);
+      if (ra_is_named_action(ptr))
+         describe_single_action(f, ptr, len_label, indent);
 
       ++ptr;
    }
@@ -174,11 +174,11 @@ EXPORT void ra_describe_options(FILE *f, int indent)
 /** Write out a usage example.  Called by ra_show_help() */
 EXPORT void ra_describe_usage(FILE *f, int indent, raUsage usage)
 {
-   int options_count = ra_scene_options_count();
+   int actions_count = ra_scene_actions_count();
 
    if (usage == RAU_DEFAULT)
    {
-      if (options_count > 8)
+      if (actions_count > 8)
          usage = RAU_SHORT;
       else
          usage = RAU_LONG;
@@ -187,32 +187,32 @@ EXPORT void ra_describe_usage(FILE *f, int indent, raUsage usage)
    fprintf(f, "%*s%s", indent, "", ra_command_name());
 
    if (usage == RAU_SHORT)
-      fprintf(f, " [OPTIONS]");
+      fprintf(f, " [ACTIONS]");
    else
    {
-      print_usage_flag_options(f);
-      print_usage_value_options(f);
+      print_usage_flag_actions(f);
+      print_usage_value_actions(f);
       print_usage_arguments(f);
    }
 
    fputc('\n', f);
 }
 
-/** Write out minimal help screen from raOpts array
+/** Write out minimal help screen from raActions array
  *  This canned help screen may be sufficient for most uses.
  */
 EXPORT void ra_show_help(FILE *f, int indent, raUsage usage)
 {
-   int count_options = ra_scene_options_count();
+   int count_actions = ra_scene_actions_count();
    int count_args = ra_scene_arguments_count();
 
    fputs("Usage:\n", f);
    ra_describe_usage(f, indent, usage);
 
-   if (count_options > 0)
+   if (count_actions > 0)
    {
-      fputs("\nOptions\n", f);
-      ra_describe_options(f, indent);
+      fputs("\nActions\n", f);
+      ra_describe_actions(f, indent);
    }
 
    if (count_args > 0)

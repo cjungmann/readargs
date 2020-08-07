@@ -6,13 +6,13 @@
 
 EXPORT raScene g_scene;
 
-/** Optional, easy-to-use function for executing the read option of an raOpt. */
-EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str, raTour *tour)
+/** Optional, easy-to-use function for executing the read action of an raAction. */
+EXPORT raStatus ra_execute_action_read(const raAction *action, const char *str, raTour *tour)
 {
-   if (option && option->agent)
+   if (action && action->agent)
    {
-      if (option->agent->reader)
-         return (*option->agent->reader)(option, str, tour);
+      if (action->agent->reader)
+         return (*action->agent->reader)(action, str, tour);
       else
          return RA_MISSING_READER;
    }
@@ -20,24 +20,24 @@ EXPORT raStatus ra_execute_option_read(const raOpt *option, const char *str, raT
       return RA_MISSING_AGENT;
 }
 
-/** Optional, easy-to-use function for executing the write option of an raOpt. */
-EXPORT void ra_execute_option_write(FILE *f, const raOpt *option)
+/** Optional, easy-to-use function for executing the write action of an raAction. */
+EXPORT void ra_execute_action_write(FILE *f, const raAction *action)
 {
-   if (option && option->agent && option->agent->writer)
-      (*option->agent->writer)(f, option);
+   if (action && action->agent && action->agent->writer)
+      (*action->agent->writer)(f, action);
 }
 
-int include_in_option_list(OptFilter set, const raOpt *ptr)
+int include_in_action_list(ActFilter set, const raAction *ptr)
 {
    return set & ROF_ALL
-      || (set & ROF_TYPES && ra_is_writable_option(ptr))
-      || (set & ROF_OPTIONS && ra_is_named_option(ptr))
-      || (set & ROF_ARGS && ra_is_positional_option(ptr));
+      || (set & ROF_TYPES && ra_is_writable_action(ptr))
+      || (set & ROF_ACTIONS && ra_is_named_action(ptr))
+      || (set & ROF_ARGS && ra_is_positional_action(ptr));
 }
 
-/** Returns length needed to hold option identifier.  Sets string if buffer included.
+/** Returns length needed to hold action identifier.  Sets string if buffer included.
  */
-int option_labeler(const raOpt *ptr, OptFilter set, char *buffer, int len_buffer)
+int action_labeler(const raAction *ptr, ActFilter set, char *buffer, int len_buffer)
 {
    int len_label;
    int len_value;
@@ -50,7 +50,7 @@ int option_labeler(const raOpt *ptr, OptFilter set, char *buffer, int len_buffer
       if (!(str = ptr->type))
          str = ptr->label;
    }
-   else if (set & ROF_OPTIONS)
+   else if (set & ROF_ACTIONS)
       str = ptr->label;
    else if (set & ROF_ARGS)
    {
@@ -73,7 +73,7 @@ int option_labeler(const raOpt *ptr, OptFilter set, char *buffer, int len_buffer
       }
    }
 
-   if (set & ROF_VALUES && ra_is_value_option(ptr))
+   if (set & ROF_VALUES && ra_is_value_action(ptr))
    {
       if (!(str = ptr->type))
          str = "VALUE";
@@ -91,37 +91,37 @@ int option_labeler(const raOpt *ptr, OptFilter set, char *buffer, int len_buffer
    return len_label + len_value;
 }
 
-/** Calls option_labeler() to get label length.
+/** Calls action_labeler() to get label length.
  * Use in loop to get longest label length for columnar output.
  */
-int get_label_length(const raOpt *ptr, OptFilter set)
+int get_label_length(const raAction *ptr, ActFilter set)
 {
-   return option_labeler(ptr, set, NULL, 0);
+   return action_labeler(ptr, set, NULL, 0);
 }
 
-/** Calls option_labeler() with string buffer into which the label will be copied.
+/** Calls action_labeler() with string buffer into which the label will be copied.
  */
-int set_label_value(const raOpt *ptr, OptFilter set, char *buffer, int buffer_len)
+int set_label_value(const raAction *ptr, ActFilter set, char *buffer, int buffer_len)
 {
-   return option_labeler(ptr, set, buffer, buffer_len);
+   return action_labeler(ptr, set, buffer, buffer_len);
 }
 
-/** Get width of longest label of invocable options.
+/** Get width of longest label of invocable actions.
  *
- * Called by ra_describe_options() for columnar alignment.
- * This does not consider the short option (dash-letter),
+ * Called by ra_describe_actions() for columnar alignment.
+ * This does not consider the short action (dash-letter),
  * whose length is added to the column width according to 
  * align the help columns.
  */
-int get_max_label_length(OptFilter set)
+int get_max_label_length(ActFilter set)
 {
    int len_max = 0;
    int len_label;
 
-   const raOpt *ptr = g_scene.options;
-   while ( ptr < g_scene.options_end )
+   const raAction *ptr = g_scene.actions;
+   while ( ptr < g_scene.actions_end )
    {
-      if (include_in_option_list(set, ptr))
+      if (include_in_action_list(set, ptr))
       {
          len_label = get_label_length(ptr, set);
 
@@ -141,11 +141,11 @@ int get_max_argument_length(void)
 {
    int len_max = 0;
    int len_label;
-   const raOpt *ptr = g_scene.options;
+   const raAction *ptr = g_scene.actions;
    const char *str;
-   while ( ptr < g_scene.options_end )
+   while ( ptr < g_scene.actions_end )
    {
-      if (ra_is_positional_option(ptr))
+      if (ra_is_positional_action(ptr))
       {
          if (ptr->type)
             str = ptr->type;
@@ -170,30 +170,30 @@ int get_max_argument_length(void)
    return len_max;
 }
 
-/** Utility function to display option statuses.
+/** Utility function to display action statuses.
  *
- * For each option with a writer member, this function
- * writes out the option identifier and the output of the
- * option writer function.
+ * For each action with a writer member, this function
+ * writes out the action identifier and the output of the
+ * action writer function.
  *
- * This can help a user check the options-accessible values
+ * This can help a user check the actions-accessible values
  * to confirm appropriate values.
  */
 EXPORT void ra_show_scene_values(FILE *f)
 {
-  int len_max = get_max_label_length(ROF_OPTIONS);
+  int len_max = get_max_label_length(ROF_ACTIONS);
   int len_buffer = len_max + 1;
   char *buffer = (char*)alloca(len_buffer);
 
-  const raOpt *ptr = g_scene.options;
-  while ( ptr < g_scene.options_end )
+  const raAction *ptr = g_scene.actions;
+  while ( ptr < g_scene.actions_end )
   {
-     if (ra_is_writable_option(ptr))
+     if (ra_is_writable_action(ptr))
      {
-        set_label_value(ptr, ROF_OPTIONS, buffer, len_buffer);
+        set_label_value(ptr, ROF_ACTIONS, buffer, len_buffer);
 
         fprintf(f, "%*s:  ", len_max, buffer);
-        ra_execute_option_write(f, ptr);
+        ra_execute_action_write(f, ptr);
         fprintf(f, "\n");
      }
         
@@ -218,28 +218,28 @@ EXPORT int ra_process_arguments(void)
    ra_start_tour(&tour);
 
    raStatus status;
-   const raOpt *option;
+   const raAction *action;
    const char *value;
    int retval = 0;
 
    while(1)
    {
-      switch((status = ra_advance_option(&tour, &option, &value)))
+      switch((status = ra_advance_action(&tour, &action, &value)))
       {
          case RA_SUCCESS:
-            status = ra_execute_option_read(option, value, &tour);
+            status = ra_execute_action_read(action, value, &tour);
             if (status==RA_CANCEL)
                goto arguments_end;
             break;
 
          case RA_END_ARGS:
-         case RA_END_OPTIONS:
+         case RA_END_ACTIONS:
             retval = 1;
          case RA_CANCEL:
             goto arguments_end;
 
          default:
-            ra_write_warning(stderr, status, &tour, option, value);
+            ra_write_warning(stderr, status, &tour, action, value);
             break;
       }
    }

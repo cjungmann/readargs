@@ -1,49 +1,49 @@
-typedef enum _raOpt_filter
+typedef enum _raAction_filter
 {
-   ROF_OPTIONS = 1,
+   ROF_ACTIONS = 1,
    ROF_ARGS = 2,
    ROF_ALL = 3,
    ROF_VALUES = 8,
    ROF_TYPES = 16
-} OptFilter;
+} ActFilter;
 
 /** invisible functions found in readargs.c */
-int include_in_option_list(OptFilter set, const raOpt *ptr);
-int option_labeler(const raOpt *ptr, OptFilter set, char *buffer, int len_buffer);
-int get_label_length(const raOpt *ptr, OptFilter set);
-int set_label_value(const raOpt *ptr, OptFilter set, char *buffer, int buffer_len);
-int get_max_label_length(OptFilter set);
+int include_in_action_list(ActFilter set, const raAction *ptr);
+int action_labeler(const raAction *ptr, ActFilter set, char *buffer, int len_buffer);
+int get_label_length(const raAction *ptr, ActFilter set);
+int set_label_value(const raAction *ptr, ActFilter set, char *buffer, int buffer_len);
+int get_max_label_length(ActFilter set);
 int get_max_argument_length(void);
 
 /** invisible functions found in help.c */
-void print_option_names(FILE *f, const raOpt *opt, int max_label, OptFilter set);
-void print_usage_flag_options(FILE *f);
-void print_usage_value_options(FILE *f);
+void print_action_names(FILE *f, const raAction *opt, int max_label, ActFilter set);
+void print_usage_flag_actions(FILE *f);
+void print_usage_value_actions(FILE *f);
 void print_usage_arguments(FILE *f);
-void describe_single_option(FILE *f, const raOpt *opt, int max_label, int indent);
-void describe_single_argument(FILE *f, const raOpt *opt, int max_label, int indent);
+void describe_single_action(FILE *f, const raAction *opt, int max_label, int indent);
+void describe_single_argument(FILE *f, const raAction *act, int max_label, int indent);
 
 /** invisible functions found in scene.c */
-const raOpt *seek_raOpt_by_label(const char *str);
-const raOpt *seek_raOpt_by_letter(char letter);
-const raOpt *seek_next_positional_option(raTour *tour);
+const raAction *seek_raOpt_by_label(const char *str);
+const raAction *seek_raOpt_by_letter(char letter);
+const raAction *seek_next_positional_action(raTour *tour);
 
 /** invisible functions found in agents.c  */
 int str_is_number(const char *str);
-int confirm_option_target(const raOpt *opt);
+int confirm_action_target(const raAction *opt);
 /* ra_flag_agent */
-raStatus flag_reader(const raOpt *opt, const char *str, raTour *tour);
-void flag_writer(FILE *f, const raOpt *opt);
+raStatus flag_reader(const raAction *act, const char *str, raTour *tour);
+void flag_writer(FILE *f, const raAction *act);
 /* ra_int_agent */
-raStatus int_reader(const raOpt *opt, const char *str, raTour *tour);
-void int_writer(FILE *f, const raOpt *opt);
+raStatus int_reader(const raAction *act, const char *str, raTour *tour);
+void int_writer(FILE *f, const raAction *act);
 /* ra_string_agent */
-raStatus string_reader(const raOpt *opt, const char *str, raTour *tour);
-void string_writer(FILE *f, const raOpt *opt);
+raStatus string_reader(const raAction *act, const char *str, raTour *tour);
+void string_writer(FILE *f, const raAction *act);
 /* ra_help_agent */
-raStatus show_help_reader(const raOpt *opt, const char *str, raTour *tour);
+raStatus show_help_reader(const raAction *act, const char *str, raTour *tour);
 /* ra_show_values_agent */
-raStatus show_option_values_reader(const raOpt *opt, const char *value, raTour *tour);
+raStatus show_action_values_reader(const raAction *opt, const char *value, raTour *tour);
 
 
 

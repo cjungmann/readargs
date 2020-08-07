@@ -3,7 +3,7 @@
 This is a command line arguments processing library, written in
 and intended for use with, the C langauge.  It provides both
 a means to parse and save command line arguments **and** to generate
-a useful help screen to document the available options.
+a useful help screen to document the available actions.
 
 My goal is to allow for a simple use case using only a few library
 functions, but to also allow customization for special cases.
@@ -20,23 +20,23 @@ library.  This library may entice you with the following features:
 - Options are set up with an array of structs which can be much
   easier to scan than extended switch code.
 
-- The target variable is associated with the option struct, 
-  making it possible to read as well as write an option's value.
+- The target variable is associated with the action struct, 
+  making it possible to read as well as write an action's value.
 
-- One element of the options struct is an *agent* that handles the
-  interpretation of the option and may include a *writer* that is
-  used to display the option's current value.  There are some builtin
+- One element of the actions struct is an *agent* that handles the
+  interpretation of the action and may include a *writer* that is
+  used to display the action's current value.  There are some builtin
   agents that handle flag, integer and string values, as well as
   **help** and **show values** agents that notify the user:
 
   - The **help** agent calls library functions that generate command
-    usage and options help displays.
+    usage and actions help displays.
 
-  - The **show values** agent prints the option values as affected
+  - The **show values** agent prints the action values as affected
     by the preceding arguments, and can be invoked multiple times
     on the same set of arguments.  This is useful during
     development, and may also be useful for end users to help
-    confirm appropriateness of option settings.
+    confirm appropriateness of action settings.
 
 - New agents can be designed to handle unusual needs.  Agents
   can set variables, of course, but may also execute code
@@ -73,23 +73,23 @@ enters a *-h* or *--help** option.
 const char *filepath = NULL;
 int        iterations = 1;
 
-raOpt options[] = {
+raAction actions[] = {
    {'h', "help",     "This help output",   &ra_show_help_agent,   NULL,        NULL       },
-   {'s', "show",     "Show option values", &ra_show_values_agent, NULL,        NULL       },
+   {'s', "show",     "Show action values", &ra_show_values_agent, NULL,        NULL       },
    {'p', "filepath", "Set file path.",     &ra_string_agent,      &filepath,   "FILEPATH" },
    { -1, "*iter",    "iterations",         &ra_int_agent,         &iterations, "NUMBER"   }
 };
 
 int main(int argc, const char **argv)
 {
-   ra_set_scene(argv, argc, options, OPTS_COUNT(options));
+   ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
    if (argc > 1)
    {
       if (ra_process_arguments())
       {
          // The variables are set, begin the program.
 
-         // This function just shows the current option values.
+         // This function just shows the current action values.
          ra_show_scene_values(stdout);
       }
    }
@@ -118,7 +118,7 @@ a double-dash.
 The library allows for an exception from these standards:
 the standard says that a long option should be followed
 by an '*=*' character and the option value, without intervening
-spaces (`--option=simple`).  I noticed that **grep** recognizes
+spaces (`--action=simple`).  I noticed that **grep** recognizes
 a long option whose value is in the following argument
 (`grep --file patterns.txt` is the same as `grep --file=patterns.txt`).
 

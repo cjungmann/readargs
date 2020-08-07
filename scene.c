@@ -4,37 +4,37 @@
 #include <string.h>
 #include <alloca.h>
 
-EXPORT int ra_is_positional_option(const raOpt* opt)
+EXPORT int ra_is_positional_action(const raAction* act)
 {
-   return opt->letter<1
-      && (opt->label && *opt->label == '*');
+   return act->letter<1
+      && (act->label && *act->label == '*');
 }
 
-EXPORT int ra_is_named_option(const raOpt *opt)
+EXPORT int ra_is_named_action(const raAction *act)
 {
-   return opt->letter > 0
-      || (opt->label && *opt->label != '*');
+   return act->letter > 0
+      || (act->label && *act->label != '*');
 }
 
-EXPORT int ra_is_flag_option(const raOpt *opt)
+EXPORT int ra_is_flag_action(const raAction *act)
 {
-   return opt->agent && opt->agent->args_needed==0;
+   return act->agent && act->agent->args_needed==0;
 }
 
-EXPORT int ra_is_value_option(const raOpt *opt)
+EXPORT int ra_is_value_action(const raAction *act)
 {
-   return opt
-      && !(opt->label && *opt->label=='*')
-      && opt->agent
-      && opt->agent->args_needed;
+   return act
+      && !(act->label && *act->label=='*')
+      && act->agent
+      && act->agent->args_needed;
 }
 
-EXPORT int ra_is_writable_option(const raOpt *opt)
+EXPORT int ra_is_writable_action(const raAction *act)
 {
-   return opt && opt->agent && opt->agent->writer;
+   return act && act->agent && act->agent->writer;
 }
 
-const raOpt *seek_raOpt_by_label(const char *str)
+const raAction *seek_raAction_by_label(const char *str)
 {
    char *lstr = strchr(str,'=');
 
@@ -49,8 +49,8 @@ const raOpt *seek_raOpt_by_label(const char *str)
       str = lstr;
    }
 
-   const raOpt *ptr = g_scene.options;
-   while (ptr < g_scene.options_end)
+   const raAction *ptr = g_scene.actions;
+   while (ptr < g_scene.actions_end)
    {
       if (strcmp(ptr->label, str) == 0)
          return ptr;
@@ -61,10 +61,10 @@ const raOpt *seek_raOpt_by_label(const char *str)
    return NULL;
 }
 
-const raOpt *seek_raOpt_by_letter(char letter)
+const raAction *seek_raAction_by_letter(char letter)
 {
-   const raOpt *ptr = g_scene.options;
-   while (ptr < g_scene.options_end)
+   const raAction *ptr = g_scene.actions;
+   while (ptr < g_scene.actions_end)
    {
       if (ptr->letter == letter)
          return ptr;
@@ -75,91 +75,91 @@ const raOpt *seek_raOpt_by_letter(char letter)
    return NULL;
 }
 
-/** Find matching option, if any.  May return a positional option if available.
+/** Find matching action, if any.  May return a positional action if available.
  *
- * This function is meant to be used for an option with
- * an optional value to determine if the value following
- * the option invocation is another option.
+ * This function is meant to be used for an action with
+ * an actional value to determine if the value following
+ * the action invocation is another action.
  *
  * Using this function is not required, it's just offered
  * in case a project requires discretion in handling the 
- * optional value.
+ * actional value.
  */
-EXPORT const raOpt *ra_seek_raOpt(const char *str, const raTour *tour)
+EXPORT const raAction *ra_seek_raAction(const char *str, const raTour *tour)
 {
-   const raOpt *opt = NULL;
+   const raAction *act = NULL;
    
-   if (*str == '-')         // is option
+   if (*str == '-')         // is action
    {
       ++str;
 
-      if (*str == '-')    // may be long option
+      if (*str == '-')    // may be long action
       {
          ++str;
 
-         if (!*str)         // is double-dash, cannot be an option
+         if (!*str)         // is double-dash, cannot be an action
             return NULL;
          else
-            opt = seek_raOpt_by_label(str);
+            act = seek_raAction_by_label(str);
       }
-      else                  // is short option
-         opt = seek_raOpt_by_letter(*str);
+      else                  // is short action
+         act = seek_raAction_by_letter(*str);
    }
-   else                     // may be positional option
+   else                     // may be positional action
    {
       // Make tour copy to preserve constness
-      // for positional option search.
+      // for positional action search.
       raTour ltour = *tour;
 
-      opt = seek_next_positional_option(&ltour);
+      act = seek_next_positional_action(&ltour);
    }
 
-   return opt;
+   return act;
 }
 
-/** Marker to indicate completion of positional options.
- * This value is written to raTour::last_position_option
+/** Marker to indicate completion of positional actions.
+ * This value is written to raTour::last_position_action
  * when there are no more positional argument.
  */
-static const raOpt *position_options_done = (const raOpt*)(-1);
+static const raAction *position_actions_done = (const raAction*)(-1);
 
 /** Iteratively returns positional arguments.
- * This function is called to determine which option
+ * This function is called to determine which action
  * to apply to command line arguments that are not 
- * labeled options.
+ * labeled actions.
  */
-const raOpt *seek_next_positional_option(raTour *tour)
+const raAction *seek_next_positional_action(raTour *tour)
 {
-   const raOpt *opt = tour->last_position_option;
-   if (opt == position_options_done)
+   const raAction *act = tour->last_position_action;
+   if (act == position_actions_done)
       return NULL;
-   else if (opt == NULL)
-      opt = g_scene.options - 1;
+   else if (act == NULL)
+      act = g_scene.actions - 1;
 
-   while (++opt < g_scene.options_end)
-      if (ra_is_positional_option(opt))
+   while (++act < g_scene.actions_end)
+      if (ra_is_positional_action(act))
       {
-         tour->last_position_option = opt;
-         return opt;
+         tour->last_position_action = act;
+         return act;
       }
 
-   tour->last_position_option = position_options_done;
+   tour->last_position_action = position_actions_done;
    return NULL;
 }
 
 /**
- * Count raOpts that are NOT positional.
+ * Count raActions that are NOT positional.
  *
  * Use this function while displaying help to determine
- * if an options section is required.
+ * if an actions section is required.
  */
-EXPORT int ra_scene_options_count(void)
+EXPORT int ra_scene_actions_count(void)
 {
    int count = 0;
-   const raOpt *ptr = g_scene.options;
-   while (ptr < g_scene.options_end)
+   const raAction *ptr = g_scene.actions;
+   while (ptr < g_scene.actions_end)
    {
-      if (!ra_is_positional_option(ptr))
+      if (!ra_is_positional_action(ptr))
          ++count;
       
       ++ptr;
@@ -169,7 +169,7 @@ EXPORT int ra_scene_options_count(void)
 }
 
 /**
- * Count raOpts that ARE positional.
+ * Count raActions that ARE positional.
  *
  * Use this function while displaying help to determine
  * if an arguments section is required.
@@ -177,10 +177,10 @@ EXPORT int ra_scene_options_count(void)
 EXPORT int ra_scene_arguments_count(void)
 {
    int count = 0;
-   const raOpt *ptr = g_scene.options;
-   while (ptr < g_scene.options_end)
+   const raAction *ptr = g_scene.actions;
+   while (ptr < g_scene.actions_end)
    {
-      if (ra_is_positional_option(ptr))
+      if (ra_is_positional_action(ptr))
          ++count;
       
       ++ptr;
@@ -204,33 +204,33 @@ EXPORT const char *ra_command_name(void)
 }
 
 /**
- * Initialize the readopts environment.
+ * Initialize the readacts environment.
  */
 EXPORT void ra_set_scene(const char **start_arg,
                          int arg_count,
-                         const raOpt *start_opt,
-                         int opt_count)
+                         const raAction *start_act,
+                         int act_count)
 {
    g_scene.args = start_arg;
    g_scene.args_end = start_arg + arg_count;
-   g_scene.options = start_opt;
-   g_scene.options_end = start_opt + opt_count;
+   g_scene.actions = start_act;
+   g_scene.actions_end = start_act + act_count;
 }
 
 /**
- * Initialize a new tour of options.
+ * Initialize a new tour of actions.
  * 
  * This initializes a new set of pointers
- * that tracks progress through argument/options
+ * that tracks progress through argument/actions
  * processing.
  */
 EXPORT raTour *ra_start_tour(raTour *tour)
 {
    tour->current_arg = g_scene.args;
-   tour->current_option = g_scene.options;
+   tour->current_action = g_scene.actions;
 
    tour->sub_arg_ptr = NULL;
-   tour->last_position_option = NULL;
+   tour->last_position_action = NULL;
 
    return tour;
 }
@@ -249,11 +249,11 @@ EXPORT const char* ra_advance_arg(raTour *tour)
       return NULL;
 }
 
-/** Decrement current_arg so it will be considered for the next option.
+/** Decrement current_arg so it will be considered for the next action.
  *
- * This function is used for an option that has an optional value,
- * so the agent can consider the option's value and decide whether
- * or not it is the value or it is the next option.
+ * This function is used for an action that has an actional value,
+ * so the agent can consider the action's value and decide whether
+ * or not it is the value or it is the next action.
  */
 EXPORT raStatus ra_retreat_arg(raTour *tour)
 {
@@ -267,25 +267,25 @@ EXPORT raStatus ra_retreat_arg(raTour *tour)
 }
 
 /**
- * Get the next option, with a value if appropriate.
+ * Get the next action, with a value if appropriate.
  * 
  * When the return value is RA_SUCCESS, the program
- * should process the option.
+ * should process the action.
  *
  * Non-RA_SUCCESS values may indicate the end of the
- * list of arguments, an error, or the end of options.
+ * list of arguments, an error, or the end of actions.
  * Process these values according to the needs of your
  * program.
  */
-EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char **value)
+EXPORT raStatus ra_advance_action(raTour *tour, const raAction **action, const char **value)
 {
-   *option = NULL;
+   *action = NULL;
    *value = NULL;
 
-   const char **options_str = &tour->sub_arg_ptr;
-   const raOpt *opt = NULL;
+   const char **actions_str = &tour->sub_arg_ptr;
+   const raAction *act = NULL;
 
-   if (! *options_str || ! **options_str)
+   if (! *actions_str || ! **actions_str)
    {
       const char *arg = ra_advance_arg(tour);
 
@@ -297,14 +297,14 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
             if (*arg == '-')
             {
                ++arg;
-               if (*arg)  // long option, double-dash + label
+               if (*arg)  // long action, double-dash + label
                {
-                  opt = seek_raOpt_by_label(arg);
-                  if (opt)
+                  act = seek_raAction_by_label(arg);
+                  if (act)
                   {
-                     *option = opt;
+                     *action = act;
 
-                     if (ra_is_value_option(opt))
+                     if (ra_is_value_action(act))
                      {
                         const char *tstr = strchr(arg,'=');
                         if (tstr)
@@ -316,18 +316,18 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
                      return RA_SUCCESS;
                   }
                }
-               else       // options terminator, naked double-dash "--"
-                  return RA_END_OPTIONS;
+               else       // actions terminator, naked double-dash "--"
+                  return RA_END_ACTIONS;
             }
-            else          // short option, single-dash + letter
-               *options_str = arg;
+            else          // short action, single-dash + letter
+               *actions_str = arg;
          }
-         else // not an option, read as next positional option
+         else // not an action, read as next positional action
          {
-            opt = seek_next_positional_option(tour);
-            if (opt)
+            act = seek_next_positional_action(tour);
+            if (act)
             {
-               *option = opt;
+               *action = act;
                *value = arg;
                return RA_SUCCESS;
             }
@@ -335,22 +335,22 @@ EXPORT raStatus ra_advance_option(raTour *tour, const raOpt **option, const char
       }
    }
       
-   if (*options_str)
+   if (*actions_str)
    {
-      char letter = **options_str;
-      ++*options_str;
-      opt = seek_raOpt_by_letter(letter);
-      if (opt)
+      char letter = **actions_str;
+      ++*actions_str;
+      act = seek_raAction_by_letter(letter);
+      if (act)
       {
-         *option = opt;
-         if (ra_is_value_option(opt))
+         *action = act;
+         if (ra_is_value_action(act))
          {
-            if (**options_str)
+            if (**actions_str)
             {
-               *value = *options_str;
+               *value = *actions_str;
 
                // clear so next iteration will be new argument
-               *options_str = NULL;
+               *actions_str = NULL;
             }
             else
                *value = ra_advance_arg(tour);
@@ -369,31 +369,31 @@ EXPORT const char* ra_current_arg(const raTour *tour)
    return *(tour->current_arg);
 }
 
-EXPORT const raOpt *ra_current_option(const raTour *tour)
+EXPORT const raAction *ra_current_action(const raTour *tour)
 {
-   return tour->current_option;
+   return tour->current_action;
 }
 
 /**
  * Convenience function for writing out an error.
  *
  * This function is used by the default raTour processor,
- * but it is optional for custom implementations.
+ * but it is actional for custom implementations.
  */
 EXPORT void ra_write_warning(FILE *f,
                              raStatus status,
                              const raTour *tour,
-                             const raOpt *option,
+                             const raAction *action,
                              const char *value)
 {
    fprintf(f, "%s: ", ra_command_name());
 
-   if (option)
+   if (action)
    {
-      if (option->letter)
-         fprintf(f, "-%c: ", option->letter);
-      else if (option->label)
-         fprintf(f, "--%s: ", option->label);
+      if (action->letter)
+         fprintf(f, "-%c: ", action->letter);
+      else if (action->label)
+         fprintf(f, "--%s: ", action->label);
    }
 
    switch(status)
@@ -401,8 +401,8 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_SUCCESS:
          fprintf(f, "no error\n");
          break;
-      case RA_END_OPTIONS:
-         fprintf(f, "reached the end of the options\n");
+      case RA_END_ACTIONS:
+         fprintf(f, "reached the end of the actions\n");
          break;
       case RA_END_ARGS:
          fprintf(f, "reached the end of the arguments\n");
@@ -410,20 +410,20 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_UNKNOWN_OPTION:
          fprintf(f, "%s\n", *tour->current_arg);
          break;
-      case RA_MALFORMED_OPTION:
-         fprintf(f, "option value in bad form\n");
+      case RA_MALFORMED_ACTION:
+         fprintf(f, "action value in bad form\n");
          break;
       case RA_INVALID_ARGUMENT:
          fprintf(f, "invalid argument\n");
          break;
       case RA_MISSING_TARGET:
-         fprintf(f, "option missing target\n");
+         fprintf(f, "action missing target\n");
          break;
       case RA_MISSING_AGENT:
-         fprintf(f, "option missing agent\n");
+         fprintf(f, "action missing agent\n");
          break;
       case RA_MISSING_READER:
-         fprintf(f, "option missing reader\n");
+         fprintf(f, "action missing reader\n");
          break;
       default:
          fprintf(f, "unknown status number %d\n", (int)status);
@@ -441,7 +441,7 @@ int        flag = 0;
 const char *input_file = NULL;
 int        repetitions = 0;
 
-raOpt options[] = {
+raAction actions[] = {
    { 'h', "help",    "This help message", NULL,             NULL },
    { 'v', "version", "Version number",    NULL,             NULL },
    { 'p', "path",    "Set file path",     &ra_string_agent, &path },
@@ -451,15 +451,15 @@ raOpt options[] = {
    { -1,  "*reps",   "repetitions",       &ra_int_agent,    &repetitions }
 };
 
-void display_option(const raOpt *option, const char *value, int wellformed)
+void display_action(const raAction *action, const char *value, int wellformed)
 {
    if (!wellformed)
-      printf("Malformed option: ");
+      printf("Malformed action: ");
 
-   if (option->letter)
-      printf("-%c", option->letter);
-   else if (option->label)
-      printf("--%s", option->label);
+   if (action->letter)
+      printf("-%c", action->letter);
+   else if (action->label)
+      printf("--%s", action->label);
 
    if (value)
       printf(":%s\n", value);
@@ -470,7 +470,7 @@ void display_option(const raOpt *option, const char *value, int wellformed)
 int main(int argc, const char **argv)
 {
    raTour tour;
-   ra_set_scene(argv, argc, options, OPTS_COUNT(options));
+   ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
    ra_start_tour(&tour);
 
    const char *arg;
@@ -479,17 +479,17 @@ int main(int argc, const char **argv)
    while ((arg = ra_advance_arg(&tour)))
       printf("%2d: %s\n", ++count, arg);
 
-   const raOpt *option;
+   const raAction *action;
    const char *value;
 
    ra_start_tour(&tour);
 
    while (1)
    {
-      switch(ra_advance_option(&tour, &option, &value))
+      switch(ra_advance_action(&tour, &action, &value))
       {
          case RA_SUCCESS:
-            switch(ra_execute_option_read(option, value))
+            switch(ra_execute_action_read(action, value))
             {
                case RA_SUCCESS:
                   break;
@@ -502,16 +502,16 @@ int main(int argc, const char **argv)
             }
             break;
          case RA_END_ARGS:
-         case RA_END_OPTIONS:
-            goto end_option_walk;
-         case RA_UNKNOWN_OPTION:
-            fprintf(stderr, "Option %s is not known.\n", *tour.current_arg);
+         case RA_END_ACTIONS:
+            goto end_action_walk;
+         case RA_UNKNOWN_ACTION:
+            fprintf(stderr, "Action %s is not known.\n", *tour.current_arg);
             break;
-         case RA_MALFORMED_OPTION:
-            display_option(option, value, 0);
+         case RA_MALFORMED_ACTION:
+            display_action(action, value, 0);
             break;
          case RA_MISSING_TARGET:
-            fprintf(stderr, "%s: missing target for option.\n", ra_command_name());
+            fprintf(stderr, "%s: missing target for action.\n", ra_command_name());
             break;
          case RA_INVALID_ARGUMENT:
             fprintf(stderr, "%s: argument value is the wrong type.\n", ra_command_name());
@@ -520,7 +520,7 @@ int main(int argc, const char **argv)
             break;
       }
    }
-end_option_walk:
+end_action_walk:
 
    return 0;
 }

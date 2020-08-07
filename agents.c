@@ -14,34 +14,34 @@ int str_is_number(const char *str)
    return ptr != NULL;
 }
 
-int confirm_option_target(const raOpt *opt) { return opt->target != NULL; }
+int confirm_action_target(const raAction *act) { return act->target != NULL; }
 
 /** ra_flag_agent function implementations */
-raStatus flag_reader(const raOpt *opt, const char *str, raTour *tour)
+raStatus flag_reader(const raAction *act, const char *str, raTour *tour)
 {
-   if (confirm_option_target(opt))
+   if (confirm_action_target(act))
    {
-      *(int*)opt->target = 1;
+      *(int*)act->target = 1;
       return RA_SUCCESS;
    }
    else
       return RA_MISSING_TARGET;
 }
 
-void flag_writer(FILE *f, const raOpt *opt)
+void flag_writer(FILE *f, const raAction *act)
 {
-   if (confirm_option_target(opt))
-      fprintf(f, "%s", (*(int*)opt->target ? "true": "false" ));
+   if (confirm_action_target(act))
+      fprintf(f, "%s", (*(int*)act->target ? "true": "false" ));
 }
 
 /** ra_int_agent function implementations  */
-raStatus int_reader(const raOpt *opt, const char *str, raTour *tour)
+raStatus int_reader(const raAction *act, const char *str, raTour *tour)
 {
-   if (confirm_option_target(opt))
+   if (confirm_action_target(act))
    {
       if (str_is_number(str))
       {
-         *(int*)opt->target = atoi(str);
+         *(int*)act->target = atoi(str);
          return RA_SUCCESS;
       }
       else
@@ -51,29 +51,29 @@ raStatus int_reader(const raOpt *opt, const char *str, raTour *tour)
       return RA_MISSING_TARGET;
 }
 
-void int_writer(FILE *f, const raOpt *opt)
+void int_writer(FILE *f, const raAction *act)
 {
-   if (confirm_option_target(opt))
-      fprintf(f, "%d", *(int*)opt->target);
+   if (confirm_action_target(act))
+      fprintf(f, "%d", *(int*)act->target);
 }
 
 /** ra_string_agent function implementations */
-raStatus string_reader(const raOpt *opt, const char *str, raTour *tour)
+raStatus string_reader(const raAction *act, const char *str, raTour *tour)
 {
-   if (confirm_option_target(opt))
+   if (confirm_action_target(act))
    {
-      *(const char**)opt->target = str;
+      *(const char**)act->target = str;
       return RA_SUCCESS;
    }
    else
       return RA_MISSING_TARGET;
 }
 
-void string_writer(FILE *f, const raOpt *opt)
+void string_writer(FILE *f, const raAction *act)
 {
-   if (confirm_option_target(opt))
+   if (confirm_action_target(act))
    {
-      const char *val = *(const char**)opt->target;
+      const char *val = *(const char**)act->target;
       if (val)
          fprintf(f, "%s", val);
       else
@@ -82,16 +82,16 @@ void string_writer(FILE *f, const raOpt *opt)
 }
 
 /** default --help agent */
-raStatus show_help_reader(const raOpt *opt, const char *str, raTour *tour)
+raStatus show_help_reader(const raAction *act, const char *str, raTour *tour)
 {
    ra_show_help(stdout, 2, RAU_DEFAULT);
    return RA_CANCEL;
 }
 
-/** show option values */
-raStatus show_option_values_reader(const raOpt *opt, const char *value, raTour *tour)
+/** show action values */
+raStatus show_action_values_reader(const raAction *act, const char *value, raTour *tour)
 {
-   fputs("\nCurrent option values:\n", stdout);
+   fputs("\nCurrent action values:\n", stdout);
    ra_show_scene_values(stdout);
    putc('\n', stdout);
    return RA_SUCCESS;
@@ -101,4 +101,4 @@ EXPORT const raAgent ra_flag_agent        = { 0, flag_reader, flag_writer };
 EXPORT const raAgent ra_int_agent         = { 1, int_reader, int_writer };
 EXPORT const raAgent ra_string_agent      = { 1, string_reader, string_writer };
 EXPORT const raAgent ra_show_help_agent   = { 0, show_help_reader, NULL };
-EXPORT const raAgent ra_show_values_agent = { 0, show_option_values_reader, NULL };
+EXPORT const raAgent ra_show_values_agent = { 0, show_action_values_reader, NULL };

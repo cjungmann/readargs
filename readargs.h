@@ -6,25 +6,25 @@
 #include <stdio.h>
 
 // Forward declarations for function pointer typedefs
-typedef struct _readargs_option raOpt;
+typedef struct _readargs_action raAction;
 typedef struct _readargs_tour raTour;
 
 typedef enum {
    RA_SUCCESS = 0,
    RA_CANCEL,
-   RA_END_OPTIONS,
+   RA_END_ACTIONS,
    RA_END_ARGS,
    RA_BEFORE_ARGS,
    RA_UNKNOWN_OPTION,
-   RA_MALFORMED_OPTION,
+   RA_MALFORMED_ACTION,
    RA_INVALID_ARGUMENT,
    RA_MISSING_TARGET,
    RA_MISSING_AGENT,
    RA_MISSING_READER
 } raStatus;
 
-typedef raStatus (*raReader)(const raOpt *opt, const char *str, raTour *tour);
-typedef void (*raWriter)(FILE *f, const raOpt *opt);
+typedef raStatus (*raReader)(const raAction *act, const char *str, raTour *tour);
+typedef void (*raWriter)(FILE *f, const raAction *act);
 
 typedef struct _readargs_agent
 {
@@ -34,47 +34,47 @@ typedef struct _readargs_agent
 } raAgent;
 
 /** Library's fundamental data structure. */
-typedef struct _readargs_option
+typedef struct _readargs_action
 {
-   int           letter;   /* letter that invokes the option */
-   const char    *label;   /* long-option name invoking option */
-   const char    *comment; /* documents option for help output */
+   int           letter;   /* letter that invokes the action */
+   const char    *label;   /* long-action name invoking option */
+   const char    *comment; /* documents action for help output */
    const raAgent *agent;   /* object that manages value */
-   void          *target;  /* optional data pointer */
-   const char    *type;    /* optional string to describe the value */
-} raOpt;
+   void          *target;  /* actional data pointer */
+   const char    *type;    /* actional string to describe the value */
+} raAction;
 
 /**
- * Special option types:
- * - A flag option sets an integer value to 1.
+ * Special action types:
+ * - A flag action sets an integer value to 1.
  *     Identified by the raAgent that has set
  *     args_needed == 0;
  *
  * - A positional argument is invoked when an
  *     argument is not preceeded by a short or
- *     long option name.
- *     This option type is indicated by two
- *     raOpt settings: raOpt::letter < 0
- *     and raOpt::label is prefixed with an
+ *     long action name.
+ *     This action type is indicated by two
+ *     raAction settings: raOpt::letter < 0
+ *     and raAction::label is prefixed with an
  *     asterisk
  */
 
 
 typedef struct _readargs_scene
 {
-   // Collections of CL arguments and option definitions
+   // Collections of CL arguments and action definitions
    const char **args;
    const char **args_end;
-   const raOpt *options;
-   const raOpt *options_end;
+   const raAction *actions;
+   const raAction *actions_end;
 } raScene;
 
 typedef struct _readargs_tour
 {
    const char **current_arg;
    const char *sub_arg_ptr;
-   const raOpt *current_option;
-   const raOpt *last_position_option;
+   const raAction *current_action;
+   const raAction *last_position_action;
 } raTour;
 
 
@@ -90,38 +90,38 @@ extern const raAgent ra_string_agent;
 extern const raAgent ra_show_help_agent;
 extern const raAgent ra_show_values_agent;
 
-/* Use for fifth (opt_count) parameter of ra_init_cache(): */
-#define OPTS_COUNT(a) (sizeof((a)) / sizeof(raOpt))
+/* Use for fifth (act_count) parameter of ra_init_cache(): */
+#define ACTS_COUNT(a) (sizeof((a)) / sizeof(raAction))
 
 
 const char *ra_command_name(void);
 void ra_set_scene(const char **start_arg,
                   int arg_count,
-                  const raOpt *start_opt,
-                  int opt_count);
+                  const raAction *start_act,
+                  int act_count);
 raTour *ra_start_tour(raTour *tour);
 
 const char* ra_advance_arg(raTour *tour);
 raStatus ra_retreat_arg(raTour *tour);
-raStatus ra_advance_option(raTour *tour, const raOpt **option, const char **value);
+raStatus ra_advance_action(raTour *tour, const raAction **option, const char **value);
 
 const char* ra_current_arg(const raTour *tour);
-const raOpt *ra_current_option(const raTour *tour);
+const raAction *ra_current_action(const raTour *tour);
 
-const raOpt *ra_seek_raOpt(const char *str, const raTour *tour);
+const raAction *ra_seek_raAction(const char *str, const raTour *tour);
 
 // Option characteristic test functions:
-int ra_is_positional_option(const raOpt* opt);
-int ra_is_named_option(const raOpt* opt);
-int ra_is_flag_option(const raOpt* opt);
-int ra_is_value_option(const raOpt* opt);
-int ra_is_writable_option(const raOpt* opt);
+int ra_is_positional_action(const raAction* opt);
+int ra_is_named_action(const raAction* opt);
+int ra_is_flag_action(const raAction* opt);
+int ra_is_value_action(const raAction* opt);
+int ra_is_writable_action(const raAction* opt);
 
-int ra_scene_options_count(void);
+int ra_scene_actions_count(void);
 int ra_scene_arguments_count(void);
 
-raStatus ra_execute_option_read(const raOpt *option, const char *str, raTour *tour);
-void ra_execute_option_write(FILE *f, const raOpt *option);
+raStatus ra_execute_action_read(const raAction *option, const char *str, raTour *tour);
+void ra_execute_action_write(FILE *f, const raAction *option);
 
 void ra_show_scene_values(FILE *f);
 
@@ -134,7 +134,7 @@ typedef enum _readargs_usage_format
 } raUsage;
 
 void ra_describe_arguments(FILE *f, int indent);
-void ra_describe_options(FILE *f, int indent);
+void ra_describe_actions(FILE *f, int indent);
 void ra_describe_usage(FILE *f, int indent, raUsage usage);
 void ra_show_help(FILE *f, int indent, raUsage usage);
 
@@ -143,10 +143,10 @@ void ra_show_help(FILE *f, int indent, raUsage usage);
 void ra_write_warning(FILE *f,
                       raStatus status,
                       const raTour *tour,
-                      const raOpt *option,
+                      const raAction *action,
                       const char *value);
 
-int arguments_required(const raOpt *opt);
+int arguments_required(const raAction *act);
 
 // Let the library do everything:
 int ra_process_arguments(void);
