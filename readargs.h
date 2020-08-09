@@ -37,7 +37,7 @@ typedef struct _readargs_agent
 typedef struct _readargs_action
 {
    int           letter;   /* letter that invokes the action */
-   const char    *label;   /* long-action name invoking option */
+   const char    *label;   /* long-action name invoking action */
    const char    *comment; /* documents action for help output */
    const raAgent *agent;   /* object that manages value */
    void          *target;  /* actional data pointer */
@@ -97,20 +97,20 @@ extern const raAgent ra_show_values_agent;
 const char *ra_command_name(void);
 void ra_set_scene(const char **start_arg,
                   int arg_count,
-                  const raAction *start_act,
-                  int act_count);
+                  const raAction *start_action,
+                  int action_count);
 raTour *ra_start_tour(raTour *tour);
 
 const char* ra_advance_arg(raTour *tour);
 raStatus ra_retreat_arg(raTour *tour);
-raStatus ra_advance_action(raTour *tour, const raAction **option, const char **value);
+raStatus ra_advance_action(raTour *tour, const raAction **action, const char **value);
 
 const char* ra_current_arg(const raTour *tour);
 const raAction *ra_current_action(const raTour *tour);
 
 const raAction *ra_seek_raAction(const char *str, const raTour *tour);
 
-// Option characteristic test functions:
+// Action characteristic test functions:
 int ra_is_positional_action(const raAction* opt);
 int ra_is_named_action(const raAction* opt);
 int ra_is_flag_action(const raAction* opt);
@@ -120,8 +120,8 @@ int ra_is_writable_action(const raAction* opt);
 int ra_scene_actions_count(void);
 int ra_scene_arguments_count(void);
 
-raStatus ra_execute_action_read(const raAction *option, const char *str, raTour *tour);
-void ra_execute_action_write(FILE *f, const raAction *option);
+raStatus ra_execute_action_read(const raAction *action, const char *str, raTour *tour);
+void ra_execute_action_write(FILE *f, const raAction *action);
 
 void ra_show_scene_values(FILE *f);
 
