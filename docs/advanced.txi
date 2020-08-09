@@ -2,9 +2,9 @@
 @chapter Advanced Usage
 
 @menu
-* raOpt Detail::
+* raAction Detail::
 * raAgent Detail::
 @end menu
 
-@include raOpt_detail.txi
+@include raAction_detail.txi
 @include raAgent_detail.txi

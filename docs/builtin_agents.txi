@@ -1,12 +1,12 @@
-@node Builtin Option Agents
-@chapter Builtin Option Agents
+@node Builtin Action Agents
+@chapter Builtin Action Agents
 
 @menu
-* builtin ra_flag_agent::         Service raOpt objects with true/false integer target
-* builtin ra_int_agent::          Service raOpt objects with an integer target
-* builtin ra_string_agent::       Service raOpt objects with a const char* target
-* builtin ra_show_help_agent::    Service raOpt objects that show a help display
-* builtin ra_show_values_agent::  Service raOpt objects that show the printable option values
+* builtin ra_flag_agent::         sets a true/false integer target
+* builtin ra_int_agent::          sets an integer target
+* builtin ra_string_agent::       sets a const char* target
+* builtin ra_show_help_agent::    shows a help display
+* builtin ra_show_values_agent::  shows the printable option values
 @end menu
 
 @node builtin ra_flag_agent

@@ -8,11 +8,11 @@ to use this library.
 #include <stdio.h>
 #include <readargs.h>
 
+// Prepare action targets and the actions array (@pxref{raAction})
 const char *name = NULL;
 int        value = 0;
 
-// Options definition section @xref{raOpt}.
-raOpt options[] = @{
+raAction actions[] = @{
   @{'h', "help",  "This help output", &ra_show_help_agent,    NULL,   NULL    @},
   @{'s', "show",  "Show settings",    &ra_show_values_agent,  NULL,   NULL    @},
   @{'n', "name",  "Set name value",   &ra_string_agent,       &name,  "STRING"@},
@@ -23,7 +23,8 @@ int main(int argc, const char **argv)
 @{
    if (argc < 2)
    @{
-      // Using builtin usage message @xref{ra_show_no_args_message}
+      // If some arguments are necessary, a usage message may be helpful.
+      // Create your own message, or use the builtin message display (@pxref{ra_show_no_args_message}).
       ra_show_no_args_message();
       return 1;
    @}
@@ -31,11 +32,12 @@ int main(int argc, const char **argv)
    @{
       // Register the arguments and option instructions to
       // the global raScene variable @xref{ra_set_scene}, @xref{raScene}
-      ra_set_scene(argv, argc, options, OPTS_COUNT(options));
+      ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
 
       // Call the function that starts everything @xref{ra_process_arguments}
       if (ra_process_arguments())
       @{
+         // Begin program.  Here we just show the target values
          printf("name is \"%s\"\n"
                 "value is %d\n",
                 name, value);

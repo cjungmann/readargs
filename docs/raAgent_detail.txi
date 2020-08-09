@@ -2,7 +2,7 @@
 @section raAgent Detail
 
 Instances of this type execute whatever action is required
-when an option is invoked.  The basic @code{raAgent} instance
+when an action is invoked.  The basic @code{raAgent} instance
 has three members.
 
 @menu
@@ -26,8 +26,8 @@ typedef struct _readargs_agent
 @itemize @bullet
 @item int args_needed
 
-This is usually either 0 or 1, representing a @emph{flag} option
-that takes no arguments, or a @emph{value} option that does take
+This is usually either 0 or 1, representing a @emph{flag} action
+that takes no arguments, or a @emph{value} action that does take
 an argument.
 
 For providing @option{--help} display, the library only considers
@@ -36,16 +36,16 @@ member to indicate something else.
 
 @item raReader reader
 
-This is a pointer to a function that processes the option value.
+This is a pointer to a function that processes the action value.
 The function is called with a NULL @code{str} parameter for
-flag options.
+flag actions.
 
 @item raWriter writer
 
 This is a pointer to a function that writes the value of the
-option.  This is only required if the developer intends to use
+action.  This is only required if the developer intends to use
 the function @code{ra_show_scene_values} to show the user
-the effective option values.
+the effective action values.
 
 @end itemize
 
@@ -55,7 +55,7 @@ the effective option values.
 There are several builtin agents for servicing different data
 types.
 
-@xref{Builtin Option Agents}
+@xref{Builtin Action Agents}
 
 
 

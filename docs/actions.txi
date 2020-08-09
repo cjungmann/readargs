@@ -1,0 +1,6 @@
+@node Preparing Actions
+@chapter Preparing Actions
+
+The options to which your program will respond are determined
+by an array of @code{raAction} structs.
+

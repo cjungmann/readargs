@@ -3,17 +3,17 @@
 
 @deftypefun void ra_set_scene({const char **} start_arg, @
                               int arg_count, @
-                              {const raOpt *} start_opt, @
+                              {const raAction *} start_opt, @
                               int opt_count)
 
 This function saves the command line arguments and the
-array of @code{raOpt} struct to global variable @code{g_scene}
-(@pxref{raOpt}).
+array of @code{raAction} struct to global variable @code{g_scene}
+(@pxref{raAction}).
 
 It should be called in function @code{main}, when the
 @code{argc} and @code{argv} arguments are available.
 
-If you use a local array of @code{raOpt}, pay attention
+If you use a local array of @code{raAction}, pay attention
 to the scope of the array.  The array must remain in memory
 until @code{g_scene} is no longer necessary.
 
@@ -25,12 +25,12 @@ This is the @code{argv} argument of the function @code{main}.
 @item int arg_count
 This is the @code{argc} argument of the function @code{main}.
 
-@item const raOpt* start_opt
-This is a pointer to an array of @code{raOpt} structs that
+@item const raAction* start_opt
+This is a pointer to an array of @code{raAction} structs that
 describe the available options.
 
 @item int opt_count
-This is the number of @code{raOpt} elements in the array.
+This is the number of @code{raAction} elements in the array.
 There is a helper macro for calculating this value,
 @code{OPTS_COUNT}.
 @end table
@@ -53,7 +53,7 @@ line arguments with registered options and passes control to
 @deftypefun void ra_set_scene @
             ({const char**} start_arg, @
             int arg_count, @
-            {const raOpt *} start_opt, @
+            {const raAction *} start_opt, @
             int opt_count)
 This function should be called in @
 @end deftypefun

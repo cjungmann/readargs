@@ -1,5 +1,5 @@
-@node raOpt Detail
-@section raOpt Detail
+@node raAction Detail
+@section raAction Detail
 
 An instance of this struct defines the methods of
 invoking the option (letter and/or long option), a comment
@@ -18,22 +18,22 @@ typedef struct _readargs_option
    const raAgent *agent;   /* object that manages value */
    void          *target;  /* optional data pointer */
    const char    *type;    /* optional string to describe the value */
-@} raOpt;
+@} raAction;
 @end example
 
 @menu
-* raOpt letter::
-* raOpt label::
-* raOpt comment::
-* raOpt agent::
-* raOpt target::
-* raOpt type::
+* raAction letter::
+* raAction label::
+* raAction comment::
+* raAction agent::
+* raAction target::
+* raAction type::
 @end menu
 
 
 @c
-@node raOpt letter
-@subsection raOpt letter
+@node raAction letter
+@subsection raAction letter
 
 This struct element holds a single character value that
 can be used on the command line to invoke this option. For
@@ -46,26 +46,26 @@ option, set the @samp{letter} option to 0.
 @xref{Letter Options}
 
 @c
-@node raOpt label
-@subsection raOpt label
+@node raAction label
+@subsection raAction label
 
 This struct element is a string that will be matched if it follows
-a double-dash on the command line.  When an @samp{raOpt} array element
+a double-dash on the command line.  When an @samp{raAction} array element
 has set the @code{label} element to @emph{option}, invocating
 @code{--option} matches this array element.
 
 @xref{Long Options}
 
 @c
-@node raOpt comment
-@subsection raOpt comment
+@node raAction comment
+@subsection raAction comment
 
 This struct element is used with a @option{--help} display to
 provide a short explanation of the option.
 
 @c
-@node raOpt agent
-@subsection raOpt agent
+@node raAction agent
+@subsection raAction agent
 
 This struct element is a @emph{pointer} to an @samp{raAgent} struct
 that is prepared to handle the option.  As a pointer, this element
@@ -82,12 +82,12 @@ custom agents is how the library may be extended.
 @xref{raAgent Detail}
 
 @c
-@node raOpt target
-@subsection raOpt target
+@node raAction target
+@subsection raAction target
 
 @c
-@node raOpt type
-@subsection raOpt type
+@node raAction type
+@subsection raAction type
 
 This optional element provides a string to use with an value option
 depiction in the @option{--help} option.
@@ -98,7 +98,7 @@ For options that take a value, this optional element provides a
 string to use in the @option{--help} option when depicting its usage.
 
 @noindent
-Given an @samp{raOpt} is:
+Given an @samp{raAction} is:
 
 @noindent
 @{'a', "add", "NUMBER", "Number to add", &ra_string_agent, &nvalue@}

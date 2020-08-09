@@ -43,28 +43,28 @@ options and values according to the GNU/Posix standard.
 * Code Examples::             Learn library usage through examples
 * Data Types::                Data types that support argument processing
 * Library Functions::         
-* Preparing Options::
-* Builtin Option Agents::     
+* Preparing Actions::
+* Builtin Action Agents::     
 * Advanced Usage::            Customization
-* Options Interpretation::    Explains how the library reads arguments
+* Actions Interpretation::    Explains how the library reads arguments
 @end menu
 
 @node Introduction
 @chapter Introduction
 
 This C library is designed to make it easy to handle command line
-options according to 
+arguments according to 
 @url{http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax, Posix standards with GNU long options}.
 Although powerful, the library is also extensible for unique
 requirements.
 
-A developer will create an array of structs that describe the
-options available to the user.
+A developer will create an array of structs that describe how
+to interpret the command line arguments entered by the user.
 
 @include examples.txi
 @include types.txi
 @include functions.txi
-@include options.txi
+@include actions.txi
 @include builtin_agents.txi
 @include advanced.txi
 @include interpretation.txi

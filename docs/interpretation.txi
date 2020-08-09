@@ -1,7 +1,7 @@
-@node Options Interpretation
-@chapter Options Interpretation
+@node Actions Interpretation
+@chapter Actions Interpretation
 
-The goal of this library is to interpret command line options
+The goal of this library is to interpret command line arguments
 in accordance with the standards laid out in the following document:
 
 @uref{https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax,GNU argument syntax}
@@ -9,7 +9,7 @@ in accordance with the standards laid out in the following document:
 @menu
 * Letter Options::
 * Long Options::
-* Positional Options::
+* Positional Actions::
 @end menu
 
 @node Letter Options
@@ -53,8 +53,8 @@ invocations are equivalent:
 
 @code{--option=multiple} and @code{--option multiple}.
 
-@node Positional Options
-@section Positional Options
+@node Positional Actions
+@section Positional Actions
 
 Command line arguments that are not options or associated with
-options will be applied to positional options.
+options will be applied to positional actions.

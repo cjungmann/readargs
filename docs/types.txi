@@ -3,12 +3,12 @@
 
 @menu
 Function pointer types
-* raReader::      saves changes to an option's value
-* raWriter::      displays an option's value
+* raReader::      executes the actions mission
+* raWriter::      displays an action's value
 
 struct types
 * raAgent::       contains elements needed to process an option
-* raOpt::         holds details of an defined option
+* raAction::      holds details of an defined action
 * raScene::       preserves static values from @code{main} for navigating tours
 * raTour::        tracks progress through command line arguments
 @end menu
@@ -16,29 +16,31 @@ struct types
 @c raReader function pointer type
 @node raReader
 @section raReader
-Function pointer called by the library to save an option's value,
-this is a @strong{mandatory} member of the @ref{raAgent} struct.
+Function pointer called by the library to execute an action's mission.
+This is a @strong{mandatory} member of the @ref{raAgent} struct.
 
-@deftp {Function Pointer Type} raStatus (*raReadeer)(const raOpt *opt, const char *str, raTour *tour)
+@deftp {Function Pointer Type} raStatus (*raReader)(const raAction *act, const char *str, raTour *tour)
 
 @table @code
-@item const raOpt *opt
-This is the currently-matched option, which give access
-to the @code{target} void pointer element.  In most cases,
-the @code{reader} function casts and sets the @code{target}
-according to the value in @code{str}
+@item const raAction *act
+This is the @code{raAction} instance that provided the @code{raReader}
+pointer.  The reader function can refer to the @code{raAction}
+for details about the action, especially the @code{target} pointer
+if the mission is to set the @code{target} value.
 
 @item const char *str
 The command line argument string that is to be used for setting
 the @code{target}.  This is not always a separate command line
-argument because in some cases the option value is the remainder
-of the characters in a grouped short option invocation.
+argument because in some cases the @code{*str} value is the set
+of characters that remain after the letter of a value-option
+invocation.
 
 @item raTour *tour
-The @code{raTour} object that is tracking the current pass
-through the command line arguments.  This can be used to consume
-or restore argument acccording to the needs of the particular
-item type.
+The @code{raTour} object that is tracking the progress through
+the command line arguments.  This member is rarely used, but is
+useful when it's necessary to return the @code{*str} to the
+argument tour or if the action needs to consume more than one
+argument.
 @end table
 
 @end deftp
@@ -46,17 +48,20 @@ item type.
 @c raWriter function pointer type
 @node raWriter
 @section raWriter
-Function pointer called by the library to write an option's value,
-this is an @emph{optional} member of the @ref{raAgent} struct.
+If not @code{NULL}, the library calls this function pointer
+to print out the action's value.  This is an @emph{optional}
+member of the @ref{raAgent} struct because some actions are
+not associated with any value, like showing the help or usage
+display.
 
-@deftp {Function Pointer Type} void (*raWriter)(FILE *f, const raOpt *opt)
+@deftp {Function Pointer Type} void (*raWriter)(FILE *f, const raAction *act)
 
 @table @code
 @item FILE *f
 Stream pointer to which the value is to be written.
 
-@item const raOpt *opt
-The current @code{raOpt} option, through which the @code{target}
+@item const raAction *act
+The current @code{raAction} action, through which the @code{target}
 can be accessed for writing out the value.
 
 @end table
@@ -65,65 +70,95 @@ can be accessed for writing out the value.
 @c raAgent
 @node raAgent
 @section raAgent
-struct containing elements needed for the library to
-interact with the command line arguments.  A pointer to
-an instance of @code{raAgent} is one element of the
-@code{raOpt} struct (@pxref{raOpt}).
+An @code{raAgent} instance represents the @code{raAction}
+to the library, providing a standard interface through
+which the library can execute the action's mission.  Each
+instance of @code{raAction} needs an @code{raAgent} for
+this purpose.
 
 Minimally, it contains three members, but customized
 versions can longer according to the option's needs.
+
+@verbatim
+typedef struct _readargs_agent {
+   int      args_needed;
+   raReader reader;
+   raWriter writer;
+} raAgent;
+@end verbatim
 
 @deftp {Data Type} raAgent
 
 @table @code
 @item int args_needed
 Minimally, this can be @code{0} or not @code{0}, with @code{0}
-indicating a @emph{flag} option that takes no arguments.
+indicating a @emph{flag} action that takes no arguments.
 Some customized versions may differentiate between @code{1}
 and something else.
 
 @item raReader reader
 This is a pointer to a function that processes the command
-line argument according to the matched option.
+line argument according to the matched action.
 
 @item raWriter writer
-This is a pointer to a function that writes the option
-value of the matched option.
+If not @code{NULL}, the library will call this function
+pointer when displaying value the associated action.
 
 @end table
 @end deftp
 
-There are several builtin agents, @xref{Builtin Option Agents}.
+There are several builtin agents, @xref{Builtin Action Agents}.
 
 Developers can also make custom agents.  @xref{raAgent Detail}.
 
-@c raOpt 
-@node raOpt
-@section raOpt
+@c raAction 
+@node raAction
+@section raAction
 This data type associates an agent, a target, and a comment
-with an option letter or long-option label.  A set of @code{raOpt}
+with an option letter or long-option label.  A set of @code{raAction}
 objects defines the command line processing of a command.
 
-@deftp {Data Type} raOpt
+@verbatim
+typedef struct _readargs_action {
+   int           letter;
+   const char    *label;
+   const char    *comment;
+   const raAgent *agent;
+   void          *target;
+   const char    *type;
+} raAction;
+@end verbatim
+
+@deftp {Data Type} raAction
 
 @table @code
 @item int letter
-The letter that invokes the option.  If this value is @code{0}, there
+The letter that invokes the action.  If this value is @code{0}, there
 is no letter invocation.  If this value is @code{-1} and @var{label} is
-@code{NULL}, the option is a position option.
+@code{NULL}, the action is a position action.
 
 @item const char *label
 This is the long-option invocation, matched when this string
 is preceded by a double-dash.  If this value if @code{NULL}, there will
-be no long-option access to this option.
+be no long-option access to this action.
 
 @item const char *comment
-Used for the description of the option when showing the
+Used for the description of the action when showing the
 help display.
 
 @item const raAgent *agent
 A pointer to an @code{raAgent}, which coordinates the interaction
 of the command line settings and the application.
+
+@item void *target
+A pointer that is cast to the appropriate data type by the reader
+to change a value or the write to display a value.  This member is
+not necessary for some actions like displaying help.
+
+@item const char *type
+A string to use in help displays to show the data type expected by
+a given option.  The string @code{VALUE} will be usedIf this value
+is @code{NULL}.
 
 @end table
 @end deftp
@@ -133,7 +168,16 @@ of the command line settings and the application.
 @section raScene
 This data type describes a static singleton global
 variable that preserves the sets of command line arguments
-and option definitions.
+and action definitions.
+
+@verbatim
+typedef struct _readargs_scene {
+   const char     **args;
+   const char     **args_end;
+   const raAction *actions;
+   const raAction *actions_end;
+} raScene;
+@end verbatim
 
 @deftp {Data Type} raScene
 
@@ -145,12 +189,12 @@ Points to the first of the list of command line arguments
 Points to memory just past the last of the command line arguments.
 It is used to test if a given argument is within bounds.
 
-@item const raOpt *options
-Points to the first of the list of option definitions
+@item const raAction *actions
+Points to the first of the list of action definitions
 
-@item const raOpt *options_end
+@item const raAction *actions_end
 Like @code{args_end}, this member is used to test if a given
-option is within bounds.
+action is within bounds.
 
 @end table
 @end deftp
@@ -162,6 +206,15 @@ option is within bounds.
 This data type tracks progress through a given @emph{tour} of
 command line arguments.
 
+@verbatim
+typedef struct _readargs_tour {
+   const char     **current_arg;
+   const char     *sub_arg_ptr;
+   const raAction *current_action;
+   const raAction *last_position_action;
+} raTour;
+@end verbatim
+
 @deftp {Data Type} raTour
 
 @table @code
@@ -171,15 +224,15 @@ A pointer to one of the arguments found in the @code{raScene}.
 @item const cahr *sub_arg_ptr
 For arguments that are a list of single-letter options, this
 member tracks the progress through the set for each iteration
-of the options parsing loop.
+of the actions parsing loop.
 
-@item const raOpt *current_option
-Pointer to @code{raOpt} on which the current processing is
+@item const raAction *current_action
+Pointer to @code{raAction} on which the current processing is
 working.
 
-@item const raOpt *last_position_option
-This keeps track of already processed position options
-to know which is next and to ensure each position option
+@item const raAction *last_position_action
+This keeps track of already processed position actions
+to know which is next and to ensure each position action
 is used only once.
 @end table
 @end deftp

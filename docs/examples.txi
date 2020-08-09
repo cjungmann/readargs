@@ -5,8 +5,10 @@ This chapter will illustrate library usage through commented
 example source listings.
 
 @menu
-* Basic Example::     Simplest usage
+* Basic Example::       Simplest usage
+* Non-options Example:: Example collecting non-option values
 @end menu
 
 
 @include examples_basic.txi
+@include examples_nonoption.txi
