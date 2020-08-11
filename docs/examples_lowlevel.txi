@@ -1,0 +1,42 @@
+@node Low-level Example
+@section Low-level Example
+
+For most cases, the @code{ra_process_arguments} function is sufficient
+for parsing command line arguments.  (@pxref{ra_process_arguments})
+
+There may be situations where the default argument parsing will not
+perform appropriately.  The library includes several functions that
+process command line arguments.
+
+The following code fragment attempts to illustrate the low-level
+processing that is needed to parse command line arguments.
+
+@example
+void my_process_arguments(void)
+@{
+   // Fresh tour variable for tracking progress
+   raTour tour
+   ra_start_tour(&tour);     // @xref{ra_start_tour}
+
+   // Targets to accept results of @code{ra_advance_action}
+   raStatus @var{status};    // @xref{raStatus}
+   raAction *@var{action};   // @xref{raAction}
+   const char *@var{value};
+
+   while (1)
+   @{
+      // Consider the next argument 
+      status = ra_advance_action(&@var{tour}, &@var{action}, &@var{value});
+      switch((@var{status} =
+      ra_advance_action(&@var{tour}, &@var{action}, &@var{value}))
+      @{
+         CASE RA_SUCCESS:
+            status = ra_execute_action_read(action, value, &tour);
+      @}
+   @}
+
+@}
+
+
+@end example
+

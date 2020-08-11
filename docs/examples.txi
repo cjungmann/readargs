@@ -7,8 +7,10 @@ example source listings.
 @menu
 * Basic Example::       Simplest usage
 * Non-options Example:: Example collecting non-option values
+* Low-level Example::   
 @end menu
 
 
 @include examples_basic.txi
 @include examples_nonoption.txi
+@include examples_lowlevel.txi

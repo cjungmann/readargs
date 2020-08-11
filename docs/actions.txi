@@ -4,3 +4,85 @@
 The options to which your program will respond are determined
 by an array of @code{raAction} structs.
 
+@menu
+* Action Introduction::
+* Option Action::        invoked with a command line option argument
+* Non option Action::    first-come, first-served actions for arguments
+                         that are not preceded by an option argument
+* Display Action::       displays information, including --help
+* Custom Action::        developers are not limited to these categories
+@end menu
+
+@node Action Introduction
+@section Action Introduction
+
+Actions are defined with a means to trigger, strings to describe the
+action, and information that allows execution to occur.
+
+@node Option Action
+@section Option Action
+
+If an action includes either or both of short or long option
+settings are @emph{option actions} because they are triggered
+when the short or long option arguments are parsed.
+
+@example
+   @{ 'i', "input", "input file", &ra_string_agent, &input_file, "STRING" @}
+@end example
+
+@node Non option Action
+@section Non option Action
+
+Actions that are not triggered by a short or long option argument
+are non option actions.  The non option actions are consumed in order,
+along with command line arguments that have no option precedent.
+
+The definition of a non option action is a little tricky.  The action
+needs a label in order for help displays to be generated, but the label
+would normally be interpreted as a long option label.
+
+So, for non option actions, the following steps are required:
+
+@itemize @bullet
+@item
+The @code{letter} member must be @code{-1}.
+
+@item
+The @code{label} member must have an asterisk @emph{*} prefix to
+distinguish it from normal options.
+
+@end itemize
+
+@example
+   @{ -1, "*input", "Input file", &ra_string_agent, &input_file, "FILENAME" @}
+@end example
+
+@node Display Action
+@section Display Action
+
+Display actions do not execute any of the command's function, but
+write some information to the screen.  Obvious examples are for
+@emph{help} and @emph{version} screens, but also include the builtin
+library function, @code{ra_show_scene_values} that prints value
+information for actions prepared to print their values.
+
+@example
+   @{ 'h', "help", "Show this help", &ra_show_help_agent @}
+@end example
+
+Notice that the example only sets four of the six members of the
+@code{raAction}.  This works here because the compiler sets
+unassigned struct member values to 0, AKA NULL.  The @code{target}
+and @code{type} member variables are pointers for which NULL
+is a valid value.
+
+@node Custom Action
+@section Custom Action
+
+There are several builtin @code{raAgent} implementations that
+save and show values.  Developers can create their own @code{raAgent}
+implementations that are limited only by the developer's
+imagination.
+
+@xref{raAgent}
+

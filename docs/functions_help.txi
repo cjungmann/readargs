@@ -1,53 +1,127 @@
 @node ra_describe_arguments
 @section ra_describe_arguments
 
-@deftypefun void ra_describe_arguments ({FILE*} f, int indent)
+@deftypefun void ra_describe_arguments (FILE* @var{f}, int @var{indent})
+
+Print the names, types, and descriptions for each @code{raAction} that
+is a non option action.
+
+
 @end deftypefun
 
 @node ra_describe_options
 @section ra_describe_options
 
-@deftypefun void ra_describe_options ({FILE*} f, int indent)
+@deftypefun void ra_describe_options (FILE* @var{f}, int @var{indent})
 @end deftypefun
 
 @node ra_describe_usage
 @section ra_describe_usage
 
-@deftypefun void ra_describe_usage ({FILE*} f, int indent, raUsage usage)
+@deftypefun void ra_describe_usage (FILE* @var{f}, @*@
+            int @var{indent}, @*@
+            raUsage @var{usage})
+
+Print a single line usage message to @var{f} that consists of
+the command name followed by a representation of the options
+and non options.
+
+There is a threshhold options count below which the option letters
+will all be printed, and above which they will be implied.
+
+This function is mostly a placeholder function to use during
+development.  A finished project should probably include a custom
+usage message.
+
 @end deftypefun
 
 @node ra_scene_options_count
 @section ra_scene_options_count
 
 @deftypefun int ra_scene_options_count (void)
+
 Call this function before calling @code{ra_describe_options} so
 @code{ra_describe_options} can be skipped if there are no options.
+
+@xref{Option Action}
+
 @end deftypefun
 
 @node ra_scene_arguments_count
 @section ra_scene_arguments_count
 
 @deftypefun int ra_scene_arguments_count (void)
+
 Call this function before calling @code{ra_describe_arguments} so
 @code{ra_describe_arguments} can be skipped if there are no arguments.
+
+@xref{Non option Action}
+
 @end deftypefun
 
 @node ra_show_help
 @section ra_show_help
 
-@deftypefun void ra_show_help ({FILE*} f, int indent, raUsage usage)
+@deftypefun void ra_show_help (FILE* @var{f}, @*@
+            int @var{indent}, @*@
+            raUsage @var{usage})
 @end deftypefun
 
 @node ra_show_no_args_message
 @section ra_show_no_args_message
 
 @deftypefun void ra_show_no_args_message (void)
+
+A convenient provider of a help display.  It calls the default
+functions for displaying usage, options, and non options.
+
 @end deftypefun
 
 
 @node ra_show_scene_values
 @section ra_show_scene_values
 
-@deftypefun void ra_show_scene_values ({FILE *} f)
+@deftypefun void ra_show_scene_values (FILE * @var{f})
+
+Shows the value of every 
+
 @end deftypefun
 
+
+
+@node ra_write_warning
+@section ra_write_warning
+
+@deftypefun void ra_write_warning ( @*@
+            FILE *@var{f}, @*@
+            raStatus @var{status}, @*@
+            const raTour *@var{tour}, @*@
+            const raAction *@var{action}, @*@
+            const char *@var{value});
+
+Displays a user-readable message to help understand unexpected
+results.
+
+@table @code
+@item FILE *f
+File stream to which the warning will be written
+
+@item raStatus status
+Status value for which the warning is needed
+
+@item const raTour *tour
+Tour status to consider the context of the error being reported
+
+@item const raAction *action
+Specific @code{raAction} that was being processed when the error occurred.
+The short or long option from the @code{raAction} is included in the
+warning.
+
+@item const char *value
+Value being applied when the error occurred.  If not NULL, this
+value is included in the warning.
+
+@end table
+
+
+@end deftypefun

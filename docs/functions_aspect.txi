@@ -1,0 +1,123 @@
+@node ra_is_positional_action
+@section ra_is_positional_action
+
+@deftypefun int ra_is_positional_action(const raAction* act)
+
+Test for positional or non-option action.  Command line arguments
+that are not associated with command line options are assigned to
+positional actions in the order they are encountered.
+
+@end deftypefun
+
+@xref{Non option Action}
+
+@node ra_is_named_action
+@section ra_is_named_action
+
+@deftypefun int ra_is_named_action(const raAction *act)
+
+Test the @code{raAction} instance for either a short option
+(as defined by the @var{letter} member), or a long option
+(as defined by the @var{label} member).  Having either or
+both of these members allows the action to be triggered by
+a command line option.
+
+@end deftypefun
+
+@xref{Option Action}
+
+@node ra_is_flag_action
+@section ra_is_flag_action
+
+@deftypefun int ra_is_flag_action(const raAction *act)
+
+This @code{raAction} type uses an @code{raAgent} whose
+@var{args_needed} member is set to @code{0}.  Generally,
+one uses the builtin agent @code{ra_flag_agent}.
+
+@end deftypefun
+
+@xref{builtin ra_flag_agent}
+
+@node ra_is_value_action
+@section ra_is_value_action
+
+@deftypefun int ra_is_value_action(const raAction *act)
+
+Returns non-zero if the @code{raAction} takes a value.  The
+library uses this function to decide whether or not to return
+a string to the @var{str} parameter of the @code{ra_advance_action}
+function.
+
+@end deftypefun
+
+@xref{ra_advance_action}
+
+@node ra_is_writable_action
+@section ra_is_writable_action
+
+@deftypefun int ra_is_writable_action(const raAction *act)
+
+Test for @code{raAction} to determine if it can write its
+value.  Being able to write a value allows this @code{raAction}
+instance to participate in the @code{ra_show_values_agent}
+printing of the actions' values.
+
+@end deftypefun
+
+@xref{builtin ra_show_values_agent}
+
+@node ra_execute_action_read
+@section ra_execute_action_read
+
+@deftypefun raStatus ra_execute_action_read (@*@
+            const raAction *action,@*@
+            const char *str,@*@
+            raTour *tour)
+
+Given the selected @code{raAction} instance and a value (if appropriate),
+this function uses the attached @code{raAgent} instance to apply the
+@var{str} value to the @var{action}.
+
+@table @code
+@item const raAction *action
+The @code{raAction} instance matching the command line argument
+
+@item const char *str
+The value to be assigned to the @code{raAction}, if appropriate.
+This parameter will be filled only if @var{action} is a @emph{value action}.
+
+@item raTour *tour
+The active @var{tour} instance is made available in case the @code{raAgent}
+needs to manipulate the argument pointer, either to take more values for
+multi-value agents, or to return an inappropriate argument in the case of
+an optional-value action.
+
+@end table
+
+@end deftypefun
+
+@node ra_execute_action_write
+@section ra_execute_action_write
+
+@deftypefun void ra_execute_action_write (@*@
+            FILE *f,@*@
+            const raAction *action)
+
+This function attempts to resolve the value of the @code{raAction}
+parameter and write the value to file stream @var{f}.
+
+The function will silently (no warnings or errors) do nothing if
+@var{action} or @var{action->agent} or @var{action->agent->writer}
+is NULL.
+
+@table @code
+@item FILE *f
+The file stream to which the value is to be written
+
+@item const raAction *action
+The selected @code{raAction} from which the value is to be retrieved.
+
+@end table
+
+@end deftypefun

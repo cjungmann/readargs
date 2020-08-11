@@ -1,0 +1,77 @@
+@node ra_start_tour
+@section ra_start_tour
+
+@deftypefun raTour *ra_start_tour (raTour * @var{tour})
+
+Initialize @var{tour} with starting positions of the global
+@var{g_scene} variable.
+
+@end deftypefun
+
+
+
+@node ra_advance_arg
+@section ra_advance_arg
+
+@deftypefun const char* ra_advance_arg (raTour * @var{tour})
+
+Moves the argument pointer ahead one position.  Note that the argument
+is an uninterpreted command line argument, which may or may not be an
+option.
+
+@end deftypefun
+
+@node ra_retreat_arg
+@section ra_retreat_arg
+
+@deftypefun raStatus ra_retreat_arg (raTour *@var{tour})
+
+Moves the argument pointer back one position.  This is mainly used
+for optional value actions when the value is determined to be unneeded.
+Returning the argument puts it in the queue to be considered for the
+next option.
+
+@end deftypefun
+
+@node ra_advance_action
+@section ra_advance_action
+
+@deftypefun raStatus ra_advance_action (@*@
+            raTour *@var{tour},@*@
+            const raAction **@var{action},@*@
+            const char **@var{value})
+
+@table @code
+@item raTour *@var{tour}
+The function consumes arguments from the @code{raTour} instance,
+updating the pointers therein to be prepared for the next
+call of @code{ra_advance_action}.
+
+@item const raAction **@var{action}
+The matched @code{raAction} is returned through this pointer-to-pointer
+parameter.
+
+@item const char **@var{value}
+If the @code{raAction} is a value action, the value to be applied to
+the action is returned in this pointer-to-pointer parameter.
+
+Custom optional-value actions may decide that the value does not
+apply to the current action, in which case this value should be
+declined by calling @code{ra_retreat_arg}.
+
+@end table
+@end deftypefun
+
+@node ra_current_arg
+@section ra_current_arg
+
+@deftypefun const char* ra_current_arg (const raTour *@var{tour})
+
+@end deftypefun
+
+@node ra_current_action
+@section ra_current_action
+
+@deftypefun const raAction *ra_current_action (const raTour *@var{tour})
+
+@end deftypefun

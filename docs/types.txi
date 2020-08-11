@@ -11,6 +11,9 @@ struct types
 * raAction::      holds details of an defined action
 * raScene::       preserves static values from @code{main} for navigating tours
 * raTour::        tracks progress through command line arguments
+
+enumeration types
+* raStatus::      return value from many library functions
 @end menu
 
 @c raReader function pointer type
@@ -236,4 +239,7 @@ to know which is next and to ensure each position action
 is used only once.
 @end table
 @end deftp
+
+@include rastatus.txi
+
 

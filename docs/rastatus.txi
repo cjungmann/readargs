@@ -1,0 +1,87 @@
+@node raStatus
+@section raStatus
+
+Many library functions return a @code{raStatus} value to indicate
+success or the type of failure.
+
+@deftp {DATA TYPE} {typedef enum raStatus}
+
+@table @code
+
+@item RA_SUCCESS
+No errors or interruptions
+
+@item RA_CANCEL
+This value is returned by the @code{ra_show_help_agent} to indicate
+that the program should not continue after processing this action.
+
+@xref{builtin ra_show_help_agent}
+
+Custom @code{raAgent} implementations should return @code{RA_CANCEL}
+if the action should not continue.
+
+@xref{raAgent Detail}
+
+@item RA_END_ACTIONS
+Returned when a double-dash (--) is encountered in the argument list.
+All arguments following this marker should be treated as positional,
+or non-option actions.
+
+@xref{ra_advance_action}
+
+@item RA_END_ARGS
+Returned when there are no more command line arguments to retrieve.
+
+@xref{ra_advance_action}
+
+@item RA_BEFORE_ARGS
+Returned when a call to @code{ra_retreat_arg} would otherwise move
+the argument pointer before the argument list.
+
+@xref{ra_retreat_arg}
+
+@item RA_UNKNOWN_OPTION
+
+Returned when an argument appears to be an option, but the option
+is not found.
+
+@item RA_MALFORMED_ACTION
+
+Unused by the library, but this return value can be returned at the
+discretion of a custom agent when the value @code{RA_INVALID_ARGUMENT}
+is not appropriate.
+
+@item RA_INVALID_ARGUMENT
+
+Returned when a value argument (begin applied to some agent) is
+not appropriate for the selected action.
+
+For example, the @code{ra_int_agent} will return @code{RA_INVALID_ARGUMENT}
+if the string value cannot be converted to an integer.
+
+@item RA_MISSING_TARGET
+
+For agents that set values, like builtin agents @code{ra_flag_agent}, 
+@code{ra_int_agent}, and @code{ra_string_agent}, this value is returned
+when the @code{raAction} instance does not include a @code{target}
+pointer.
+
+@xref{raAction}
+
+@item RA_MISSING_AGENT
+
+Returned when a selected @code{raAction} instance has a NULL @code{raAgent}
+value.
+
+@item RA_MISSING_READER
+
+Returned by the function @code{ra_execute_action_read} if the @code{raAgent}
+has a NULL @code{raReader} value.
+
+@xref{ra_execute_action_read}@*
+@xref{raAgent}
+
+@end table
+
+@end deftp
+
