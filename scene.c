@@ -6,7 +6,7 @@
 
 EXPORT int ra_is_positional_action(const raAction* act)
 {
-   return act->letter<1
+   return act->letter < -1
       && (act->label && *act->label == '*');
 }
 
