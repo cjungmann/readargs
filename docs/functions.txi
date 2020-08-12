@@ -7,6 +7,7 @@ basic functions
 * ra_set_scene::               register global variable with command line arguments
                                list of option instructions
 * ra_process_arguments::       processes command line arguments
+* ACTS_COUNT::                 macro that counts actions in action map
 
 display functions
 @c found in functions_help.txi
@@ -38,9 +39,12 @@ action identifiers
 * ra_is_value_action::         TRUE if action requires a following value argument
 * ra_is_writable_action::      TRUE if associated @code{raAgent} implements a @var{writer}
 
+miscellaneous
 @c action executors
 * ra_execute_action_read::     calls appropriate @code{raAgent::reader} to process argument
 * ra_execute_action_write::    writes value of @code{raAction} using @code{raAgent::writer} if found
+* ra_command_name::            name of currently running command
+
 
 @end menu
 
