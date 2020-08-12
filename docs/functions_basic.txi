@@ -37,23 +37,41 @@ There is a helper macro for calculating this value,
 
 @end deftypefun
 
+@xref{exec basic}
+
 @node ra_process_arguments
 @section ra_process_arguments
 
 @deftypefun int ra_process_arguments (void)
 
+Returns 1 to continue processing arguments, 0 to stop.
+
 This function lets the library do everything for you.  It takes
 no arguments since it's using the global @code{g_scene} variable
 to begin processing.
 
+This function writes warning and error messages to @var{stdout}.
+This is not typical library behavior, but it fulfills its mission
+to be a plug-in solution for someone making an application.
+
+If this behavior is not appropriate for your application, look at
+the @xref{Low-level Example} for a break-down of this function to
+see where @code{ra_write_warnings} is called and decide how you might
+otherwise handle user-entry errors.
+
 @end deftypefun
 
-@deftypefun void ra_set_scene @*@
-            ({const char**} start_arg, @*@
-            int arg_count, @*@
-            {const raAction *} start_opt, @*@
-            int opt_count)
-This function should be called in @
-@end deftypefun
-            
+@xref{exec basic}
 
+@node ACTS_COUNT
+@section ACTS_COUNT
+
+@defmac ACTS_COUNT (@var{actions_array})
+
+This macro calculates the number of actions in an array by dividing
+the @code{sizeof} the array by the @code{sizeof} an @code{raAction}.
+
+@xref{raAction} @*
+@xref{exec basic}
+
+@end defmac
