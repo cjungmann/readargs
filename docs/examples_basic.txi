@@ -8,7 +8,8 @@ to use this library.
 #include <stdio.h>
 #include <readargs.h>
 
-// Prepare action targets and the actions array (@pxref{raAction})
+// Prepare action targets and the actions array
+// @xref{raAction}
 const char *name = NULL;
 int        value = 0;
 
@@ -24,17 +25,23 @@ int main(int argc, const char **argv)
    if (argc < 2)
    @{
       // If some arguments are necessary, a usage message may be helpful.
-      // Create your own message, or use the builtin message display (@pxref{ra_show_no_args_message}).
+      // Create your own message, or use the builtin message display.
+      // @xref{ra_show_no_args_message}
       ra_show_no_args_message();
       return 1;
    @}
    else
    @{
+@anchor{exec basic}
       // Register the arguments and option instructions to
-      // the global raScene variable @xref{ra_set_scene}, @xref{raScene}
+      // the global raScene variable.
+      // @xref{ra_set_scene}
+      // @xref{raScene}
+      // @xref{ACTS_COUNT}
       ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
 
-      // Call the function that starts everything @xref{ra_process_arguments}
+      // Call the function that starts everything
+      // @xref{ra_process_arguments}
       if (ra_process_arguments())
       @{
          // Begin program.  Here we just show the target values
