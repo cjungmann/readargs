@@ -19,21 +19,33 @@ void my_process_arguments(void)
    ra_start_tour(&tour);     // @xref{ra_start_tour}
 
    // Targets to accept results of @code{ra_advance_action}
-   raStatus @var{status};    // @xref{raStatus}
-   raAction *@var{action};   // @xref{raAction}
+   @c notice: I added six spaces before the '//' to cover the
+   @c characters '@var{}' and line up with '// @xref{ra_start_tour}'
+   raStatus @var{status};          // @xref{raStatus}
+   raAction *@var{action};         // @xref{raAction}
    const char *@var{value};
 
    while (1)
    @{
       // Consider the next argument 
       status = ra_advance_action(&@var{tour}, &@var{action}, &@var{value});
-      switch((@var{status} =
-      ra_advance_action(&@var{tour}, &@var{action}, &@var{value}))
+
+      switch(@var{status})
       @{
-         CASE RA_SUCCESS:
+         case RA_SUCCESS:
             status = ra_execute_action_read(action, value, &tour);
+            if (status == RA_CANCEL)
+               goto arguments_end;
+            break;
+
+         case RA_END_ARGS:
+         case RA_END_ACTIONS:
+         case RA_CANCEL:
+              goto arguments_end;
       @}
    @}
+
+   arguments_end:
 
 @}
 
