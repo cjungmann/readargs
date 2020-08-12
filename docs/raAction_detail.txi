@@ -6,14 +6,16 @@ invoking the option (letter and/or long option), a comment
 string used for @option{--help} output, and an agent for
 recording the user's command.
 
-An array of these objects defines the set of available
-command line options.  (@pxref{Basic Example})
+An array of these objects is called a command line parsing map,
+which is used by the library to identify actions according to
+the command line arguments submitted by the user.
+(@pxref{Basic Example})
 
 @example
-typedef struct _readargs_option
+typedef struct _readargs_action
 @{
-   int           letter;   /* letter that invokes the option */
-   const char    *label;   /* long-option name invoking option */
+   int           letter;   /* letter that invokes the action */
+   const char    *label;   /* long-option name invoking action */
    const char    *comment; /* documents option for help output */
    const raAgent *agent;   /* object that manages value */
    void          *target;  /* optional data pointer */
@@ -84,6 +86,9 @@ custom agents is how the library may be extended.
 @c
 @node raAction target
 @subsection raAction target
+
+This data member, is not NULL, is a pointer to data that will
+be set or read from according to the @code{raAgent} data member.
 
 @c
 @node raAction type
