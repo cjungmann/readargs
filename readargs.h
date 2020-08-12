@@ -20,7 +20,8 @@ typedef enum {
    RA_INVALID_ARGUMENT,
    RA_MISSING_TARGET,
    RA_MISSING_AGENT,
-   RA_MISSING_READER
+   RA_MISSING_READER,
+   RA_MISSING_VALUE
 } raStatus;
 
 typedef raStatus (*raReader)(const raAction *act, const char *str, raTour *tour);
