@@ -7,7 +7,7 @@ Function pointer types
 * raWriter::      displays an action's value
 
 struct types
-* raAgent::       contains elements needed to process an option
+* raAgent::       contains resources needed to process an action
 * raAction::      holds details of an defined action
 * raScene::       preserves static values from @code{main} for navigating tours
 * raTour::        tracks progress through command line arguments
@@ -22,7 +22,12 @@ enumeration types
 Function pointer called by the library to execute an action's mission.
 This is a @strong{mandatory} member of the @ref{raAgent} struct.
 
-@deftp {Function Pointer Type} raStatus (*raReader)(const raAction *act, const char *str, raTour *tour)
+@c Function pointer type definition modeled after
+@c tss_dtor_t in libc library (threads.texi).
+@deftp {Function Pointer Type} raReader
+
+The @code{raReader} is a function pointer of type @*
+@code{raStatus (*)(const raAction *act, const char *str, raTour *tour)}.
 
 @table @code
 @item const raAction *act
@@ -35,15 +40,15 @@ if the mission is to set the @code{target} value.
 The command line argument string that is to be used for setting
 the @code{target}.  This is not always a separate command line
 argument because in some cases the @code{*str} value is the set
-of characters that remain after the letter of a value-option
+of characters that remain after the letter of a value-action
 invocation.
 
 @item raTour *tour
 The @code{raTour} object that is tracking the progress through
-the command line arguments.  This member is rarely used, but is
-useful when it's necessary to return the @code{*str} to the
-argument tour or if the action needs to consume more than one
-argument.
+the command line arguments.  This argument is rarely accessed,
+but is useful when it's necessary to return the @code{*str} to
+the argument tour or if the action needs to consume more than
+one argument.
 @end table
 
 @end deftp
@@ -57,7 +62,10 @@ member of the @ref{raAgent} struct because some actions are
 not associated with any value, like showing the help or usage
 display.
 
-@deftp {Function Pointer Type} void (*raWriter)(FILE *f, const raAction *act)
+@deftp {Function Pointer Type} raWriter
+
+The @code{raWriter} is a function pointer of type@*
+@code{void (*)(FILE *f, const raAction *act)}.
 
 @table @code
 @item FILE *f
@@ -80,7 +88,7 @@ instance of @code{raAction} needs an @code{raAgent} for
 this purpose.
 
 Minimally, it contains three members, but customized
-versions can longer according to the option's needs.
+versions can longer according to the action's needs.
 
 @verbatim
 typedef struct _readargs_agent {
@@ -118,8 +126,9 @@ Developers can also make custom agents.  @xref{raAgent Detail}.
 @node raAction
 @section raAction
 This data type associates an agent, a target, and a comment
-with an option letter or long-option label.  A set of @code{raAction}
-objects defines the command line processing of a command.
+with an option letter or long-option label.  An array of @code{raAction}
+instances defines the command line processing map which is used
+by the library to determine how to handle command line arguments.
 
 @verbatim
 typedef struct _readargs_action {
@@ -160,7 +169,7 @@ not necessary for some actions like displaying help.
 
 @item const char *type
 A string to use in help displays to show the data type expected by
-a given option.  The string @code{VALUE} will be usedIf this value
+a given action.  The string @code{VALUE} will be used if this value
 is @code{NULL}.
 
 @end table
