@@ -20,7 +20,7 @@ that the program should not continue after processing this action.
 Custom @code{raAgent} implementations should return @code{RA_CANCEL}
 if the action should not continue.
 
-@xref{raAgent Detail}
+@xref{raAgent}
 
 @item RA_END_ACTIONS
 Returned when a double-dash (--) is encountered in the argument list.

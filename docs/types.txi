@@ -120,7 +120,7 @@ pointer when displaying value the associated action.
 
 There are several builtin agents, @xref{Builtin Action Agents}.
 
-Developers can also make custom agents.  @xref{raAgent Detail}.
+Developers can also make custom agents.  @xref{raAgent}.
 
 @c raAction 
 @node raAction
