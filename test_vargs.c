@@ -1,49 +1,46 @@
 #include <stdio.h>
+#include <unistd.h>   // for access()
 
 #include "readargs.h"
 
-/** This function signals whether a string is appropriate for the action.
+/** This is a test if a filename exists and is readable.
  *
  * This is used to interpret a string that may or may not be meant
  * for an optional-valued option.
  */
-int str_suits_positional_action(const raAction *act, const char *str)
+int is_appropriate_input_file(const char *filepath)
 {
-   return 0;
+   return !access(filepath, R_OK);
 }
 
 raStatus filepath_optional_reader(const raAction *act, const char *str, raTour *tour)
 {
-   static const char *default_value = "./";
+   // Make sure default value is valid after function returns!
+   static const char *default_value = "/etc/hosts";
+
+   if (!act->target)
+      return RA_MISSING_TARGET;
+
    // Cast target for eventual assignment
    const char **target = (const char **)act->target;
+   *target = NULL;
 
-   // If there is no *str, these is no mystery: use the default action value.
-   if (str == NULL)
-      *target = default_value;
-   else
+   if (str == NULL)                       // if no string
    {
-      const raAction *valueact = ra_seek_raAction(str, tour);
-
-      // If there is no *valueact, the value is *str
-      if (valueact == NULL)
-         *target = str;
-      else if (!ra_is_positional_action(valueact)
-               || (str_suits_positional_action(valueact, str)))
-      {
-            // Reuse the str as the next actions by pushing it back:
-            ra_retreat_arg(tour);
-
-            // Since we're not using the value, we fall back to the default value
-            *target = default_value;
-      }
-      else
-      {
-         // even though there is a position action available,
-         // the value is not appropriate for that action, so
-         // allow the str to be used as the current action value.
-         *target = str;
-      }
+      *target = default_value;
+      return RA_SUCCESS;
+   }
+   else if ( (ra_seek_raAction(str, tour))       // str, but is option
+             || !is_appropriate_input_file(str)) // str, but not a readable file
+   {
+      *target = default_value;                   // ignore str and signal success
+      ra_retreat_arg(tour);
+      return RA_SUCCESS;
+   }
+   else                                          // str is usable
+   {
+      *target = str;
+      return RA_SUCCESS;
    }
 
    return RA_SUCCESS;
@@ -113,10 +110,10 @@ const char *name = NULL;
 PPair ppair = {NULL,NULL};
 
 raAction actions[] = {
-   {'h', "help",    "This help output",     &ra_show_help_agent },
-   {'s', "show",    "Show action values",   &ra_show_values_agent },
-   {'f', "filepath","Set file path",        &filepath_optional_agent, &filepath,   "FILEPATH" },
-   {'p', "param",   "Set param value",      &param_agent,             &ppair }
+   {'h', "help",  "This help output",   &ra_show_help_agent },
+   {'s', "show",  "Show action values", &ra_show_values_agent },
+   {'i', "input", "input file",         &filepath_optional_agent, &filepath,   "FILEPATH" },
+   {'p', "param", "Set param value",    &param_agent,             &ppair }
 };
 
 int main(int argc, const char **argv)
