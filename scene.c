@@ -317,7 +317,7 @@ EXPORT raStatus ra_advance_action(raTour *tour, const raAction **action, const c
                   }
                }
                else       // actions terminator, naked double-dash "--"
-                  return RA_END_ACTIONS;
+                  return RA_END_OPTIONS;
             }
             else          // short action, single-dash + letter
                *actions_str = arg;
@@ -401,8 +401,8 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_SUCCESS:
          fprintf(f, "no error\n");
          break;
-      case RA_END_ACTIONS:
-         fprintf(f, "reached the end of the actions\n");
+      case RA_END_OPTIONS:
+         fprintf(f, "encountered argument '--'\n");
          break;
       case RA_END_ARGS:
          fprintf(f, "reached the end of the arguments\n");
@@ -502,7 +502,7 @@ int main(int argc, const char **argv)
             }
             break;
          case RA_END_ARGS:
-         case RA_END_ACTIONS:
+         case RA_END_OPTIONS:
             goto end_action_walk;
          case RA_UNKNOWN_ACTION:
             fprintf(stderr, "Action %s is not known.\n", *tour.current_arg);
