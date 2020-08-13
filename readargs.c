@@ -217,36 +217,25 @@ EXPORT int ra_process_arguments(void)
    raTour tour;
    ra_start_tour(&tour);
 
-   raStatus status;
    const raAction *action;
-   const char *value;
-   int retval = 0;
+   const char     *value;
+   raStatus       status;
 
    while(1)
    {
-      switch((status = ra_advance_action(&tour, &action, &value)))
-      {
-         case RA_SUCCESS:
-            status = ra_execute_action_read(action, value, &tour);
-            if (status==RA_CANCEL)
-               goto arguments_end;
-            break;
+      status = ra_advance_action(&tour, &action, &value);
 
-         case RA_END_ARGS:
-         case RA_END_ACTIONS:
-            retval = 1;
-         case RA_CANCEL:
-            goto arguments_end;
+      if (status == RA_SUCCESS)
+         status = ra_execute_action_read(action, value, &tour);
 
-         default:
-            ra_write_warning(stderr, status, &tour, action, value);
-            break;
-      }
+      if (status == RA_CANCEL)              // cancel execution at action's direction
+         return 0;
+      else if (status == RA_END_ARGS        // no more arguments to read
+               || status == RA_END_OPTIONS) // encountered "--" argument
+         return 1;
+      else if (status != RA_SUCCESS)
+         ra_write_warning(stderr, status, &tour, action, value);
    }
-
-  arguments_end:
-
-   return retval;
 }
 
 
