@@ -21,7 +21,7 @@ Parse command line arguments
 @menu
 * Step Details::            describe and explain steps
 * Minimal Code Example::    a simple and complete example
-* Various Action Types::    demonstration of action types (step 2)
+* Defining an Action Map::  an explanation of action types (step 2)
 * Custom Parsing Example::  custom argument parsing (step 4)
 @end menu
 
