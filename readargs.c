@@ -229,10 +229,10 @@ EXPORT int ra_process_arguments(void)
          status = ra_execute_action_read(action, value, &tour);
 
       if (status == RA_CANCEL)              // cancel execution at action's direction
-         return 0;
+         return 0;                          // direct calling function to terminate program
       else if (status == RA_END_ARGS        // no more arguments to read
-               || status == RA_END_OPTIONS) // encountered "--" argument
-         return 1;
+               || status == RA_END_OPTIONS) // encountered '--' argument
+         return 1;                          // indicate successful tour of arguments
       else if (status != RA_SUCCESS)
          ra_write_warning(stderr, status, &tour, action, value);
    }
