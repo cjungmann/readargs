@@ -19,14 +19,14 @@ Parse command line arguments
 @end enumerate
 
 @menu
-* Step Details::            describe and explain steps
-* Minimal Code Example::    a simple and complete example
-* Defining an Action Map::  an explanation of action types (step 2)
-* Custom Parsing Example::  custom argument parsing (step 4)
+* Step Details::             describe and explain steps
+* Minimal Code Example::     a simple and complete example
+* Defining an Action Map::   an explanation of action types (step 2)
+* Argument Processing::      argument parsing (step 4)
 @end menu
 
 @include qs_steps.txi
 @include qs_mincode.txi
 @include qs_action_types.txi
-@include qs_custparse.txi
+@include qs_argprocess.txi
 

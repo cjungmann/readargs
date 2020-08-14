@@ -48,7 +48,7 @@ errors and automatically handles early termination situations.
 
 @xref{ra_process_arguments}@*
 @xref{Minimal Code Example}@*
-@xref{Custom Parsing Example}
+@xref{Argument Processing}
 
 @item For most control
 Use library functions to cycle through the command line arguments

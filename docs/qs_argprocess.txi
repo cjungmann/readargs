@@ -1,5 +1,5 @@
-@node Custom Parsing Example
-@section Custom Parsing Example
+@node Argument Processing
+@section Argument Processing
 
 For ease of reading, this example will replace the function
 @code{ra_process_arguments} in the minimal code example on the

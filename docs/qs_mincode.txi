@@ -15,6 +15,7 @@ const char *sval;
 
 // Step 2: @strong{declare actions map}
 @anchor{code step 2}
+// @xref{Defining an Action Map}
 raAction actions[] = @{
    @{ 'h', "help",   "This help display", &ra_show_help_agent, NULL,  NULL @},
    @{ 'n', "number", "Set nval",          &ra_int_agent,       &nval, "NUMBER" @},
@@ -29,6 +30,7 @@ int main(int argc, const char *argv)
 
    // Step 4: @strong{parse command line arguments}
    @anchor{code step 4}
+   // @xref{Argument Processing}
    if (ra_process_arguments())
    @{
       // begin the program here
