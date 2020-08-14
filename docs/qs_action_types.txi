@@ -1,29 +1,41 @@
-@node Various Action Types
-@section Various Action Types
+@node Defining an Action Map
+@section Defining an Action Map
 
-This section replaces the actions map (step 2) in the
-minimal code sample (@pxref{Minimal Code Example}).
+In order to explain the how @code{raAction} instances are
+constructed and used to build an action map, this section
+breaks down an array of @code{raAction} elements to see
+how they work.
 
+This section illustrates and expands on the actions map (step 2)
+in the minimal code sample (@pxref{Minimal Code Example}).@*
 @xref{def step 2}@*
 @xref{code step 2}
+
+It will be helpful to become familiar with the construction of
+the @code{raAction} data type (@pxref{raAction}).
+
+Code fragment defining an action map:
 
 @example
 raction actions[] = @{
    // actions that display information and terminate program
    @{ 'h', "help", "This help display", &ra_show_help_agent @},
    @{ 's', "show", "Show action values", &ra_show_values_agent @},
-
-   @{ 'n', NULL,     "Set nval", &ra_int_agent,    &nval, "NUMBER" @},
-   @{ 0,   "string", "Set sval", &ra_string_agent, &sval, "STRING" @},
+   // One should also make a custom -v/--version action
 
    // action used by non-option argument
    @{ -1,  "*input", "Input file'', &ra_string_agent, &input_path, "FILEPATH" @}
+
+   // actions that set user-choice variables
+   @{ 'n', NULL,     "Set nval",  &ra_int_agent,    &nval, "NUMBER" @},
+   @{ 0,   "string", "Set sval",  &ra_string_agent, &sval, "STRING" @},
 
 @};
 @end example
 
 @table @code
 @item @{ 'h', "help", "This help display", &ra_show_help_agent @}
+@itemx @samp{display}, @samp{omitted members}
 Most Linux commands include a @option{-h}/@option{--help} option,
 and the library makes it easy to do so.
 
@@ -34,6 +46,7 @@ these options do not participate in setting variables, so they do
 not need a target variable nor a tag to describe their values.
 
 @item @{ 's', "show", "Show action values", &ra_show_values_agent @}
+@itemx @samp{debug display} @samp{display}, @samp{omitted members}
 This is a special feature of this library: to print out
 the values handled by the action map.  It is not standard
 and is not required, but it can be a help during development
@@ -41,8 +54,28 @@ to confirm proper argument handling, and it may also help
 end users to confirm their intentions.
 
 @item @{ -1,  "*input", "Input file'', &ra_string_agent, &input_path, "FILEPATH" @}
+@itemx @samp{non-option action}, @samp{set value}
 This is a positional or non-option action.  It is matched
 when a argument is read that is not preceded by a short or
 long option invocation (ie @emph{-h} or @emph{--help}).
+
+There are two requirements to identifying a positional action:@*
+@enumerate
+@item
+The first member (letter) must be @code{-1}, and
+@item
+The second member (label) must include an asterisk prefix.
+@end enumerate
+
+@item  @{ 'n', NULL,     "Set nval",  &ra_int_agent,    &nval, "NUMBER" @}
+@itemx @samp{short- but no long-option}, @samp{set value}
+Setting the second member (label) to NULL means there is no
+long-option access to this action
+
+@item   @{ 0,   "string", "Set sval",  &ra_string_agent, &sval, "STRING" @},
+@itemx @samp{long- but no short-option}, @samp{set value}
+Setting the first member (letter) to 0 means that there is no
+short-option access to this action.
+
 
 @end table
