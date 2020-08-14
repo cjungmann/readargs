@@ -18,7 +18,8 @@ A action map is an array of @code{raAction} instances.  The
 library determines which action to execute by comparing the
 command line arguments against elements of the action map.
 
-@xref{raAction}
+@xref{raAction}@*
+@xref{Defining an Action Map}
 
 @item Initialize library
 @anchor{def step 3}
@@ -46,7 +47,8 @@ be done.  This function uses @code{stderr} to warn the user of
 errors and automatically handles early termination situations.
 
 @xref{ra_process_arguments}@*
-@xref{Minimal Code Example}
+@xref{Minimal Code Example}@*
+@xref{Custom Parsing Example}
 
 @item For most control
 Use library functions to cycle through the command line arguments
