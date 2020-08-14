@@ -39,7 +39,7 @@ void my_process_arguments(void)
             break;
 
          case RA_END_ARGS:
-         case RA_END_ACTIONS:
+         case RA_END_OPTIONS:
          case RA_CANCEL:
               goto arguments_end;
       @}
