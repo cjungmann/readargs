@@ -19,7 +19,7 @@ a custom argument parser:
 @enumerate
 @item
 @anchor{item non-standard --}
-A need to handle '--' in a non-standard way.  If this is needed,
+A need to handle @samp{--} in a non-standard way.  If this is needed,
 the customer argument parser would recognize @code{raStatus} value
 RA_END_OPTIONS and respond appropriately.
 
@@ -49,16 +49,16 @@ value, so new code will be needed to write the unique messages.
 Look at the code.  It is largely lifted from the builtin function,
 @code{ra_process_arguments} found in source file @file{readargs.c}.
 
-This code listing includes additional comments to help explain
-the steps used to process command line arguments.
+The following code fragment includes additional comments to help
+explain the steps used to process command line arguments.  The call
+to @code{ra_process_arguments} in the minimal code example can be
+replaced with a call to @code{process_arguments_on_my_own} found in
+the code fragment.
 
 Comments that begin with @emph{CUSTOMIZE POTENTIAL} draw attention
 to the items in the list of reasons to customize (@pxref{Reasons to Customize}).
 
 @example
-#include <stdio.h>
-#include <readargs.h>
-
 // This function assumes that ra_set_scene has been called.
 int process_arguments_on_my_own(void)
 @{
