@@ -1,0 +1,32 @@
+@node Quick Start
+@chapter Quick Start
+
+There are four steps to setting up @code{readargs} in an application:
+
+@enumerate
+@item
+Declare user choice variables
+
+@item
+Declare actions map
+
+@item
+Initialize library
+
+@item
+Parse command line arguments
+
+@end enumerate
+
+@menu
+* Step Details::            describe and explain steps
+* Minimal Code Example::    a simple and complete example
+* Various Action Types::    demonstration of action types (step 2)
+* Custom Parsing Example::  custom argument parsing (step 4)
+@end menu
+
+@include qs_steps.txi
+@include qs_mincode.txi
+@include qs_action_types.txi
+@include qs_custparse.txi
+

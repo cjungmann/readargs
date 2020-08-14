@@ -1,0 +1,174 @@
+@node Customizing
+@chapter Customizing
+
+The @code{raAgent} interface, and specifically the @code{raReader}
+function pointer, is the object through which all the work is
+done in the @code{readargs} library.
+
+While there are several builtin agents, handling boolean,
+integer, and string data types, as well as displaying a
+help display, most project will need to handle command line
+arguments in a unique way.
+
+Creating new @code{raReader} functions, therefore, is how
+customization is done.
+
+@menu
+* float agent::
+* optional value agent::
+@end menu
+
+@node float agent
+@section Float Agent
+
+A float agent is not provided by the library, but it is easy
+to create and serves as a tutorial for making a custom agent.
+
+The most important member of the @code{raAgent} instance is
+the @code{raReader} function pointer because the reader function
+performs the fundamental task of the custom type parser.
+
+@example
+   #include <readargs.h>
+   #include <stdlib.h>
+
+   // @xref{raReader}
+   raStatus float_reader(const raAction *action,
+                         const char *str,
+                         raTour *tour)
+   @{
+       if (!action->target)
+          return RA_MISSING_TARGET;
+       if (!str)
+          return RA_MISSING_VALUE;
+
+       float work = strtof(str);
+
+       if (errno == ERANGE)
+          return RA_INVALID_ARGUMENT;
+       else
+       @{
+          (float*)action->target = work;
+          return RA_SUCCESS;
+       @}
+   @}
+
+   // Not necessary in general, but a @code{raWriter} would be
+   // expected and easy enough to provide for the float data type.
+   // @xref{raWriter}
+   void float_writer(FILE *f, const raAction *action)
+   @{
+       if (action->target)
+          fprintf(f, "%f", (double)*(float*)action->target);
+   @}
+
+   // Having defined the necessary functions, create an instance
+   // of @code{raAgent} that will handle float arguments.
+   // @xref{raAgent}
+   raAgent float_agent = @{ 1, float_reader, float_writer @};
+@end example
+
+
+@node optional value agent
+@section Optional Value Agent
+
+An optional value agent must be a custom agent because of the
+uncertain task of determining if what follows the short or long
+option that triggers the action.
+
+@menu
+* optional-value discussion::
+* optional-value code::
+@end menu
+
+@node optional-value discussion
+@subsection Optional-Value Discussion
+
+It's up to the developer to decide how forgiving the optional
+value agent will be.  There are a few options:
+
+@itemize @bullet
+@item
+Strict parsing, the option must be followed by a usable value or NULL.
+This means that an unvalued option must be the last command line argument,
+which would be the only way to have a NULL @code{str} value.
+
+@item
+Forgiving parsing, where the @code{str} value ignored if it
+is a recognized command line option.  In this case, the command line
+argument whose value was used for @code{str} will be returned
+using @code{ra_retreat_arg}.
+
+@xref{ra_retreat_arg}
+
+@item
+More forgiving parsing, where the @code{str} value is tested for
+appropriateness to the action in addition to matching a command
+line option.  A matched action or inappropriate value will be returned
+with @code{ra_retreat_arg}
+
+@xref{ra_retreat_arg}
+@end itemize
+
+@node optional-value code
+@subsection Optional-Value Code
+
+This example will demonstrate the most forgiving parsing.
+
+@example
+   #include <readargs.h>
+   #include <unistd.h>
+
+   int is_appropriate_input_file(const char *filepath)
+   @{
+      return !access(filepath, R_OK);
+   @}
+
+   // @xref{raReader}
+   raStatus input_file_reader(const raAction *action,
+                              const char *str,
+                              raTour *tour)
+   @{
+       if (!action->target)
+          return RA_MISSING_TARGET;
+
+       // Make sure default value is valid after function returns!
+       static const char *default_value = "/etc/hosts";
+
+       // Cast target for eventual assignment
+       const char **target = (const char **)act->target;
+       *target = NULL;
+
+       if (str == NULL)                             // if no string
+       @{
+          *target = default_value;
+          return RA_SUCCESS;
+       @}
+       else if ( (ra_seek_raAction(str, tour)) ||   // str, but is option OR
+                 !is_appropriate_input_file(str))   // str, but not a readable file
+       @{
+          *target = default_value;                  // ignore str and signal success
+          ra_retreat_arg(tour);                     // IMPORTANT: return str argument
+          return RA_SUCCESS;
+       @}
+       else                                         // str is usable
+       @{
+          *target = str;
+          return RA_SUCCESS;
+       @}
+   @}
+
+   // Not necessary in general, but a @code{raWriter} would be
+   // expected and easy enough to provide for the float data type.
+   // @xref{raWriter}
+   void float_writer(FILE *f, const raAction *action)
+   @{
+       if (action->target)
+          fprintf(f, "%f", (double)*(float*)action->target);
+   @}
+
+   // Having defined the necessary functions, create an instance
+   // of @code{raAgent} that will handle float arguments.
+   // @xref{raAgent}
+   raAgent float_agent = @{ 1, float_reader, float_writer @};
+@end example

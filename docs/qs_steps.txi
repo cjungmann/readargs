@@ -1,0 +1,61 @@
+@node Step Details
+@section Step Details
+
+@table @asis
+
+@item Declare user choice variables
+@anchor{def step 1}
+
+Declare the variables that will record users' choices.
+
+The library supports @code{integer} and @code{const char *}
+(string) variables, but can easily support other data types.
+
+@item Declare actions map
+@anchor{def step 2}
+
+A action map is an array of @code{raAction} instances.  The
+library determines which action to execute by comparing the
+command line arguments against elements of the action map.
+
+@xref{raAction}
+
+@item Initialize library
+@anchor{def step 3}
+
+Use function @code{ra_set_scene} to tell the library how
+to access the command line arguments and the actions map.
+
+This is almost universally done in function @code{main},
+where the @code{argc} and @code{argv} arguments are
+available to supply to @code{ra_set_scene}.
+
+The @code{ra_set_scene} function prepares the global @code{raTour}
+variable @var{g_scene} with the command line arguments and
+actions map.
+
+@xref{ra_set_scene}
+
+@item Parse command line arguments
+@anchor{def step 4}
+
+@table @samp
+@item Least effort
+Simply call the library function @code{ra_process_arguments} and
+be done.  This function uses @code{stderr} to warn the user of
+errors and automatically handles early termination situations.
+
+@xref{ra_process_arguments}@*
+@xref{Minimal Code Example}
+
+@item For most control
+Use library functions to cycle through the command line arguments
+to match elements of the action map and executing the actions.
+Report or record errors and warnings according to the needs of
+the application.  Prepare for early termination for certain
+options like @strong{help} (@code{-h} or @code{--help}).
+
+@end table
+
+@end table
+

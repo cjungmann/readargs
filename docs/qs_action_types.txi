@@ -1,0 +1,48 @@
+@node Various Action Types
+@section Various Action Types
+
+This section replaces the actions map (step 2) in the
+minimal code sample (@pxref{Minimal Code Example}).
+
+@xref{def step 2}@*
+@xref{code step 2}
+
+@example
+raction actions[] = @{
+   // actions that display information and terminate program
+   @{ 'h', "help", "This help display", &ra_show_help_agent @},
+   @{ 's', "show", "Show action values", &ra_show_values_agent @},
+
+   @{ 'n', NULL,     "Set nval", &ra_int_agent,    &nval, "NUMBER" @},
+   @{ 0,   "string", "Set sval", &ra_string_agent, &sval, "STRING" @},
+
+   // action used by non-option argument
+   @{ -1,  "*input", "Input file'', &ra_string_agent, &input_path, "FILEPATH" @}
+
+@};
+@end example
+
+@table @code
+@item @{ 'h', "help", "This help display", &ra_show_help_agent @}
+Most Linux commands include a @option{-h}/@option{--help} option,
+and the library makes it easy to do so.
+
+Note that this declaration omits the last two struct members.
+C will set uninitialized members to 0, our default value.  The
+final two members are not needed here or for @emph{--show} because
+these options do not participate in setting variables, so they do
+not need a target variable nor a tag to describe their values.
+
+@item @{ 's', "show", "Show action values", &ra_show_values_agent @}
+This is a special feature of this library: to print out
+the values handled by the action map.  It is not standard
+and is not required, but it can be a help during development
+to confirm proper argument handling, and it may also help
+end users to confirm their intentions.
+
+@item @{ -1,  "*input", "Input file'', &ra_string_agent, &input_path, "FILEPATH" @}
+This is a positional or non-option action.  It is matched
+when a argument is read that is not preceded by a short or
+long option invocation (ie @emph{-h} or @emph{--help}).
+
+@end table

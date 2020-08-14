@@ -1,0 +1,107 @@
+@node Custom Parsing Example
+@section Custom Parsing Example
+
+For ease of reading, this example will replace the function
+@code{ra_process_arguments} in the minimal code example on the
+previous with a custom function listed here.  @xref{Minimal Code Example}
+
+@menu
+* Reasons to Customize::
+* Custom Parsing Code::
+@end menu
+
+@node Reasons to Customize
+@subsection Reasons to Customize
+
+There are a few reasons why a developer might want to write
+a custom argument parser:
+
+@enumerate
+@item
+@anchor{item non-standard --}
+A need to handle '--' in a non-standard way.  If this is needed,
+the customer argument parser would recognize @code{raStatus} value
+RA_END_OPTIONS and respond appropriately.
+
+I recommend breaking out of the @code{while} loop at RA_END_OPTIONS
+and handle the remaining arguments in a new loop.
+
+@xref{code non-standard --}@*
+@xref{raStatus}
+
+@item
+@anchor{item custom warnings}
+The developer has designed custom @code{raAgent} instances that
+return non-standard @code{raStatus} values.  The builtin function,
+@code{ra_write_warning} will not know how to handle the unexpected
+value, so new code will be needed to write the unique messages.
+
+@xref{code custom warnings}@*
+@xref{raAgent}@*
+@xref{raStatus}@*
+@xref{ra_write_warning}
+
+@end enumerate
+
+@node Custom Parsing Code
+@subsection Custom Parsing Code
+
+Look at the code.  It is largely lifted from the builtin function,
+@code{ra_process_arguments} found in source file @file{readargs.c}.
+
+This code listing includes additional comments to help explain
+the steps used to process command line arguments.
+
+Comments that begin with @emph{CUSTOMIZE POTENTIAL} draw attention
+to the items in the list of reasons to customize (@pxref{Reasons to Customize}).
+
+@example
+#include <stdio.h>
+#include <readargs.h>
+
+// This function assumes that ra_set_scene has been called.
+int process_arguments_on_my_own(void)
+@{
+   // Start a new parsing progress tracker
+   raTour tour;
+   ra_start_tour(&tour);
+
+   // Declare the three return variables for
+   // function @code{ra_advance_action}.
+   const raAction *action;
+   const char     *value;
+   raStatus       status;     // @xref{raStatus}
+
+   while(1)
+   @{
+      // Retrieve the next action (@pxref{ra_advance_action})
+      status = ra_advance_action(&tour, &action, &value);
+
+      // If found action, execute the read action (@pxref{ra_execute_action_read})
+      if (status == RA_SUCCESS) 
+         status = ra_execute_action_read(action, value, &tour);
+
+      if (status == RA_CANCEL)            // cancel execution at action's request
+         return 0;                        // direct calling function to terminate program
+      else if (status == RA_END_ARGS)     // no more arguments to read
+         return 1;                        // indicate successful tour of arguments
+      else if (status == RA_END_OPTIONS)  // encountered "--" argument
+      @{
+         // CUSTOMIZE POTENTIAL @anchor{code non-standard --} @xref{item non-standard --}
+         // Break @code{while} loop if application expects '--'
+         // and is prepared to handle the remaining arguments.
+         // Otherwise, return 1 because preceding arguments OK.
+         return 1;                        // indicate successful tour of arguments
+      @}
+      else if (status != RA_SUCCESS)
+      @{
+         // CUSTOMIZE POTENTIAL @anchor{code custom warnings} @xref{item custom warnings}
+         // A developer may provide a custom warning writer here, otherwise
+         // use builtin (@pxref{ra_write_warning})
+         ra_write_warning(stderr, status, &tour, action, value);
+      @}
+   @}
+@}
+
+@end example
+

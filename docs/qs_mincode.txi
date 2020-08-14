@@ -1,0 +1,39 @@
+@node Minimal Code Example
+@section Minimal Code Example
+
+See how the four steps are situated in this stripped-down
+code sample.
+
+@example
+#include <stdio.h>
+#include <readargs.h>
+
+// Step 1: @strong{declare user choice variables}
+@anchor{code step 1}
+int        nval;
+const char *sval;
+
+// Step 2: @strong{declare actions map}
+@anchor{code step 2}
+raAction actions[] = @{
+   @{ 'h', "help",   "This help display", &ra_show_help_agent, NULL,  NULL @},
+   @{ 'n', "number", "Set nval",          &ra_int_agent,       &nval, "NUMBER" @},
+   @{ 's', "string", "Set sval",          &ra_string_agent,    &sval, "STRING" @}
+@};
+
+int main(int argc, const char *argv)
+@{
+   // Step 3: @strong{initialize library}
+   @anchor{code step 3}
+   ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
+
+   // Step 4: @strong{parse command line arguments}
+   @anchor{code step 4}
+   if (ra_process_arguments())
+   @{
+      // begin the program here
+   @}
+   return 0;
+@}
+@end example
+
