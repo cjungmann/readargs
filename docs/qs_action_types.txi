@@ -4,17 +4,16 @@
 In order to explain the how @code{raAction} instances are
 constructed and used to build an action map, this section
 breaks down an array of @code{raAction} elements to see
-how they work.
+how they work.  @xref{raAction}
 
-This section illustrates and expands on the actions map (step 2)
+This section illustrates and expands on the action map (step 2)
 in the minimal code sample (@pxref{Minimal Code Example}).@*
 @xref{def step 2}@*
 @xref{code step 2}
 
-It will be helpful to become familiar with the construction of
-the @code{raAction} data type (@pxref{raAction}).
+The following code fragment shows several @code{raAction}
+elements to illustrate alternatives.
 
-Code fragment defining an action map:
 
 @example
 raction actions[] = @{
@@ -29,9 +28,11 @@ raction actions[] = @{
    // actions that set user-choice variables
    @{ 'n', NULL,     "Set nval",  &ra_int_agent,    &nval, "NUMBER" @},
    @{ 0,   "string", "Set sval",  &ra_string_agent, &sval, "STRING" @},
-
 @};
 @end example
+
+Now we'll breakdown how each @code{raAction} array member
+presents to the user.
 
 @table @code
 @item @{ 'h', "help", "This help display", &ra_show_help_agent @}
