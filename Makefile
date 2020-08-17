@@ -45,7 +45,7 @@ $(TARGET): $(OBJ_FILES)
 	@echo SRC Directory is $(srcdir) and DESTDIR is $(DESTDIR)
 	$(CC) $(CFLAGS) $(LIBFLAGS) -o $@ $(OBJ_FILES)
 
-%_debug.o %.o: %.c
+%_debug.o %.o: %.c readargs.h invisible.h
 	$(CC) $(CFLAGS) $(LIBFLAGS) -c -o $@ $<
 
 # Make test programs that use the library
