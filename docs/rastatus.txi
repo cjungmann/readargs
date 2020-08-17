@@ -11,6 +11,10 @@ success or the type of failure.
 @item RA_SUCCESS
 No errors or interruptions
 
+@item RA_FAIL
+Generic failure status.  Primarily for use as a default value before
+success is determined.
+
 @item RA_CANCEL
 This value is returned by the @code{ra_show_help_agent} to indicate
 that the program should not continue after processing this action.

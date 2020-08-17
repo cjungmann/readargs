@@ -11,6 +11,7 @@ typedef struct _readargs_tour raTour;
 
 typedef enum {
    RA_SUCCESS = 0,
+   RA_FAIL,
    RA_CANCEL,
    RA_END_OPTIONS,
    RA_END_ARGS,
