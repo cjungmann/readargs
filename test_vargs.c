@@ -55,15 +55,9 @@ void filepath_optional_writer(FILE *f, const raAction *act)
       fprintf(f, "%s", *target);
 }
 
-typedef struct ppair
-{
-   const char *name;
-   const char *value;
-} PPair;
-
 raStatus param_reader(const raAction *act, const char *str, raTour *tour)
 {
-   PPair *ppair = (PPair* )act->target;
+   const char **lpair = (const char**)act->target;
 
    // Preserve tour progress by using a copy
    raTour saved_tour = *tour;
@@ -71,8 +65,8 @@ raStatus param_reader(const raAction *act, const char *str, raTour *tour)
 
    if (str && str2)
    {
-      ppair->name = str;
-      ppair->value = str2;
+      lpair[0] = str;
+      lpair[1] = str2;
       return RA_SUCCESS;
    }
    else
@@ -84,19 +78,17 @@ raStatus param_reader(const raAction *act, const char *str, raTour *tour)
 
 void param_writer(FILE *f, const raAction *act)
 {
-   const PPair *ppair = (const PPair* )act->target;
+   const char **lpair = (const char**)act->target;
 
-   if (ppair->name == NULL)
-      fprintf(f, "(null)");
+   if (lpair[1] == NULL)
+   {
+      if (lpair[0] == NULL)
+         fprintf(f, "(null):(null)");
+      else
+         fprintf(f, "%s:(null)", lpair[0]);
+   }
    else
-      fprintf(f, "%s", ppair->name);
-
-   fprintf(f, " : ");
-
-   if (ppair->value == NULL)
-      fprintf(f, "(null)");
-   else
-      fprintf(f, "%s", ppair->value);
+      fprintf(f, "%s:%s", lpair[0], lpair[1]);
 }
 
 raAgent filepath_optional_agent = { 1, filepath_optional_reader, filepath_optional_writer };
@@ -107,7 +99,7 @@ raAgent param_agent = { 1, param_reader, param_writer };
 const char *filepath = NULL;
 const char *section = NULL;
 const char *name = NULL;
-PPair ppair = {NULL,NULL};
+const char *ppair[2] = {NULL,NULL};
 
 raAction actions[] = {
    {'h', "help",  "This help output",   &ra_show_help_agent },
