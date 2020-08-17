@@ -1,9 +1,14 @@
 @node Argument Processing
 @section Argument Processing
 
-For ease of reading, this example will replace the function
-@code{ra_process_arguments} in the minimal code example on the
-previous with a custom function listed here.  @xref{Minimal Code Example}
+Although the quick and easy @code{ra_process_arguments}
+function will be good enough for most cases, there will be
+times when a developer will need more control over the
+processing.
+
+This section discusses some reasons why one might want to
+roll-their-own argument processor, then it will break down
+some code for custom argument processor.
 
 @menu
 * Reasons to Customize::

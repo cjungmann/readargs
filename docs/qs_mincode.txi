@@ -8,13 +8,13 @@ code sample.
 #include <stdio.h>
 #include <readargs.h>
 
-// Step 1: @strong{declare user choice variables}
 @anchor{code step 1}
+// Step 1: @strong{declare user choice variables}
 int        nval;
 const char *sval;
 
-// Step 2: @strong{declare actions map}
 @anchor{code step 2}
+// Step 2: @strong{declare actions map}
 // @xref{Defining an Action Map}
 raAction actions[] = @{
    @{ 'h', "help",   "This help display", &ra_show_help_agent, NULL,  NULL @},
@@ -24,12 +24,12 @@ raAction actions[] = @{
 
 int main(int argc, const char *argv)
 @{
+@anchor{code step 3}
    // Step 3: @strong{initialize library}
-   @anchor{code step 3}
    ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
 
+@anchor{code step 4}
    // Step 4: @strong{parse command line arguments}
-   @anchor{code step 4}
    // @xref{Argument Processing}
    if (ra_process_arguments())
    @{

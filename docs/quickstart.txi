@@ -6,13 +6,10 @@ There are four steps to setting up @code{readargs} in an application:
 @enumerate
 @item
 Declare user choice variables
-
 @item
 Declare actions map
-
 @item
 Initialize library
-
 @item
 Parse command line arguments
 

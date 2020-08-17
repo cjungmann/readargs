@@ -3,7 +3,7 @@
 
 @table @asis
 
-@item Declare user choice variables
+@item 1. Declare user choice variables
 @anchor{def step 1}
 
 Declare the variables that will record users' choices.
@@ -11,17 +11,17 @@ Declare the variables that will record users' choices.
 The library supports @code{integer} and @code{const char *}
 (string) variables, but can easily support other data types.
 
-@item Declare actions map
+@item 2. Declare actions map
 @anchor{def step 2}
 
 A action map is an array of @code{raAction} instances.  The
 library determines which action to execute by comparing the
 command line arguments against elements of the action map.
 
-@xref{raAction}@*
-@xref{Defining an Action Map}
+@xref{Defining an Action Map}@*
+@xref{raAction}
 
-@item Initialize library
+@item 2. Initialize library
 @anchor{def step 3}
 
 Use function @code{ra_set_scene} to tell the library how
@@ -37,8 +37,14 @@ actions map.
 
 @xref{ra_set_scene}
 
-@item Parse command line arguments
+@item 4. Parse command line arguments
 @anchor{def step 4}
+
+This step must be prepared to terminate the program in case
+the @code{raAgent} returns @var{RA_CANCEL} through the @code{raAction}.
+
+@xref{raStatus}@*
+@xref{raAgent}
 
 @table @samp
 @item Least effort
@@ -48,7 +54,6 @@ errors and automatically handles early termination situations.
 
 @xref{ra_process_arguments}@*
 @xref{Minimal Code Example}@*
-@xref{Argument Processing}
 
 @item For most control
 Use library functions to cycle through the command line arguments
@@ -56,6 +61,8 @@ to match elements of the action map and executing the actions.
 Report or record errors and warnings according to the needs of
 the application.  Prepare for early termination for certain
 options like @strong{help} (@code{-h} or @code{--help}).
+
+@xref{Argument Processing}
 
 @end table
 

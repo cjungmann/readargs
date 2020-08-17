@@ -1,5 +1,5 @@
-@node Customizing
-@chapter Customizing
+@node Custom Action Agents
+@chapter Custom Action Agents
 
 The @code{raAgent} interface, and specifically the @code{raReader}
 function pointer, is the object through which all the work is
@@ -14,11 +14,12 @@ Creating new @code{raReader} functions, therefore, is how
 customization is done.
 
 @menu
-* float agent::
-* optional value agent::
+* Float Agent::           boilerplate simple example
+* Optional Value Agent::  handling uncertain values
+* Multiple Value Agent::  
 @end menu
 
-@node float agent
+@node Float Agent
 @section Float Agent
 
 A float agent is not provided by the library, but it is easy
@@ -69,7 +70,7 @@ performs the fundamental task of the custom type parser.
 @end example
 
 
-@node optional value agent
+@node Optional Value Agent
 @section Optional Value Agent
 
 An optional value agent must be a custom agent because of the
@@ -77,12 +78,12 @@ uncertain task of determining if what follows the short or long
 option that triggers the action.
 
 @menu
-* optional-value discussion::
-* optional-value code::
+* Optional Value Discussion::
+* Optional Value Code::
 @end menu
 
-@node optional-value discussion
-@subsection Optional-Value Discussion
+@node Optional Value Discussion
+@subsection Optional Value Discussion
 
 It's up to the developer to decide how forgiving the optional
 value agent will be.  There are a few options:
@@ -110,8 +111,8 @@ with @code{ra_retreat_arg}
 @xref{ra_retreat_arg}
 @end itemize
 
-@node optional-value code
-@subsection Optional-Value Code
+@node Optional Value Code
+@subsection Optional Value Code
 
 This example will demonstrate the most forgiving parsing.
 
@@ -172,3 +173,38 @@ This example will demonstrate the most forgiving parsing.
    // @xref{raAgent}
    raAgent float_agent = @{ 1, float_reader, float_writer @};
 @end example
+
+@node Multiple Value Agent
+@section Multiple Value Agent
+
+There are times when an option should read more than one value.
+
+One example is having to declare a name-value pair.  As usual,
+we need a @code{raReader} and a @code{raWriter} for a custom
+nameval @code{raAgent}.
+
+@example
+
+const char *nameval[2] = {NULL,NULL};
+
+raStatus nameval_reader(const raAction *act, const char *str, raTour *tour)
+{
+   const char **pair = nameval;
+
+   // Preserve tour progress with a copy
+   raTour saved_tour = *tour;
+   const char *str2 = ra_advance_tour(tour);
+
+   
+}
+
+void nameval_writer(FILE *f, const raAction *act)
+{
+   if (nameval[1] != NULL && nameval[0] != NULL)
+      fprintf(f, "%s:%s", nameval[0], nameval[1]);
+   else
+      fprintf(f, "(null):(null)");
+}
+
+
+

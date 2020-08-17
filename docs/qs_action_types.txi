@@ -8,8 +8,13 @@ how they work.  @xref{raAction}
 
 This section illustrates and expands on the action map (step 2)
 in the minimal code sample (@pxref{Minimal Code Example}).@*
+
 @xref{def step 2}@*
 @xref{code step 2}
+
+@emph{Note:} While arguments on the command line can be in any order,
+the order of the @code{raAction} members of an action map determines
+the order they will be displayed in the generated help display.
 
 The following code fragment shows several @code{raAction}
 elements to illustrate alternatives.
@@ -17,17 +22,16 @@ elements to illustrate alternatives.
 
 @example
 raction actions[] = @{
-   // actions that display information and terminate program
+   // display actions
    @{ 'h', "help", "This help display", &ra_show_help_agent @},
    @{ 's', "show", "Show action values", &ra_show_values_agent @},
-   // One should also make a custom -v/--version action
 
-   // action used by non-option argument
-   @{ -1,  "*input", "Input file'', &ra_string_agent, &input_path, "FILEPATH" @}
-
-   // actions that set user-choice variables
-   @{ 'n', NULL,     "Set nval",  &ra_int_agent,    &nval, "NUMBER" @},
+   // basic actions
+   @{ 'n', "number", "Set nval",  &ra_int_agent,    &nval, "NUMBER" @},
    @{ 0,   "string", "Set sval",  &ra_string_agent, &sval, "STRING" @},
+
+   // positional action
+   @{ -1,  "*input", "Input file'', &ra_string_agent, &input_path, "FILEPATH" @}
 @};
 @end example
 
@@ -54,8 +58,15 @@ and is not required, but it can be a help during development
 to confirm proper argument handling, and it may also help
 end users to confirm their intentions.
 
+@item   @{ 'n', "number", "Set nval",  &ra_int_agent,    &nval, "NUMBER" @}
+@itemx  @{ 0,   "string", "Set sval",  &ra_string_agent, &sval, "STRING" @},
+@itemx @samp{basic action}
+An action may include one or both of @code{letter} and @code{label} to
+allow short or long option triggers.  Omitting one just means that
+trigger type will not be supported for the action.
+
 @item @{ -1,  "*input", "Input file'', &ra_string_agent, &input_path, "FILEPATH" @}
-@itemx @samp{non-option action}, @samp{set value}
+@itemx @samp{positional action}, @samp{set value}
 This is a positional or non-option action.  It is matched
 when a argument is read that is not preceded by a short or
 long option invocation (ie @emph{-h} or @emph{--help}).
@@ -67,16 +78,5 @@ The first member (letter) must be @code{-1}, and
 @item
 The second member (label) must include an asterisk prefix.
 @end enumerate
-
-@item  @{ 'n', NULL,     "Set nval",  &ra_int_agent,    &nval, "NUMBER" @}
-@itemx @samp{short- but no long-option}, @samp{set value}
-Setting the second member (label) to NULL means there is no
-long-option access to this action
-
-@item   @{ 0,   "string", "Set sval",  &ra_string_agent, &sval, "STRING" @},
-@itemx @samp{long- but no short-option}, @samp{set value}
-Setting the first member (letter) to 0 means that there is no
-short-option access to this action.
-
 
 @end table
