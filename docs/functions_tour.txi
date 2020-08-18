@@ -75,3 +75,24 @@ declined by calling @code{ra_retreat_arg}.
 @deftypefun const raAction *ra_current_action (const raTour *@var{tour})
 
 @end deftypefun
+
+@node ra_seek_raAction_by_letter
+@section ra_seek_raAction_by_letter
+
+@deftypefun const raAction* ra_seek_raAction_by_letter (const char @var{letter})
+
+Returns the @code{raAction} instance whose @var{letter} value matches the
+@var{letter} parameter, or NULL if there is no matching @var{letter}.
+
+@end deftypefun
+
+
+@node ra_seek_raAction_by_label
+@section ra_seek_raAction_by_label
+
+@deftypefun const raAction* ra_seek_raAction_by_label (const char *@var{str})
+
+Returns the @code{raAction} instance whose @var{label} value matches the
+@var{label} parameter, or NULL if there is no matching @var{label}.
+
+@end deftypefun
