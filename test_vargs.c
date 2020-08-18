@@ -55,6 +55,18 @@ void filepath_optional_writer(FILE *f, const raAction *act)
       fprintf(f, "%s", *target);
 }
 
+/** raReader implementation for param_agent. 
+ *
+ * This uses the simplest test: both values must be available,
+ * an no checking is done on the values.
+ *
+ * There are other options:
+ * - There could be a default value for a single-valued option call.
+ * - There could be an option test (see if either str or str2 could
+ *   be interpreted as another option.
+ * - The program could continue after an error, but that would
+ *   entail deciding on how to dispose of str and str2, if found.
+ */
 raStatus param_reader(const raAction *act, const char *str, raTour *tour)
 {
    const char **lpair = (const char**)act->target;
@@ -71,8 +83,9 @@ raStatus param_reader(const raAction *act, const char *str, raTour *tour)
    }
    else
    {
+      fprintf(stderr, "Not enough parameters for --param option.\n");
       *tour = saved_tour;
-      return RA_END_ARGS;
+      return RA_CANCEL;
    }
 }
 
