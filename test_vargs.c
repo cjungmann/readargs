@@ -84,6 +84,7 @@ raStatus param_reader(const raAction *act, const char *str, raTour *tour)
    else
    {
       fprintf(stderr, "Not enough parameters for --param option.\n");
+      ra_describe_usage(stderr, 0, RAU_DEFAULT);
       *tour = saved_tour;
       return RA_CANCEL;
    }
@@ -117,8 +118,8 @@ const char *ppair[2] = {NULL,NULL};
 raAction actions[] = {
    {'h', "help",  "This help output",   &ra_show_help_agent },
    {'s', "show",  "Show action values", &ra_show_values_agent },
-   {'i', "input", "input file",         &filepath_optional_agent, &filepath,   "FILEPATH" },
-   {'p', "param", "Set param value",    &param_agent,             &ppair }
+   {'i', "input", "input file",         &filepath_optional_agent, &filepath, "FILEPATH" },
+   {'p', "param", "Set param value",    &param_agent,             &ppair,    "NAME VALUE" }
 };
 
 int main(int argc, const char **argv)
