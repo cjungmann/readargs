@@ -174,6 +174,7 @@ This example will demonstrate the most forgiving parsing.
    raAgent float_agent = @{ 1, float_reader, float_writer @};
 @end example
 
+@c Multiple Value Agent
 @node Multiple Value Agent
 @section Multiple Value Agent
 
@@ -183,28 +184,60 @@ One example is having to declare a name-value pair.  As usual,
 we need a @code{raReader} and a @code{raWriter} for a custom
 nameval @code{raAgent}.
 
+Even more than the Optional Value Agent, this handler must be
+custom because of the various ways a program will handle input
+mistakes.
+
+For example, what happens if only one non-option argument follows
+the multiple value option?  Here are some ideas:
+
+@itemize @bullet
+@item
+
+@item
+Terminate program after displaying an error message (used below).
+@item
+Continue program with practical default second argument.
+@item
+Continue program while ignoring the multiple value option.
+@itemize @minus
+@item
+Return first argument to eligible for positional actions
+@item
+Consume the argument and begin processing with argument following the @var{value}.
+@end itemize
+@end itemize
+
 @example
 
-const char *nameval[2] = {NULL,NULL};
+const char *nameval[2] = @{NULL,NULL@};
 
+// This is a simple implementation, saving the two values if both are available,
+// otherwise printing an error and terminating the program, if not.
 raStatus nameval_reader(const raAction *act, const char *str, raTour *tour)
-{
+@{
    const char **pair = nameval;
 
-   // Preserve tour progress with a copy
-   raTour saved_tour = *tour;
-   const char *str2 = ra_advance_tour(tour);
-
-   
-}
+   if (str && (str2 = ra_advance_tour(tour)))
+   @{
+      pair[0] = str1;
+      pair[1] = str2;
+      return RA_SUCCESS;
+   @}
+   else
+   @{
+      fprintf(stderr, "Not enough parameters for option --%s.\n", act->label);
+      return RA_CANCEL;
+   @}
+@}
 
 void nameval_writer(FILE *f, const raAction *act)
-{
+@{
    if (nameval[1] != NULL && nameval[0] != NULL)
       fprintf(f, "%s:%s", nameval[0], nameval[1]);
    else
       fprintf(f, "(null):(null)");
-}
+@}
 
 
-
+@end example
