@@ -24,8 +24,8 @@ void describe_single_action(FILE *f, const raAction *opt, int max_label, int ind
 void describe_single_argument(FILE *f, const raAction *act, int max_label, int indent);
 
 /** invisible functions found in scene.c */
-const raAction *seek_raOpt_by_label(const char *str);
-const raAction *seek_raOpt_by_letter(char letter);
+const raAction *ra_seek_raAction_by_label(const char *str);
+const raAction *ra_seek_raAction_by_letter(char letter);
 const raAction *seek_next_positional_action(raTour *tour);
 
 /** invisible functions found in agents.c  */

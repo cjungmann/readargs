@@ -110,6 +110,8 @@ raStatus ra_advance_action(raTour *tour, const raAction **action, const char **v
 const char* ra_current_arg(const raTour *tour);
 const raAction *ra_current_action(const raTour *tour);
 
+const raAction *ra_seek_raAction_by_label(const char *str);
+const raAction *ra_seek_raAction_by_letter(char letter);
 const raAction *ra_seek_raAction(const char *str, const raTour *tour);
 
 // Action characteristic test functions:

@@ -34,7 +34,7 @@ EXPORT int ra_is_writable_action(const raAction *act)
    return act && act->agent && act->agent->writer;
 }
 
-const raAction *seek_raAction_by_label(const char *str)
+EXPORT const raAction *ra_seek_raAction_by_label(const char *str)
 {
    char *lstr = strchr(str,'=');
 
@@ -61,7 +61,7 @@ const raAction *seek_raAction_by_label(const char *str)
    return NULL;
 }
 
-const raAction *seek_raAction_by_letter(char letter)
+EXPORT const raAction *ra_seek_raAction_by_letter(char letter)
 {
    const raAction *ptr = g_scene.actions;
    while (ptr < g_scene.actions_end)
@@ -100,10 +100,10 @@ EXPORT const raAction *ra_seek_raAction(const char *str, const raTour *tour)
          if (!*str)         // is double-dash, cannot be an action
             return NULL;
          else
-            act = seek_raAction_by_label(str);
+            act = ra_seek_raAction_by_label(str);
       }
       else                  // is short action
-         act = seek_raAction_by_letter(*str);
+         act = ra_seek_raAction_by_letter(*str);
    }
    else                     // may be positional action
    {
@@ -299,7 +299,7 @@ EXPORT raStatus ra_advance_action(raTour *tour, const raAction **action, const c
                ++arg;
                if (*arg)  // long action, double-dash + label
                {
-                  act = seek_raAction_by_label(arg);
+                  act = ra_seek_raAction_by_label(arg);
                   if (act)
                   {
                      *action = act;
@@ -339,7 +339,7 @@ EXPORT raStatus ra_advance_action(raTour *tour, const raAction **action, const c
    {
       char letter = **actions_str;
       ++*actions_str;
-      act = seek_raAction_by_letter(letter);
+      act = ra_seek_raAction_by_letter(letter);
       if (act)
       {
          *action = act;
