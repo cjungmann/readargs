@@ -27,7 +27,7 @@ void print_action_names(FILE *f, const raAction *act, int max_label, ActFilter s
 /** Write out list of flag actions in form "[-abcde]"
  * Used by ra_describe_usage()
  *
- * Only creates output if there is at least flag action.
+ * Only creates output if there is at least one flag action.
  */
 void print_usage_flag_actions(FILE *f)
 {
@@ -101,7 +101,6 @@ void print_usage_arguments(FILE *f)
       ++ptr;
    }
 }
-
 
 
 /** Per-line function used by ra_describe_actions() */
@@ -211,7 +210,7 @@ EXPORT void ra_show_help(FILE *f, int indent, raUsage usage)
 
    if (count_actions > 0)
    {
-      fputs("\nActions\n", f);
+      fputs("\nOptions\n", f);
       ra_describe_actions(f, indent);
    }
 
