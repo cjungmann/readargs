@@ -30,6 +30,8 @@ controlling progress: DIY argument handling
 * ra_advance_action::          move to next action
 * ra_current_arg::             current CL argument
 * ra_current_action::          current action
+* ra_seek_raAction_by_letter:: find matching @code{raAction} instance with a letter.
+* ra_seek_raAction_by_label::  find matching @code{raAction} instance with a string.
 
 action identifiers
 @c found in functions_aspect.txi
