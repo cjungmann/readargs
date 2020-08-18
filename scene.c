@@ -410,8 +410,8 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_UNKNOWN_OPTION:
          fprintf(f, "%s\n", *tour->current_arg);
          break;
-      case RA_MALFORMED_ACTION:
-         fprintf(f, "action value in bad form\n");
+      case RA_MALFORMED_OPTION:
+         fprintf(f, "option value in bad form\n");
          break;
       case RA_INVALID_ARGUMENT:
          fprintf(f, "invalid argument\n");

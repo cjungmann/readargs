@@ -49,7 +49,7 @@ the argument pointer before the argument list.
 Returned when an argument appears to be an option, but the option
 is not found.
 
-@item RA_MALFORMED_ACTION
+@item RA_MALFORMED_OPTION
 
 Unused by the library, but this return value can be returned at the
 discretion of a custom agent when the value @code{RA_INVALID_ARGUMENT}
@@ -91,7 +91,7 @@ Returned by @code{ra_execute_action_read} from a @code{raReader} function
 if the reader didn't find an expected value.
 
 @xref{raReader}@*
-@xref{float agent}
+@xref{Float Agent}
 
 @end table
 
