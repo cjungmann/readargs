@@ -144,7 +144,7 @@ void ra_show_help(FILE *f, int indent, raUsage usage);
 
 // Post-processing tools for getting missing information
 int ra_count_str2args(const char *str);
-int ra_str2args(const char *str, const char **args, int arg_count);
+int ra_str2args(char *str, const char **args, int arg_count);
 
 // Error messaging
 
