@@ -146,6 +146,24 @@ void ra_show_help(FILE *f, int indent, raUsage usage);
 int ra_count_str2args(const char *str);
 int ra_str2args(char *str, const char **args, int arg_count);
 
+int ra_collect_user_response(void);
+int ra_copy_user_response(char *buffer, int buffer_len);
+int ra_get_user_response(const char *prompt);
+
+void ra_print_interactive_prompt(const raAction *action);
+raStatus ra_process_action_with_response(const raAction *action, char *response);
+
+typedef struct ra_xa_env {
+   int buff_len;
+   char *buff;
+} RA_XA_ENV;
+
+#define RA_READ_XA_RESPONSE(raenv) (raenv).buff_len = ra_collect_user_response(); \
+   (raenv).buff = (char*)alloca((raenv).buff_len); \
+   ra_copy_user_response((raenv).buff, (raenv).buff_len)
+
+#define RA_PROCESS_XA_ACTION(a, env) ra_process_action_with_response(a, (env).buff)
+
 // Error messaging
 
 void ra_write_warning(FILE *f,
@@ -157,6 +175,7 @@ void ra_write_warning(FILE *f,
 int arguments_required(const raAction *act);
 
 // Let the library do everything:
+int ra_process_tour_arguments(raTour *tour);
 int ra_process_arguments(void);
 void ra_show_no_args_message(void);
 
