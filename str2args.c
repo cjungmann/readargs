@@ -89,12 +89,12 @@ int string2args(char *str, const char **args, int arg_count)
    return count;
 }
 
-int ra_count_str2args(const char *str)
+EXPORT int ra_count_str2args(const char *str)
 {
    return string2args((char*)str, 0, 0);
 }
 
-int ra_str2args(char *str, const char **args, int arg_count)
+EXPORT int ra_str2args(char *str, const char **args, int arg_count)
 {
    return string2args(str, args, arg_count);
 }
@@ -205,8 +205,6 @@ void test_reader(void)
       printf("\n you entered a %d character string: [32;1m%s[m.\n", string_len, buffer);
 
       parse_string_to_new_main("bogus", buffer, test_main);
-
-      
    }
 }
 
