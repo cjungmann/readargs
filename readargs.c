@@ -212,21 +212,18 @@ EXPORT void ra_show_no_args_message(void)
  *
  * Errors are reported through stderr
  */
-EXPORT int ra_process_arguments(void)
+EXPORT int ra_process_tour_arguments(raTour *tour)
 {
-   raTour tour;
-   ra_start_tour(&tour);
-
    const raAction *action;
    const char     *value;
    raStatus       status;
 
    while(1)
    {
-      status = ra_advance_action(&tour, &action, &value);
+      status = ra_advance_action(tour, &action, &value);
 
       if (status == RA_SUCCESS)
-         status = ra_execute_action_read(action, value, &tour);
+         status = ra_execute_action_read(action, value, tour);
 
       if (status == RA_CANCEL)              // cancel execution at action's direction
          return 0;                          // direct calling function to terminate program
@@ -234,10 +231,17 @@ EXPORT int ra_process_arguments(void)
                || status == RA_END_OPTIONS) // encountered '--' argument
          return 1;                          // indicate successful tour of arguments
       else if (status != RA_SUCCESS)
-         ra_write_warning(stderr, status, &tour, action, value);
+         ra_write_warning(stderr, status, tour, action, value);
    }
 }
 
+/** Make raTour instance from g_scene and send out for processing. */
+EXPORT int ra_process_arguments(void)
+{
+   raTour tour;
+   ra_start_tour(&tour);
+   return ra_process_tour_arguments(&tour);
+}
 
 /* Local Variables: */
 /* compile-command: "b=readargs; \*/
