@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>   // for access()
+#include <alloca.h>
 
 #include "readargs.h"
 
@@ -135,11 +136,14 @@ int main(int argc, const char **argv)
       // Use the simplest processing
       if (ra_process_arguments())
       {
-         printf("The arguments have been processed.\n"
-                "\n"
-                "The following report shows how the\n"
-                "variables have been affected by your\n"
-                "command line actions.\n\n");
+         if (ppair[0] == NULL)
+         {
+            RA_XA_ENV env;
+            const raAction *ract = ra_seek_raAction_by_letter('p');
+            ra_print_interactive_prompt(ract);
+            RA_READ_XA_RESPONSE(env);
+            RA_PROCESS_XA_ACTION(ract, env);
+         }
 
          ra_show_scene_values(stdout);
       }
