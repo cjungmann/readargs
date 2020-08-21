@@ -1,19 +1,42 @@
 #include <ctype.h>
+#include <string.h>    // for memmove, strlen
+
 #include "readargs.h"  // for EXPORT macro
 
 typedef int(*weemain_t)(int argc, const char **argv);
+
+char* popper(char *str)
+{
+   int len = strlen(str);
+   memmove(str, str+1, len-1);
+   str[len-1] = '\0';
+   return str;
+}
+
+char* skipper(char *str)
+{
+   return str+1;
+}
+
+typedef char*(*discard_char_t)(char *str);
+
+int is_quote(char chr)     { return chr == '\'' || chr == '"'; }
 
 int string2args(char *str, const char **args, int arg_count)
 {
    int count = 0;
    int in_margin = 0;
    int in_quote = 0;
-   int is_escaped = 0;
 
-   // Unless first character is a space, the beginning
-   // of the string is the first argument.  Set variables
-   // accordingly.
-   if (!isspace(*str))
+   discard_char_t discard_char = args ? popper : skipper;
+
+   // bleed-off initial spaces
+   while (*str && isspace(*str))
+      ++str;
+
+   if (!*str)
+      return 0;
+   else
    {
       count = 1;
       if (args)
@@ -24,48 +47,44 @@ int string2args(char *str, const char **args, int arg_count)
    char *ptr = str;
    while (*ptr)
    {
-      if (is_escaped)
+      // Quote check must precede check for end-of-argument
+      // because *ptr==0 after matching end-of-argument.
+      if (in_quote == *ptr)
       {
-         // Ignore current character, whether it is
-         // in margin or in arg.
-         is_escaped = 0;
+         in_quote = 0;
+         ptr = (*discard_char)(ptr);
       }
+      
+      is_space = isspace(*ptr);
+
+      // Check for end-of-argument, indicated by a space
+      if (is_space && !in_quote && !in_margin)
+      {
+         in_margin = 1;
+         if (args)
+            *ptr = '\0';
+      }
+      // Check for start of next word, first character following one or more spaces
+      else if (in_margin && !is_space)
+      {
+         in_margin = 0;
+         ++count;
+
+         if (args && count <= arg_count)
+            *args++ = ptr;
+      }
+
+      // Check for start of a quote
+      if (!in_quote && is_quote(*ptr))
+      {
+         in_quote = *ptr;
+         ptr = (*discard_char)(ptr);
+      }
+      // If escaping character, discard backslash, then do not
+      // judge if the following character for quote or space.
       else if (*ptr == '\\')
-      {
-         is_escaped = 1;
-      }
-      else
-      {
-         is_space = isspace(*ptr);
-         
-         if (in_margin)
-         {
-            if (!is_space)
-            {
-               ++count;
-               in_margin = 0;
-
-               if (args && count <= arg_count)
-                  *args++ = ptr;
-            }
-         }
-         else if (in_quote)
-         {
-            if (*ptr == in_quote)
-               in_quote = 0;
-         }
-         else if (!in_quote)
-         {
-            if (is_space)
-            {
-               in_margin = 1;
-
-               if (args && count <= arg_count)
-                  *ptr = '\0';
-            }
-         }
-      }
-
+         ptr = (*discard_char)(ptr);
+      
       ++ptr;
    }
 
