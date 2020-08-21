@@ -1,5 +1,7 @@
 cache
 readargs
+str2args
+test_ask
 test_simple
 test_vargs
 *.o
