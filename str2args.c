@@ -3,8 +3,6 @@
 
 #include "readargs.h"  // for EXPORT macro
 
-typedef int(*weemain_t)(int argc, const char **argv);
-
 char* popper(char *str)
 {
    int len = strlen(str);
@@ -107,6 +105,8 @@ int ra_str2args(char *str, const char **args, int arg_count)
 #include <stdio.h>
 #include <alloca.h>
 #include <string.h>
+
+typedef int(*weemain_t)(int argc, const char **argv);
 
 int test_main(int argc, const char **argv)
 {
