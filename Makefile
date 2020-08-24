@@ -1,5 +1,6 @@
 # According to guidelines in GNU Standards:
-SHELL = /bin/sh
+SHELL=/bin/bash
+.SHELLFLAGS=-O extglob -c
 .SUFFIXES:
 .SUFFIXES: .c .o
 
@@ -73,10 +74,20 @@ install-docs:
 uninstall-docs:
 	$(call remove_info)
 
+.PHONY: html-docs
+html-docs:
+	cd docs; makeinfo --html readargs.txi
+
+.PHONY: pdf-docs
+pdf-docs:
+	cd docs; texi2pdf readargs.txi
+
 .PHONY: clean
 clean:
 	@echo Fixing to $(call fix_source,"agents_debug.o")
 	rm -f *.so
 	rm -f *.o
 	rm -f $(patsubst test%.c,test%,$(wildcard test*.c))
+	rm -rf docs/readargs
+	rm docs/!(*.txi)
 
