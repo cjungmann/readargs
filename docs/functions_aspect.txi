@@ -37,7 +37,7 @@ one uses the builtin agent @code{ra_flag_agent}.
 
 @end deftypefun
 
-@xref{builtin ra_flag_agent}
+@xref{ra_flag_agent}
 
 @node ra_is_value_action
 @section ra_is_value_action
@@ -65,7 +65,7 @@ printing of the actions' values.
 
 @end deftypefun
 
-@xref{builtin ra_show_values_agent}
+@xref{ra_show_values_agent}
 
 @node ra_execute_action_read
 @section ra_execute_action_read

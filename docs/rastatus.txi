@@ -19,7 +19,7 @@ success is determined.
 This value is returned by the @code{ra_show_help_agent} to indicate
 that the program should not continue after processing this action.
 
-@xref{builtin ra_show_help_agent}
+@xref{ra_show_help_agent}
 
 Custom @code{raAgent} implementations should return @code{RA_CANCEL}
 if the action should not continue.

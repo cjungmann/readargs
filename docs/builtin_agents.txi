@@ -2,15 +2,15 @@
 @chapter Builtin Action Agents
 
 @menu
-* builtin ra_flag_agent::         sets a true/false integer target
-* builtin ra_int_agent::          sets an integer target
-* builtin ra_string_agent::       sets a const char* target
-* builtin ra_show_help_agent::    shows a help display
-* builtin ra_show_values_agent::  shows the printable option values
+* ra_flag_agent::         sets a true/false integer target
+* ra_int_agent::          sets an integer target
+* ra_string_agent::       sets a const char* target
+* ra_show_help_agent::    shows a help display
+* ra_show_values_agent::  shows the printable option values
 @end menu
 
-@node builtin ra_flag_agent
-@section builtin ra_flag_agent
+@node ra_flag_agent
+@section ra_flag_agent
 
 @table @emph
 
@@ -25,16 +25,16 @@ the value of @emph{target} is 0, and will return @emph{true}
 otherwise.
 @end table
 
-@node builtin ra_int_agent
-@section builtin ra_int_agent
+@node ra_int_agent
+@section ra_int_agent
 
-@node builtin ra_string_agent
-@section builtin ra_string_agent
+@node ra_string_agent
+@section ra_string_agent
 
-@node builtin ra_show_help_agent
-@section builtin ra_show_help_agent
+@node ra_show_help_agent
+@section ra_show_help_agent
 
-@node builtin ra_show_values_agent
-@section builtin ra_show_values_agent
+@node ra_show_values_agent
+@section ra_show_values_agent
 
 
