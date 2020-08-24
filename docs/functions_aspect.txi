@@ -56,7 +56,7 @@ function.
 @node ra_is_writable_action
 @section ra_is_writable_action
 
-@deftypefun int ra_is_writable_action(const raAction *act)
+@deftypefun int ra_is_writable_action(const raAction *@var{act})
 
 Test for @code{raAction} to determine if it can write its
 value.  Being able to write a value allows this @code{raAction}
@@ -71,9 +71,9 @@ printing of the actions' values.
 @section ra_execute_action_read
 
 @deftypefun raStatus ra_execute_action_read (@*@
-            const raAction *action,@*@
-            const char *str,@*@
-            raTour *tour)
+            const raAction *@var{action},@*@
+            const char *@var{str},@*@
+            raTour *@var{tour})
 
 Given the selected @code{raAction} instance and a value (if appropriate),
 this function uses the attached @code{raAgent} instance to apply the
@@ -101,8 +101,8 @@ an optional-value action.
 @section ra_execute_action_write
 
 @deftypefun void ra_execute_action_write (@*@
-            FILE *f,@*@
-            const raAction *action)
+            FILE *var{f},@*@
+            const raAction *@var{action})
 
 This function attempts to resolve the value of the @code{raAction}
 parameter and write the value to file stream @var{f}.
