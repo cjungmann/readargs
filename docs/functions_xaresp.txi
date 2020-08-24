@@ -1,0 +1,98 @@
+@node ra_count_str2args
+@section ra_count_str2args
+
+@deftypefun int ra_count_str2args (const char *@var{str})
+
+Return the number of arguments into which @var{str} would be split.
+This function does not modify @var{str}.
+
+@end deftypefun
+
+@node ra_str2args
+@section ra_str2args
+
+@deftypefun int ra_str2args (@*@
+            char *@var{str},@*@
+            const char **@var{args},@*@
+            int @var{arg_count})
+
+Populate an array of @code{const char*} @var{args} with substrings
+residing in the @var{STR} argument.
+
+NOTE: This function modifies @var{str}, changing some spaces to
+@code{\0} to terminate arguments, removing @code{\} characters and
+paired quote characters @code{"} and @code{'}.  Once this function
+has been run, the original @var{str} string will consist only of
+the first argument.
+
+@table @code
+@item char *str
+String consisting of space-separated values meant to be interpreted
+as arguments.  The function modifies this string, replacing spaces
+with @code{\0} and shifting the elements to remove certain characters
+like quotes that enclose text and backslashes that introduce escaped
+characters.
+
+@item const char **args
+An empty array of @code{char*} that will be populated with the
+arguments parsed from the @code{str} argument.
+
+@item int arg_count
+The number of elements in the array pointed at by the @code{args}
+argument.  This number should be taken from the result of the
+@code{ra_count_str2args} function.
+@end table
+
+@end deftypefun
+
+The following code listing shows how to handle an interactive
+request for a mandatory value that was not provided.
+
+@example
+int        resp_len, args_count;
+char       *response = NULL;
+const char **args = NULL;
+raAction   *action = ra_seek_raAction_by_letter('b');
+
+// Use builtin function to generate prompt (or write your own prompt).
+ra_print_interactive_prompt(action);
+
+// Three-step process to get user response into an
+// appropriately-scoped memory location.
+resp_len = ra_collect_user_response();
+response = (char*)alloca(resp_len);
+ra_copy_user_response(response, resp_len);
+
+ra_process_action_with_response(action, response);
+@end example
+
+
+
+
+@node ra_collect_user_response
+@section ra_collect_user_response
+
+@deftypefun int ra_collect_user_response (void)
+@end deftypefun
+
+@node ra_copy_user_response
+@section ra_copy_user_response
+
+@deftypefun int ra_copy_user_response (@*@
+            char *@var{buffer},@*@
+            int @var{buffer_len})
+@end deftypefun
+
+@node ra_print_interactive_prompt
+@section ra_print_interactive_prompt
+
+@deftypefun void ra_print_interactive_prompt (const raAction *@var{action})
+@end deftypefun
+
+@node ra_process_action_with_response
+@section ra_process_action_with_response
+
+@deftypefun raStatus ra_process_action_with_response (@*@
+            const raAction *@var{action},@*@
+            char *@var{response})
+@end deftypefun
