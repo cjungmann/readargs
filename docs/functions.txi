@@ -4,48 +4,56 @@
 @menu
 basic functions
 @c found in functions_basic.txi
-* ra_set_scene::               register global variable with command line arguments
-                               list of option instructions
-* ra_process_arguments::       processes command line arguments
-* ACTS_COUNT::                 macro that counts actions in action map
+* ra_set_scene::                    register global variable with command line arguments
+                                    list of option instructions
+* ra_process_arguments::            processes command line arguments
+* ACTS_COUNT::                      macro that counts actions in action map
 
 display functions
 @c found in functions_help.txi
-* ra_describe_arguments::      display non-options
-* ra_describe_options::        display list of options with comments
-* ra_describe_usage::          display usage template
-* ra_scene_options_count::     returns number of options
-* ra_scene_arguments_count::   returns number of argument (non-options)
-* ra_show_help::               builds full help screen with @code{ra_display_usage},
-                               @code{ra_display_options}, and @code{ra_display_arguments}
-* ra_show_no_args_message::    boilerplate message for no arguments
-* ra_show_scene_values::       display current option values
-* ra_write_warning::           display command name and error message when raStatus != RA_SUCCESS
+* ra_describe_arguments::           display non-options
+* ra_describe_options::             display list of options with comments
+* ra_describe_usage::               display usage template
+* ra_scene_options_count::          returns number of options
+* ra_scene_arguments_count::        returns number of argument (non-options)
+* ra_show_help::                    builds full help screen with @code{ra_display_usage},
+                                    @code{ra_display_options}, and @code{ra_display_arguments}
+* ra_show_no_args_message::         boilerplate message for no arguments
+* ra_show_scene_values::            display current option values
+* ra_write_warning::                display command name and error message when raStatus != RA_SUCCESS
 
 controlling progress: DIY argument handling
 @c found in functions_tour.txi
-* ra_start_tour::              prepare raTour for pass through command line (CL) arguments
-* ra_advance_arg::             move to next CL argument
-* ra_retreat_arg::             move CL argument pointer back one position
-* ra_advance_action::          move to next action
-* ra_current_arg::             current CL argument
-* ra_current_action::          current action
-* ra_seek_raAction_by_letter:: find matching @code{raAction} instance with a letter.
-* ra_seek_raAction_by_label::  find matching @code{raAction} instance with a string.
+* ra_start_tour::                   prepare raTour for pass through command line (CL) arguments
+* ra_advance_arg::                  move to next CL argument
+* ra_retreat_arg::                  move CL argument pointer back one position
+* ra_advance_action::               move to next action
+* ra_current_arg::                  current CL argument
+* ra_current_action::               current action
+* ra_seek_raAction_by_letter::      find matching @code{raAction} instance with a letter.
+* ra_seek_raAction_by_label::       find matching @code{raAction} instance with a string.
 
 action identifiers
 @c found in functions_aspect.txi
-* ra_is_positional_action::    TRUE if non option action
-* ra_is_named_action::         TRUE if action invoked with letter or long option
-* ra_is_flag_action::          TRUE if action sets an integer to 1
-* ra_is_value_action::         TRUE if action requires a following value argument
-* ra_is_writable_action::      TRUE if associated @code{raAgent} implements a @var{writer}
+* ra_is_positional_action::         TRUE if non option action
+* ra_is_named_action::              TRUE if action invoked with letter or long option
+* ra_is_flag_action::               TRUE if action sets an integer to 1
+* ra_is_value_action::              TRUE if action requires a following value argument
+* ra_is_writable_action::           TRUE if associated @code{raAgent} implements a @var{writer}
 
 miscellaneous
 @c action executors
-* ra_execute_action_read::     calls appropriate @code{raAgent::reader} to process argument
-* ra_execute_action_write::    writes value of @code{raAction} using @code{raAgent::writer} if found
-* ra_command_name::            name of currently running command
+* ra_execute_action_read::          calls appropriate @code{raAgent::reader} to process argument
+* ra_execute_action_write::         writes value of @code{raAction} using @code{raAgent::writer} if found
+* ra_command_name::                 name of currently running command
+
+* ra_count_str2args::               parse string to identify arguments
+* ra_str2args::                     break string into arguments
+* ra_collect_user_response::        get user response to static variable
+* ra_copy_user_response::           copy user response contents to new memory
+* ra_print_interactive_prompt::     generate user response prompt from raAction
+* ra_process_action_with_response:: apply user's response to raAction
+
 
 
 @end menu
@@ -54,3 +62,4 @@ miscellaneous
 @include functions_help.txi
 @include functions_tour.txi
 @include functions_aspect.txi
+@include functions_xaresp.txi
