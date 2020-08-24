@@ -35,13 +35,6 @@ EXPORT int ra_copy_user_response(char *buffer, int buffer_len)
    return buffer_len;
 }
 
-EXPORT int ra_get_user_response(const char *prompt)
-{
-   memset(response_buffer, 0, sizeof(response_buffer));
-   printf("[32;1m\n%s[m ", prompt?prompt:"Enter your response");
-   return ra_collect_user_response();
-}
-
 EXPORT void ra_print_interactive_prompt(const raAction *action)
 {
    const char *dasher = NULL;

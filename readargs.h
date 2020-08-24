@@ -148,7 +148,6 @@ int ra_str2args(char *str, const char **args, int arg_count);
 
 int ra_collect_user_response(void);
 int ra_copy_user_response(char *buffer, int buffer_len);
-int ra_get_user_response(const char *prompt);
 
 void ra_print_interactive_prompt(const raAction *action);
 raStatus ra_process_action_with_response(const raAction *action, char *response);
