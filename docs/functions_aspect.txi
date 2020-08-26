@@ -1,20 +1,20 @@
 @node ra_is_positional_action
 @section ra_is_positional_action
 
-@deftypefun int ra_is_positional_action(const raAction* act)
+@deftypefun int ra_is_positional_action(const raAction *@var{act})
 
 Test for positional or non-option action.  Command line arguments
 that are not associated with command line options are assigned to
 positional actions in the order they are encountered.
 
-@end deftypefun
-
 @xref{Non option Action}
+
+@end deftypefun
 
 @node ra_is_named_action
 @section ra_is_named_action
 
-@deftypefun int ra_is_named_action(const raAction *act)
+@deftypefun int ra_is_named_action(const raAction *@var{act})
 
 Test the @code{raAction} instance for either a short option
 (as defined by the @var{letter} member), or a long option
@@ -22,36 +22,36 @@ Test the @code{raAction} instance for either a short option
 both of these members allows the action to be triggered by
 a command line option.
 
-@end deftypefun
-
 @xref{Option Action}
+
+@end deftypefun
 
 @node ra_is_flag_action
 @section ra_is_flag_action
 
-@deftypefun int ra_is_flag_action(const raAction *act)
+@deftypefun int ra_is_flag_action(const raAction *@var{act})
 
 This @code{raAction} type uses an @code{raAgent} whose
 @var{args_needed} member is set to @code{0}.  Generally,
 one uses the builtin agent @code{ra_flag_agent}.
 
-@end deftypefun
-
 @xref{ra_flag_agent}
+
+@end deftypefun
 
 @node ra_is_value_action
 @section ra_is_value_action
 
-@deftypefun int ra_is_value_action(const raAction *act)
+@deftypefun int ra_is_value_action(const raAction *@var{act})
 
 Returns non-zero if the @code{raAction} takes a value.  The
 library uses this function to decide whether or not to return
 a string to the @var{str} parameter of the @code{ra_advance_action}
 function.
 
-@end deftypefun
-
 @xref{ra_advance_action}
+
+@end deftypefun
 
 @node ra_is_writable_action
 @section ra_is_writable_action
@@ -63,9 +63,9 @@ value.  Being able to write a value allows this @code{raAction}
 instance to participate in the @code{ra_show_values_agent}
 printing of the actions' values.
 
-@end deftypefun
-
 @xref{ra_show_values_agent}
+
+@end deftypefun
 
 @node ra_execute_action_read
 @section ra_execute_action_read
@@ -80,14 +80,14 @@ this function uses the attached @code{raAgent} instance to apply the
 @var{str} value to the @var{action}.
 
 @table @code
-@item const raAction *action
+@item const raAction *@var{action}
 The @code{raAction} instance matching the command line argument
 
-@item const char *str
+@item const char *@var{str}
 The value to be assigned to the @code{raAction}, if appropriate.
 This parameter will be filled only if @var{action} is a @emph{value action}.
 
-@item raTour *tour
+@item raTour *@var{tour}
 The active @var{tour} instance is made available in case the @code{raAgent}
 needs to manipulate the argument pointer, either to take more values for
 multi-value agents, or to return an inappropriate argument in the case of
@@ -101,21 +101,21 @@ an optional-value action.
 @section ra_execute_action_write
 
 @deftypefun void ra_execute_action_write (@*@
-            FILE *var{f},@*@
+            FILE *@var{f},@*@
             const raAction *@var{action})
 
 This function attempts to resolve the value of the @code{raAction}
 parameter and write the value to file stream @var{f}.
 
 The function will silently (no warnings or errors) do nothing if
-@var{action} or @var{action->agent} or @var{action->agent->writer}
+@var{action} or @var{action}->agent or @var{action}->agent->writer
 is NULL.
 
 @table @code
-@item FILE *f
+@item FILE *@var{f}
 The file stream to which the value is to be written
 
-@item const raAction *action
+@item const raAction *@var{action}
 The selected @code{raAction} from which the value is to be retrieved.
 
 @end table
@@ -127,7 +127,7 @@ The selected @code{raAction} from which the value is to be retrieved.
 
 @deftypefun const char * ra_command_name (void)
 
-This funtion returns the command name, with the path, if present,
+This function returns the command name, with the path, if present,
 stripped off.  This only works after @code{ra_set_scene} because the
 function returns a pointer into the first command line argument.
 

@@ -1,30 +1,50 @@
 @node ra_describe_arguments
 @section ra_describe_arguments
 
-@deftypefun void ra_describe_arguments (FILE* @var{f}, int @var{indent})
+@deftypefun void ra_describe_arguments (@*@
+            FILE* @var{f},@*@
+            int @var{indent})
 
 Print the names, types, and descriptions for each @code{raAction} that
 is a non option action.
 
+This function is called by @code{ra_show_help}, but may be used in a
+custom help display.
 
+@xref{ra_show_help}
 @end deftypefun
 
 @node ra_describe_options
 @section ra_describe_options
 
-@deftypefun void ra_describe_options (FILE* @var{f}, int @var{indent})
+@deftypefun void ra_describe_options (@*@
+            FILE* @var{f},@*@
+            int @var{indent})
+
+Print names types, and descriptions for each @code{raAction} that
+can be invoked on the command line with a short or long option.
+
+This function is called by @code{ra_show_help}, but may be used in a
+custom help display.
+
+@xref{ra_show_help}
+
 @end deftypefun
 
 @node ra_describe_usage
 @section ra_describe_usage
 
-@deftypefun void ra_describe_usage (FILE* @var{f}, @*@
+@deftypefun void ra_describe_usage (@*@
+            FILE* @var{f}, @*@
             int @var{indent}, @*@
             raUsage @var{usage})
 
 Print a single line usage message to @var{f} that consists of
 the command name followed by a representation of the options
 and non options.
+
+This function is called by @code{ra_show_help}, but may be used in a
+custom help display.
 
 There is a threshhold options count below which the option letters
 will all be printed, and above which they will be implied.
@@ -33,12 +53,17 @@ This function is mostly a placeholder function to use during
 development.  A finished project should probably include a custom
 usage message.
 
+@xref{ra_show_help}
+
 @end deftypefun
 
 @node ra_scene_options_count
 @section ra_scene_options_count
 
 @deftypefun int ra_scene_options_count (void)
+
+Returns the number of @code{raAction} instances that are invoked
+with an option letter or name.
 
 Call this function before calling @code{ra_describe_options} so
 @code{ra_describe_options} can be skipped if there are no options.
@@ -52,6 +77,10 @@ Call this function before calling @code{ra_describe_options} so
 
 @deftypefun int ra_scene_arguments_count (void)
 
+Returns the number of @code{raAction} instances that are applied
+to non-option arguments.  In other words, this returns the count
+of @code{raAction} instances not included in @code{ra_scene_options_count}.
+
 Call this function before calling @code{ra_describe_arguments} so
 @code{ra_describe_arguments} can be skipped if there are no arguments.
 
@@ -62,9 +91,18 @@ Call this function before calling @code{ra_describe_arguments} so
 @node ra_show_help
 @section ra_show_help
 
-@deftypefun void ra_show_help (FILE* @var{f}, @*@
+@deftypefun void ra_show_help (@*@
+            FILE* @var{f}, @*@
             int @var{indent}, @*@
             raUsage @var{usage})
+
+This function displays a full help display, including a usage
+line, a list of options (if any), and a list of arguments (if any).
+
+This function is called by the builtin @code{ra_show_help_agent}
+@code{raAgent}.
+
+@xref{ra_show_help_agent}
 @end deftypefun
 
 @node ra_show_no_args_message
@@ -72,8 +110,11 @@ Call this function before calling @code{ra_describe_arguments} so
 
 @deftypefun void ra_show_no_args_message (void)
 
-A convenient provider of a help display.  It calls the default
-functions for displaying usage, options, and non options.
+Show the usage line along with advice to try the @option{-h} option
+for help.
+
+This is a convenience function that can be called after an obvious
+error in calling the program, like calling it without any arguments.
 
 @end deftypefun
 
@@ -83,16 +124,26 @@ functions for displaying usage, options, and non options.
 
 @deftypefun void ra_show_scene_values (FILE * @var{f})
 
-Shows the value of every 
+Prints values of @code{raAction} instances that include
+a @code{target} pointer and an @code{raAgent} with a
+@code{raWriter}.
+
+This function is meant for debugging purposes and may be
+useful for both the developer and end user to confirm that
+certain options have been set appropriately.
+
+This function is used by the builtin @code{raAgent}
+@code{ra_show_values_agent}.
+
+@xref{ra_show_values_agent}
 
 @end deftypefun
-
 
 
 @node ra_write_warning
 @section ra_write_warning
 
-@deftypefun void ra_write_warning ( @*@
+@deftypefun void ra_write_warning (@*@
             FILE *@var{f}, @*@
             raStatus @var{status}, @*@
             const raTour *@var{tour}, @*@

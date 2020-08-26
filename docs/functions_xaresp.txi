@@ -6,6 +6,13 @@
 Return the number of arguments into which @var{str} would be split.
 This function does not modify @var{str}.
 
+This function works in combination with @code{ra_str2args}; the
+result of this function indicates the size of the @code{char*}
+array needed to access individual arguments.
+
+@xref{ra_str2args}@*
+@xref{Acquire Absent Answers}
+
 @end deftypefun
 
 @node ra_str2args
@@ -25,6 +32,10 @@ paired quote characters @code{"} and @code{'}.  Once this function
 has been run, the original @var{str} string will consist only of
 the first argument.
 
+This function works in combination with @code{ra_count_str2args}, which
+the size of the @code{char*} array that must be passed to this function
+to access individual arguments.
+
 @table @code
 @item char *str
 String consisting of space-separated values meant to be interpreted
@@ -43,36 +54,25 @@ argument.  This number should be taken from the result of the
 @code{ra_count_str2args} function.
 @end table
 
+@xref{Acquire Absent Answers}
+
 @end deftypefun
-
-The following code listing shows how to handle an interactive
-request for a mandatory value that was not provided.
-
-@example
-int        resp_len, args_count;
-char       *response = NULL;
-const char **args = NULL;
-raAction   *action = ra_seek_raAction_by_letter('b');
-
-// Use builtin function to generate prompt (or write your own prompt).
-ra_print_interactive_prompt(action);
-
-// Three-step process to get user response into an
-// appropriately-scoped memory location.
-resp_len = ra_collect_user_response();
-response = (char*)alloca(resp_len);
-ra_copy_user_response(response, resp_len);
-
-ra_process_action_with_response(action, response);
-@end example
-
-
-
 
 @node ra_collect_user_response
 @section ra_collect_user_response
 
 @deftypefun int ra_collect_user_response (void)
+
+Accepts a user's typed input into a static @code{char*} 
+array.  The function returns the number of bytes needed
+to copy the string, including the terminating @code{\0}.
+
+Use the @code{ra_copy_user_response} function with an
+appropriately-sized buffer to collect the response into
+persistent memory that can be used by @code{ra_process_arguments}.
+
+@xref{Acquire Absent Answers}
+
 @end deftypefun
 
 @node ra_copy_user_response
@@ -81,12 +81,32 @@ ra_process_action_with_response(action, response);
 @deftypefun int ra_copy_user_response (@*@
             char *@var{buffer},@*@
             int @var{buffer_len})
+
+Copies the user response, previously collected by the
+@code{ra_collect_user_response} function, into @var{buffer}.
+
 @end deftypefun
+
+@example
+int len_ur = ra_collect_user_response();
+char *buffer = (char*)alloca(len_ur);
+ra_copy_user_response(buffer, len_ur);
+@end example
+
+@xref{Acquire Absent Answers}
 
 @node ra_print_interactive_prompt
 @section ra_print_interactive_prompt
 
 @deftypefun void ra_print_interactive_prompt (const raAction *@var{action})
+
+Displays a generic prompt for data entry using the @code{label}
+(long option name) or @code{letter} (short option) members of
+an @code{raAction} instance.
+
+@xref{raAction}@*
+@xref{Acquire Absent Answers}
+
 @end deftypefun
 
 @node ra_process_action_with_response
@@ -95,4 +115,11 @@ ra_process_action_with_response(action, response);
 @deftypefun raStatus ra_process_action_with_response (@*@
             const raAction *@var{action},@*@
             char *@var{response})
+
+After splitting @var{response} into arguments, this function
+uses the @code{raAction} instance to process the arguments
+submitted by the user to set the target of the @code{raAction}.
+
+@xref{Acquire Absent Answers}
+
 @end deftypefun

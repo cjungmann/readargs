@@ -46,6 +46,7 @@ options and values according to the GNU/Posix standard.
 * Preparing Actions::
 * Builtin Action Agents::     
 * Custom Action Agents::      Extend the library with 
+* Code::                      Examples are the best explanation
 * Actions Interpretation::    Explains how the library reads arguments
 @end menu
 
@@ -67,6 +68,7 @@ to interpret the command line arguments entered by the user.
 @include actions.txi
 @include builtin_agents.txi
 @include custom_agents.txi
+@include code.txi
 @include interpretation.txi
 
 @bye

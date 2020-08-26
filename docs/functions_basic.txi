@@ -1,10 +1,11 @@
 @node ra_set_scene
 @section ra_set_scene
 
-@deftypefun void ra_set_scene (const char ** @var{start_arg}, @*@
-                              int @var{arg_count}, @*@
-                              const raAction * @var{start_action}, @*@
-                              int @var{action_count})
+@deftypefun void ra_set_scene (@*@
+            const char ** @var{start_arg}, @*@
+            int @var{arg_count}, @*@
+            const raAction * @var{start_action}, @*@
+            int @var{action_count})
 
 This function saves the command line arguments and the
 array of @code{raAction} struct to global variable @code{g_scene}
@@ -35,9 +36,9 @@ There is a helper macro for calculating this value,
 @code{ACTS_COUNT}.
 @end table
 
+@xref{def step 3,,,Use in code}
 @end deftypefun
 
-@xref{def step 3,,,Use in code}
 
 @node ra_process_arguments
 @section ra_process_arguments
@@ -64,11 +65,9 @@ the @xref{Argument Processing} for a break-down of this function to
 see where @code{ra_write_warnings} is called and decide how you might
 otherwise handle user-entry errors.
 
-@end deftypefun
-
 @xref{def step 4}@*
 @xref{Argument Processing}
-
+@end deftypefun
 
 
 @node ACTS_COUNT

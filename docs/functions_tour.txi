@@ -1,7 +1,7 @@
 @node ra_start_tour
 @section ra_start_tour
 
-@deftypefun raTour *ra_start_tour (raTour * @var{tour})
+@deftypefun raTour *ra_start_tour (raTour *@var{tour})
 
 Initialize @var{tour} with starting positions of the global
 @var{g_scene} variable.
@@ -13,7 +13,7 @@ Initialize @var{tour} with starting positions of the global
 @node ra_advance_arg
 @section ra_advance_arg
 
-@deftypefun const char* ra_advance_arg (raTour * @var{tour})
+@deftypefun const char* ra_advance_arg (raTour *@var{tour})
 
 Moves the argument pointer ahead one position.  Note that the argument
 is an uninterpreted command line argument, which may or may not be an
@@ -67,12 +67,16 @@ declined by calling @code{ra_retreat_arg}.
 
 @deftypefun const char* ra_current_arg (const raTour *@var{tour})
 
+Points to the @code{argv} element currently being considered.
+
 @end deftypefun
 
 @node ra_current_action
 @section ra_current_action
 
 @deftypefun const raAction *ra_current_action (const raTour *@var{tour})
+
+Returns the latest @code{raAction} element that matched a user argument.
 
 @end deftypefun
 
@@ -81,8 +85,8 @@ declined by calling @code{ra_retreat_arg}.
 
 @deftypefun const raAction* ra_seek_raAction_by_letter (const char @var{letter})
 
-Returns the @code{raAction} instance whose @var{letter} value matches the
-@var{letter} parameter, or NULL if there is no matching @var{letter}.
+Returns the @code{raAction} instance whose @var{letter} member matches the
+@var{letter} argument, or NULL if there is no matching @var{letter}.
 
 @end deftypefun
 
@@ -92,7 +96,7 @@ Returns the @code{raAction} instance whose @var{letter} value matches the
 
 @deftypefun const raAction* ra_seek_raAction_by_label (const char *@var{str})
 
-Returns the @code{raAction} instance whose @var{label} value matches the
-@var{label} parameter, or NULL if there is no matching @var{label}.
+Returns the @code{raAction} instance whose @var{label} member matches the
+@var{str} parameter, or NULL if there is no matching @var{label}.
 
 @end deftypefun
