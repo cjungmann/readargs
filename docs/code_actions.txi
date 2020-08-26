@@ -1,0 +1,58 @@
+@node An Array of Actions
+@section An Array of Actions
+
+@code{raAction} is the definition of a @code{struct} data type
+whose data members allow the @code{readargs} library process
+the command line interaction.  @xref{raAction}
+
+An instance of @code{raAction} is a block of memory with values
+assigned to the @code{raAction} members.  Recall the @code{raAction}
+definition:
+
+@example
+typedef struct @{
+  int           letter;
+  const char    *label;
+  const char    *comment;
+  const raAgent *agent;
+  void          *target;
+  const char    *type;
+@} raAction
+@end example
+
+Typical @code{raAction} instances record the intentions of a program's
+user as they are expressed in the command line arguments.  In practice,
+when a user includes an option when invoking a command, the user's
+preference is stored in a variable.
+
+@table @asis
+@item Saving a string
+In the first example, if the user enters either @option{-i filename} or
+@option{--input filename}, the @code{ra_string_agent} will be used to
+set the target variable @var{input_file} to the value entered with
+the option.  The @var{``FILENAME''} is used by the help generator to
+generate usage and option examples.
+
+@smallexample
+@{ 'i', "input", "Input file", &ra_string_agent, &input_file, "FILENAME" @}
+@end smallexample
+
+@item Saving an integer
+
+@smallexample
+@{ 'p', "port", "Email port", &ra_int_agent, &port_number, "PORT NUMBER" @}
+@end smallexample
+
+@item Setting a flag
+@smallexample
+@{ 'v', "verbose", "Verbose output", &ra_flag_agent, &show_verbose, NULL @}
+@end smallexample
+
+@item Showing help
+@smallexample
+@{ 'h', "help", "Show this help", &ra_show_help_agent, NULL, NULL @}
+@end smallexample
+
+
+@end table
+

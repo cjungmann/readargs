@@ -1,0 +1,17 @@
+@node Code
+@chapter Code
+
+Examples are often the best explanation, especially for code.
+
+@menu
+* Simple and Complete::
+* An Array of Actions::
+* An Assortment of Agents::
+* Acquire Absent Answers::
+@end menu
+
+@include code_simple.txi
+@include code_actions.txi
+@include code_agents.txi
+@include code_xaresp.txi
+
