@@ -3,6 +3,9 @@
 
 #include "readargs.h"  // for EXPORT macro
 
+typedef char*(*discard_char_t)(char *str);
+
+// Two discard_char_t implementations:
 char* popper(char *str)
 {
    int len = strlen(str);
@@ -15,8 +18,6 @@ char* skipper(char *str)
 {
    return str+1;
 }
-
-typedef char*(*discard_char_t)(char *str);
 
 int is_quote(char chr)     { return chr == '\'' || chr == '"'; }
 
