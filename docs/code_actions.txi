@@ -11,48 +11,76 @@ definition:
 
 @example
 typedef struct @{
-  int           letter;
-  const char    *label;
-  const char    *comment;
-  const raAgent *agent;
-  void          *target;
-  const char    *type;
+  int           @var{letter};
+  const char    *@var{label};
+  const char    *@var{comment};
+  const raAgent *@var{agent};
+  void          *@var{target};
+  const char    *@var{type};
 @} raAction
 @end example
 
-Typical @code{raAction} instances record the intentions of a program's
-user as they are expressed in the command line arguments.  In practice,
-when a user includes an option when invoking a command, the user's
-preference is stored in a variable.
+@xref{raAction}
 
-@table @asis
-@item Saving a string
-In the first example, if the user enters either @option{-i filename} or
-@option{--input filename}, the @code{ra_string_agent} will be used to
-set the target variable @var{input_file} to the value entered with
-the option.  The @var{``FILENAME''} is used by the help generator to
-generate usage and option examples.
+A typical action map is a global array of @code{raAction}, though
+it could also reside in function @code{main}.  The only requirement
+is that the array remains intact until the argument-processing
+is complete.
 
-@smallexample
-@{ 'i', "input", "Input file", &ra_string_agent, &input_file, "FILENAME" @}
-@end smallexample
+Here is a sample @code{raAction} array:
 
-@item Saving an integer
+@example
+raAction actions[] = @{
+   @{ 'o', "output",  "Output file",    &ra_string_agent, &output_file, "FILENAME" @},
+   @{ 'p', "port",    "Email port",     &ra_int_agent,    &port_number, "PORT NUMBER" @},
 
-@smallexample
-@{ 'p', "port", "Email port", &ra_int_agent, &port_number, "PORT NUMBER" @}
-@end smallexample
+   // Omitted initialion values
+   @{ 'v', "verbose", "Verbose output", &ra_flag_agent,   &show_verbose @},
+   @{ 'h', "help",    "Show this help", &ra_show_help_agent @},
 
-@item Setting a flag
-@smallexample
-@{ 'v', "verbose", "Verbose output", &ra_flag_agent, &show_verbose, NULL @}
-@end smallexample
+   // Long option but no short option
+   @{ 0  , "debug",   "Debug mode",     &rs_flag_agent,   &debug_mode @},
+   // Short option but no long option
+   @{ 'u', NULL,      "Undo mode",      &rs_flag_agent,   &undo_flag @},
+   // Non-option, positional action
+   @{ -1,  "*input"   "Input file",     &ra_string_agent, &input_file, "FILENAME" @}
 
-@item Showing help
-@smallexample
-@{ 'h', "help", "Show this help", &ra_show_help_agent, NULL, NULL @}
-@end smallexample
+@};
 
+@end example
+
+@table @code
+@item Omitted initializers
+Notice that lines three and four (the verbose and help actions) initialize
+fewer than the full set of data members.  This is a convenience made
+possible by the C language, which sets uninitialized data members to 0.
+
+Flag actions, in particular, have no need for the @var{type} member
+because the option does not take a flag.  Display actions like @code{help}
+may not need either the @var{agent} or @var{type} members, in which case
+they are both optional.
+
+@item Singular invocations
+An action may be called by either or both the short or long
+option methods.  Initialize the unneeded @var{letter} or @var{label}
+option with a 0 or NULL to not recognize that invocation.  Lines
+five and six demonstrate singular invocations.
+
+@item Non-option or positional action
+When a value will be collected without an preceding option
+invocation is a non-option or positional argument.  Line seven
+is an example of this sort.  There are two distictions of this
+type:
+
+@enumerate
+@item
+The @var{letter} member is set to @code{-1}
+@item
+The @var{label} member includes a non-display prefix, @code{*}.
+@end enumerate
 
 @end table
+
+
+
 
