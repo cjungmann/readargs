@@ -1,40 +1,39 @@
 @node Builtin Action Agents
 @chapter Builtin Action Agents
 
-@menu
-* ra_flag_agent::         sets a true/false integer target
-* ra_int_agent::          sets an integer target
-* ra_string_agent::       sets a const char* target
-* ra_show_help_agent::    shows a help display
-* ra_show_values_agent::  shows the printable option values
-@end menu
+@table @code
+@anchor{ra_flag_agent}
+@item ra_flag_agent
+Sets the value of an integer variable to 1.  It is assumed that
+variable had been initialized to 0 for the default value.
 
-@node ra_flag_agent
-@section ra_flag_agent
+@anchor{ra_int_agent}
+@item ra_int_agent
+Sets the value of an integer variable from the argument following
+the option that invoked an @code{raAction} with an @code{ra_int_agent}.
+The variable can and should be set with a valid default value in
+case the option is not invoked.
 
-@table @emph
+@anchor{ra_string_agent}
+@item ra_string_agent
+Sets the value of a @code{char*} to the address of the @code{char*}
+argument that follows the option that invoked the @code{raAction}
+with an @code{ra_string_agent}.
 
-@item target
-Target must be an integer, initialized to 0 (false).
-@item writer
-When invoked, this raAgent writer will set the @emph{target}
-value to 1 (true).
-@item reader
-When invoked, this raAgent will return @emph{false} if the
-the value of @emph{target} is 0, and will return @emph{true}
-otherwise.
+@anchor{ra_show_help_agent}
+@item ra_show_help_agent
+Invoking an @code{raAction} with this @code{raAgent} will display
+a help screen generated from the actions map.  The
+@code{ra_show_help_agent} returns @var{RA_CANCEL} that is a
+directive requesting that the program be immediately terminated.
+
+@anchor{ra_show_values_agent}
+@item ra_show_values_agent
+This is a debugging agent that may be useful to both developer and
+the end user.  For each @code{raAction} whose @code{raAgent} provides
+an @code{raWriter}, this agent creates a two-column display with the
+option @code{letter} or @code{label} on the left and the value of the
+@code{target} element on the right.
+
 @end table
-
-@node ra_int_agent
-@section ra_int_agent
-
-@node ra_string_agent
-@section ra_string_agent
-
-@node ra_show_help_agent
-@section ra_show_help_agent
-
-@node ra_show_values_agent
-@section ra_show_values_agent
-
 
