@@ -40,13 +40,13 @@ options and values according to the GNU/Posix standard.
 @contents
 @menu
 * Introduction::
+* Code Listings::             Instructive code for learning and reference
 * Quick Start::               Enough to get you started
 * Data Types::                Data types that support argument processing
 * Library Functions::         
 * Preparing Actions::
 * Builtin Action Agents::     
 * Custom Action Agents::      Extend the library with 
-* Code::                      Examples are the best explanation
 * Actions Interpretation::    Explains how the library reads arguments
 @end menu
 
@@ -62,13 +62,13 @@ requirements.
 A developer will create an array of structs that describe how
 to interpret the command line arguments entered by the user.
 
+@include code.txi
 @include quickstart.txi
 @include types.txi
 @include functions.txi
 @include actions.txi
 @include builtin_agents.txi
 @include custom_agents.txi
-@include code.txi
 @include interpretation.txi
 
 @bye
