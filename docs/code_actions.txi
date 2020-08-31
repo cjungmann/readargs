@@ -17,7 +17,7 @@ typedef struct @{
   const raAgent *@var{agent};
   void          *@var{target};
   const char    *@var{type};
-@} raAction
+@} raAction;
 @end example
 
 @xref{raAction}
@@ -34,7 +34,7 @@ raAction actions[] = @{
    @{ 'o', "output",  "Output file",    &ra_string_agent, &output_file, "FILENAME" @},
    @{ 'p', "port",    "Email port",     &ra_int_agent,    &port_number, "PORT NUMBER" @},
 
-   // Omitted initialion values
+   // @code{raAction} structs with omitted initial values
    @{ 'v', "verbose", "Verbose output", &ra_flag_agent,   &show_verbose @},
    @{ 'h', "help",    "Show this help", &ra_show_help_agent @},
 
