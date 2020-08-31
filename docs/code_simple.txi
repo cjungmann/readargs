@@ -7,25 +7,29 @@ The following is a simple and complete code listing.
 #include <stdio.h>
 #include <readargs.h>
 
-int        nval;
-const char *sval;
+// Variables in which arguments are saved
+int        nval = 0;
+const char *sval = NULL;
 
-// @xref{Defining an Action Map}
-// @xref{raAction}
+// Map option responses to variables
 raAction actions[] = @{
    @{ 'h', "help",   "This help display", &ra_show_help_agent, NULL,  NULL @},
    @{ 'n', "number", "Set nval",          &ra_int_agent,       &nval, "NUMBER" @},
    @{ 's', "string", "Set sval",          &ra_string_agent,    &sval, "STRING" @}
 @};
+// @xref{Defining an Action Map}
+// @xref{raAction}
 
 int main(int argc, const char *argv)
 @{
-   // @xref{ra_set_scene}
+   // Register options map and arguments
    ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
+   // @xref{ra_set_scene}
 
+   // Process arguments, with library handling all errors
+   if (ra_process_arguments())
    // @xref{Argument Processing}
    // @xref{ra_process_arguments}
-   if (ra_process_arguments())
    @{
       // begin the program here
    @}
