@@ -1,13 +1,19 @@
-@node Code
-@chapter Code
+@node Code Listings
+@chapter Code Listings
 
-Examples are often the best explanation, especially for code.
+Learn how to use the readargs library with code, starting with
+an example that lets the library do nearly everything.  Nearly
+all command line argument processing can be done by following
+the example of the simplest code listing.
+
+All code listings include links that lead to pages that help
+understand how to use and extend the library functions.
 
 @menu
-* Simple and Complete::
-* An Array of Actions::
-* An Assortment of Agents::
-* Acquire Absent Answers::
+* Simple and Complete::     Start here to learn basics
+* An Array of Actions::     Defining responses to command line arguments
+* An Assortment of Agents:: Agents process users' biddings
+* Acquire Absent Answers::  Tools to ask users for missing information
 @end menu
 
 @include code_simple.txi
