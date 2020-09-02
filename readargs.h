@@ -6,8 +6,10 @@
 #include <stdio.h>
 
 // Forward declarations for function pointer typedefs
+typedef struct _readargs_agent raAgent;
 typedef struct _readargs_action raAction;
 typedef struct _readargs_tour raTour;
+typedef struct _readargs_scene raScene;
 
 typedef enum {
    RA_SUCCESS = 0,
@@ -28,15 +30,15 @@ typedef enum {
 typedef raStatus (*raReader)(const raAction *act, const char *str, raTour *tour);
 typedef void (*raWriter)(FILE *f, const raAction *act);
 
-typedef struct _readargs_agent
+struct _readargs_agent
 {
    int args_needed;
    raReader reader;
    raWriter writer;
-} raAgent;
+};
 
 /** Library's fundamental data structure. */
-typedef struct _readargs_action
+struct _readargs_action
 {
    int           letter;   /* letter that invokes the action */
    const char    *label;   /* long-action name invoking action */
@@ -44,7 +46,7 @@ typedef struct _readargs_action
    const raAgent *agent;   /* object that manages value */
    void          *target;  /* actional data pointer */
    const char    *type;    /* actional string to describe the value */
-} raAction;
+};
 
 /**
  * Special action types:
@@ -62,22 +64,22 @@ typedef struct _readargs_action
  */
 
 
-typedef struct _readargs_scene
+struct _readargs_scene
 {
    // Collections of CL arguments and action definitions
    const char **args;
    const char **args_end;
    const raAction *actions;
    const raAction *actions_end;
-} raScene;
+};
 
-typedef struct _readargs_tour
+struct _readargs_tour
 {
    const char **current_arg;
    const char *sub_arg_ptr;
    const raAction *current_action;
    const raAction *last_position_action;
-} raTour;
+};
 
 
 /**
