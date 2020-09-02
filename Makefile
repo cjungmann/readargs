@@ -6,7 +6,7 @@ SHELL=/bin/bash
 
 DESTDIR = /usr
 
-CFLAGS = -Wall -Werror -pedantic -m64
+CFLAGS = -Wall -Werror -std=c99 -pedantic -m64
 LIBFLAGS = -fPIC -shared -fvisibility=hidden
 
 TARGET = libreadargs.so
@@ -89,5 +89,5 @@ clean:
 	rm -f *.o
 	rm -f $(patsubst test%.c,test%,$(wildcard test*.c))
 	rm -rf docs/readargs
-	rm docs/!(*.txi)
+	rm -f docs/!(*.txi)
 
