@@ -1,13 +1,21 @@
 @node An Array of Actions
 @section An Array of Actions
 
-@code{raAction} is the definition of a @code{struct} data type
-whose data members allow the @code{readargs} library process
-the command line interaction.  @xref{raAction}
+An @code{raAction} is a struct that associates the information
+needed to
+@enumerate
+@item
+invoke the option with the @var{letter} and @var{label}
+@item
+execute the option using @var{agent} and @var{target}.
+@item
+explain the action using @var{comment} and @var{type}
+@end enumerate
 
-An instance of @code{raAction} is a block of memory with values
-assigned to the @code{raAction} members.  Recall the @code{raAction}
-definition:
+The library works with an array of @code{raAction} instances,
+called the @dfn{action map}, to process command line arguments.
+
+@xref{raAction}
 
 @example
 typedef struct @{
@@ -19,13 +27,6 @@ typedef struct @{
   const char    *@var{type};
 @} raAction;
 @end example
-
-@xref{raAction}
-
-A typical action map is a global array of @code{raAction}, though
-it could also reside in function @code{main}.  The only requirement
-is that the array remains intact until the argument-processing
-is complete.
 
 Here is a sample @code{raAction} array:
 
@@ -50,6 +51,12 @@ raAction actions[] = @{
 @end example
 
 @table @code
+@item Memory Scope
+In these examples, both the state variables and the action map are global
+variables.  This is convenient, but not necessary.  Global variables are
+used because they are accessible and persistent, but local variables in
+@code{main} also live long enough to be useful.
+
 @item Omitted initializers
 Notice that lines three and four (the verbose and help actions) initialize
 fewer than the full set of data members.  This is a convenience made
@@ -60,7 +67,7 @@ because the option does not take a flag.  Display actions like @code{help}
 may not need either the @var{agent} or @var{type} members, in which case
 they are both optional.
 
-@item Singular invocations
+@item Singular invocations (letter or label only)
 An action may be called by either or both the short or long
 option methods.  Initialize the unneeded @var{letter} or @var{label}
 option with a 0 or NULL to not recognize that invocation.  Lines
