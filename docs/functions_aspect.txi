@@ -125,7 +125,7 @@ The selected @code{raAction} from which the value is to be retrieved.
 @node ra_command_name
 @section ra_command_name
 
-@deftypefun const char * ra_command_name (void)
+@deftypefun {const char *} ra_command_name (void)
 
 This function returns the command name, with the path, if present,
 stripped off.  This only works after @code{ra_set_scene} because the
