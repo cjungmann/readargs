@@ -7,11 +7,11 @@ The following is a simple and complete code listing.
 #include <stdio.h>
 #include <readargs.h>
 
-// Variables in which arguments are saved
+// @dfn{State Variables} in which arguments are saved
 int        nval = 0;
 const char *sval = NULL;
 
-// Map option responses to variables
+// The @dfn{Action Map} links state variables with option handling
 raAction actions[] = @{
    @{ 'h', "help",   "This help display", &ra_show_help_agent, NULL,  NULL @},
    @{ 'n', "number", "Set nval",          &ra_int_agent,       &nval, "NUMBER" @},
@@ -37,3 +37,4 @@ int main(int argc, const char *argv)
 @}
 @end example
 
+The next section will show how to make an action map (@pxref{An Array of Actions}).
