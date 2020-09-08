@@ -1,16 +1,13 @@
 @node Library Functions
 @chapter Library Functions
 
+
 @menu
-basic functions
 @c found in functions_basic.txi
-* ra_set_scene::                    register global variable with command line arguments
-                                    list of option instructions
-* ra_process_arguments::            processes command line arguments
-* ACTS_COUNT::                      macro that counts actions in action map
+* Basic Functions::                 Introduction to library use
 
 display functions
-@c found in functions_help.txi
+@c found in functions_display.txi
 * ra_describe_arguments::           display non-options
 * ra_describe_options::             display list of options with comments
 * ra_describe_usage::               display usage template
@@ -59,7 +56,7 @@ miscellaneous
 @end menu
 
 @include functions_basic.txi
-@include functions_help.txi
+@include functions_display.txi
 @include functions_tour.txi
 @include functions_aspect.txi
 @include functions_xaresp.txi
