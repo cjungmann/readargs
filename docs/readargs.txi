@@ -48,7 +48,7 @@ options and values according to the GNU/Posix standard.
 * Builtin Action Agents::     
 * Custom Action Agents::      Extend the library with 
 * Actions Interpretation::    Explains how the library reads arguments
-* Function Index::
+* Index::
 @end menu
 
 @node Introduction
@@ -72,7 +72,8 @@ to interpret the command line arguments entered by the user.
 @include custom_agents.txi
 @include interpretation.txi
 
-@node Function Index
+@node Index
+@unnumbered Index
 @printindex fn
 
 @bye
