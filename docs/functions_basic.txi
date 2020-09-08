@@ -1,11 +1,29 @@
-@node ra_set_scene
-@section ra_set_scene
+@node Basic Functions
+@section Basic Functions
 
-@deftypefun void ra_set_scene (@*@
-            const char ** @var{start_arg}, @*@
-            int @var{arg_count}, @*@
-            const raAction * @var{start_action}, @*@
-            int @var{action_count})
+The functions in this section, especially @code{ra_process_arguments},
+are all the minimum requirements for creating an application
+that processes the users' command line arguments.
+
+There is a code listing that restricts itself to these
+functions.  (@pxref{Simple and Complete})
+
+@menu
+* ra_set_scene::                    register global variable with command line arguments
+                                    list of option instructions
+* ra_process_arguments::            processes command line arguments
+* ACTS_COUNT::                      macro that counts actions in action map
+@end menu
+
+@node ra_set_scene
+@subsection ra_set_scene
+@cindex functions @subentry basic
+
+@deftypefn void ra_set_scene (@*@
+           const char ** @var{start_arg}, @*@
+           int @var{arg_count}, @*@
+           const raAction * @var{start_action}, @*@
+           int @var{action_count})
 
 This function saves the command line arguments and the
 array of @code{raAction} struct to global variable @code{g_scene}
@@ -37,13 +55,14 @@ There is a helper macro for calculating this value,
 @end table
 
 @xref{def step 3,,,Use in code}
-@end deftypefun
+@end deftypefn
 
 
 @node ra_process_arguments
-@section ra_process_arguments
+@subsection ra_process_arguments
+@cindex functions @subentry basic
 
-@deftypefun int ra_process_arguments (void)
+@deftypefn int ra_process_arguments (void)
 
 This function lets the library do everything for you.  It takes
 no arguments since it's using the global @code{g_scene} variable
@@ -67,13 +86,13 @@ otherwise handle user-entry errors.
 
 @xref{def step 4}@*
 @xref{Argument Processing}
-@end deftypefun
+@end deftypefn
 
 
 @node ACTS_COUNT
-@section ACTS_COUNT
+@subsection ACTS_COUNT
 
-@defmac ACTS_COUNT (@var{actions_array})
+@defmac {Setup Macro} ACTS_COUNT (@var{actions_array})
 
 This macro calculates the number of actions in an array by dividing
 the @code{sizeof} the array by the @code{sizeof} an @code{raAction}.
