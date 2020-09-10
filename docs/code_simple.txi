@@ -1,7 +1,12 @@
 @node Simple and Complete
 @section Simple and Complete
 
-The following is a simple and complete code listing.
+This code sample presents a minimal implementation to
+illustrate the fundamentals of a @code{readargs}
+enabled application.
+
+Follow links in the code comments to learn about each
+section.
 
 @example
 #include <stdio.h>
