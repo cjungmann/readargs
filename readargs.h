@@ -95,7 +95,7 @@ extern const raAgent ra_show_help_agent;
 extern const raAgent ra_show_values_agent;
 
 /* Use for fifth (act_count) parameter of ra_init_cache(): */
-#define ACTS_COUNT(a) (sizeof((a)) / sizeof(raAction))
+#define ACTS_COUNT(a) (sizeof((a)) / sizeof(a[0]))
 
 
 const char *ra_command_name(void);
