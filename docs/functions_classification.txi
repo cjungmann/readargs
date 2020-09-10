@@ -1,0 +1,85 @@
+@node Action Classification
+@section Action Classification
+
+Making an appropriate response to a given action requires
+knowing what kind of action it is.  This group of functions
+reveals the actions' classifications.
+
+@menu
+* ra_is_positional_action::  TRUE if non option action
+* ra_is_named_action::       TRUE if action invoked with letter or long option
+* ra_is_flag_action::        TRUE if action sets an integer to 1
+* ra_is_value_action::       TRUE if action requires a following value argument
+* ra_is_writable_action::    TRUE if associated @code{raAgent} implements a @var{writer}
+@end menu
+
+@node ra_is_positional_action
+@subsection ra_is_positional_action
+
+@deftypefun int ra_is_positional_action(const raAction *@var{act})
+
+Test for positional or non-option action.  Command line arguments
+that are not associated with command line options are assigned to
+positional actions in the order they are encountered.
+
+@xref{Non option Action}
+
+@end deftypefun
+
+@node ra_is_named_action
+@subsection ra_is_named_action
+
+@deftypefun int ra_is_named_action(const raAction *@var{act})
+
+Test the @code{raAction} instance for either a short option
+(as defined by the @var{letter} member), or a long option
+(as defined by the @var{label} member).  Having either or
+both of these members allows the action to be triggered by
+a command line option.
+
+@xref{Option Action}
+
+@end deftypefun
+
+@node ra_is_flag_action
+@subsection ra_is_flag_action
+
+@deftypefun int ra_is_flag_action(const raAction *@var{act})
+
+This @code{raAction} type uses an @code{raAgent} whose
+@var{args_needed} member is set to @code{0}.  Generally,
+one uses the builtin agent @code{ra_flag_agent}.
+
+@xref{ra_flag_agent}
+
+@end deftypefun
+
+@node ra_is_value_action
+@subsection ra_is_value_action
+
+@deftypefun int ra_is_value_action(const raAction *@var{act})
+
+Returns non-zero if the @code{raAction} takes a value.  The
+library uses this function to decide whether or not to return
+a string to the @var{str} parameter of the @code{ra_advance_action}
+function.
+
+@xref{ra_advance_action}
+
+@end deftypefun
+
+@node ra_is_writable_action
+@subsection ra_is_writable_action
+
+@deftypefun int ra_is_writable_action(const raAction *@var{act})
+
+Test for @code{raAction} to determine if it can write its
+value.  Being able to write a value allows this @code{raAction}
+instance to participate in the @code{ra_show_values_agent}
+printing of the actions' values.
+
+@xref{ra_show_values_agent}
+
+@end deftypefun
+
+

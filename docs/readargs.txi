@@ -73,7 +73,8 @@ to interpret the command line arguments entered by the user.
 @include interpretation.txi
 
 @node Index
-@unnumbered Index
+@chapter Index
+
 @printindex fn
 
 @bye

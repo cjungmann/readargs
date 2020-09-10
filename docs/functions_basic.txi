@@ -19,11 +19,11 @@ functions.  (@pxref{Simple and Complete})
 @subsection ra_set_scene
 @cindex functions @subentry basic
 
-@deftypefn void ra_set_scene (@*@
-           const char ** @var{start_arg}, @*@
-           int @var{arg_count}, @*@
-           const raAction * @var{start_action}, @*@
-           int @var{action_count})
+@deftypefun void ra_set_scene (@*@
+            const char ** @var{start_arg}, @*@
+            int @var{arg_count}, @*@
+            const raAction * @var{start_action}, @*@
+            int @var{action_count})
 
 This function saves the command line arguments and the
 array of @code{raAction} struct to global variable @code{g_scene}
@@ -55,14 +55,14 @@ There is a helper macro for calculating this value,
 @end table
 
 @xref{def step 3,,,Use in code}
-@end deftypefn
+@end deftypefun
 
 
 @node ra_process_arguments
 @subsection ra_process_arguments
 @cindex functions @subentry basic
 
-@deftypefn int ra_process_arguments (void)
+@deftypefun int ra_process_arguments (void)
 
 This function lets the library do everything for you.  It takes
 no arguments since it's using the global @code{g_scene} variable
@@ -86,7 +86,7 @@ otherwise handle user-entry errors.
 
 @xref{def step 4}@*
 @xref{Argument Processing}
-@end deftypefn
+@end deftypefun
 
 
 @node ACTS_COUNT

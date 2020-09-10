@@ -1,0 +1,79 @@
+@node Miscellaneous Functions
+@section Miscellaneous Functions
+
+These simple functions do not fit in any category.
+
+@menu
+* ra_execute_action_read::    calls appropriate @code{raAgent::reader} to process argument
+* ra_execute_action_write::   writes value of @code{raAction} using @code{raAgent::writer} if found
+* ra_command_name::           name of currently running command
+@end menu
+
+@node ra_execute_action_read
+@subsection ra_execute_action_read
+
+@deftypefun raStatus ra_execute_action_read (@*@
+            const raAction *@var{action},@*@
+            const char *@var{str},@*@
+            raTour *@var{tour})
+
+Given the selected @code{raAction} instance and a value (if appropriate),
+this function uses the attached @code{raAgent} instance to apply the
+@var{str} value to the @var{action}.
+
+@table @code
+@item const raAction *@var{action}
+The @code{raAction} instance matching the command line argument
+
+@item const char *@var{str}
+The value to be assigned to the @code{raAction}, if appropriate.
+This parameter will be filled only if @var{action} is a @emph{value action}.
+
+@item raTour *@var{tour}
+The active @var{tour} instance is made available in case the @code{raAgent}
+needs to manipulate the argument pointer, either to take more values for
+multi-value agents, or to return an inappropriate argument in the case of
+an optional-value action.
+
+@end table
+
+@end deftypefun
+
+@node ra_execute_action_write
+@subsection ra_execute_action_write
+
+@deftypefun void ra_execute_action_write (@*@
+            FILE *@var{f},@*@
+            const raAction *@var{action})
+
+This function attempts to resolve the value of the @code{raAction}
+parameter and write the value to file stream @var{f}.
+
+The function will silently (no warnings or errors) do nothing if
+@var{action} or @var{action}->agent or @var{action}->agent->writer
+is NULL.
+
+@table @code
+@item FILE *@var{f}
+The file stream to which the value is to be written
+
+@item const raAction *@var{action}
+The selected @code{raAction} from which the value is to be retrieved.
+
+@end table
+
+@end deftypefun
+
+@node ra_command_name
+@subsection ra_command_name
+
+@deftypefun {const char *} ra_command_name (void)
+
+This function returns the command name, with the path, if present,
+stripped off.  This only works after @code{ra_set_scene} because the
+function returns a pointer into the first command line argument.
+
+@xref{ra_set_scene}
+
+@end deftypefun
+

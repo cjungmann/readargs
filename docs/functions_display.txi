@@ -1,5 +1,29 @@
+@node Display Functions
+@section Display Functions
+
+By convention, libraries usually do not create screen output.
+However, in the interest of simplifying the developer's burden,
+this library provides several functions that produce parts of
+or complete help screens.  These functions can be used according
+to the developer's needs.
+
+@menu
+* ra_describe_arguments::           display non-options
+* ra_describe_options::             display list of options with comments
+* ra_describe_usage::               display usage template
+* ra_scene_options_count::          returns number of options
+* ra_scene_arguments_count::        returns number of argument (non-options)
+* ra_show_help::                    builds full help screen with @code{ra_display_usage},
+                                    @code{ra_display_options}, and @code{ra_display_arguments}
+* ra_show_no_args_message::         boilerplate message for no arguments
+
+* ra_show_scene_values::            debugging display that shows current state values
+
+* ra_write_warning::                displays a message for unsuccessful option calls
+@end menu
+
 @node ra_describe_arguments
-@section ra_describe_arguments
+@subsection ra_describe_arguments
 
 @deftypefun void ra_describe_arguments (@*@
             FILE* @var{f},@*@
@@ -15,7 +39,7 @@ custom help display.
 @end deftypefun
 
 @node ra_describe_options
-@section ra_describe_options
+@subsection ra_describe_options
 
 @deftypefun void ra_describe_options (@*@
             FILE* @var{f},@*@
@@ -32,7 +56,7 @@ custom help display.
 @end deftypefun
 
 @node ra_describe_usage
-@section ra_describe_usage
+@subsection ra_describe_usage
 
 @deftypefun void ra_describe_usage (@*@
             FILE* @var{f}, @*@
@@ -58,7 +82,7 @@ usage message.
 @end deftypefun
 
 @node ra_scene_options_count
-@section ra_scene_options_count
+@subsection ra_scene_options_count
 
 @deftypefun int ra_scene_options_count (void)
 
@@ -73,7 +97,7 @@ Call this function before calling @code{ra_describe_options} so
 @end deftypefun
 
 @node ra_scene_arguments_count
-@section ra_scene_arguments_count
+@subsection ra_scene_arguments_count
 
 @deftypefun int ra_scene_arguments_count (void)
 
@@ -89,7 +113,7 @@ Call this function before calling @code{ra_describe_arguments} so
 @end deftypefun
 
 @node ra_show_help
-@section ra_show_help
+@subsection ra_show_help
 
 @deftypefun void ra_show_help (@*@
             FILE* @var{f}, @*@
@@ -106,7 +130,7 @@ This function is called by the builtin @code{ra_show_help_agent}
 @end deftypefun
 
 @node ra_show_no_args_message
-@section ra_show_no_args_message
+@subsection ra_show_no_args_message
 
 @deftypefun void ra_show_no_args_message (void)
 
@@ -120,7 +144,7 @@ error in calling the program, like calling it without any arguments.
 
 
 @node ra_show_scene_values
-@section ra_show_scene_values
+@subsection ra_show_scene_values
 
 @deftypefun void ra_show_scene_values (FILE * @var{f})
 
@@ -141,7 +165,7 @@ This function is used by the builtin @code{raAgent}
 
 
 @node ra_write_warning
-@section ra_write_warning
+@subsection ra_write_warning
 
 @deftypefun void ra_write_warning (@*@
             FILE *@var{f}, @*@

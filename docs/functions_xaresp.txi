@@ -1,5 +1,21 @@
+@node Interaction Functions
+@section Interaction Functions
+
+Logically, a program cannot continue if a required argument
+is missing.  A developer can use these functions to interactively
+request missing information using the action map.
+
+@menu
+* ra_count_str2args::                parse string to identify arguments
+* ra_str2args::                      break string into arguments
+* ra_collect_user_response::         get user response to static variable
+* ra_copy_user_response::            copy user response contents to new memory
+* ra_print_interactive_prompt::      generate user response prompt from raAction
+* ra_process_action_with_response::  apply user's response to raAction
+@end menu
+
 @node ra_count_str2args
-@section ra_count_str2args
+@subsection ra_count_str2args
 
 @deftypefun int ra_count_str2args (const char *@var{str})
 
@@ -16,7 +32,7 @@ array needed to access individual arguments.
 @end deftypefun
 
 @node ra_str2args
-@section ra_str2args
+@subsection ra_str2args
 
 @deftypefun int ra_str2args (@*@
             char *@var{str},@*@
@@ -59,7 +75,7 @@ argument.  This number should be taken from the result of the
 @end deftypefun
 
 @node ra_collect_user_response
-@section ra_collect_user_response
+@subsection ra_collect_user_response
 
 @deftypefun int ra_collect_user_response (void)
 
@@ -76,7 +92,7 @@ persistent memory that can be used by @code{ra_process_arguments}.
 @end deftypefun
 
 @node ra_copy_user_response
-@section ra_copy_user_response
+@subsection ra_copy_user_response
 
 @deftypefun int ra_copy_user_response (@*@
             char *@var{buffer},@*@
@@ -96,7 +112,7 @@ ra_copy_user_response(buffer, len_ur);
 @xref{Acquire Absent Answers}
 
 @node ra_print_interactive_prompt
-@section ra_print_interactive_prompt
+@subsection ra_print_interactive_prompt
 
 @deftypefun void ra_print_interactive_prompt (const raAction *@var{action})
 
@@ -110,7 +126,7 @@ an @code{raAction} instance.
 @end deftypefun
 
 @node ra_process_action_with_response
-@section ra_process_action_with_response
+@subsection ra_process_action_with_response
 
 @deftypefun raStatus ra_process_action_with_response (@*@
             const raAction *@var{action},@*@

@@ -1,5 +1,24 @@
+@node Arguments Functions
+@section Arguments Functions
+
+The functions are called by @code{ra_process_arguments} can be
+used to customize a program's response to command line arguments.
+The source code for @code{ra_process_arguments} can serve as a
+model.
+
+@menu
+* ra_start_tour::                   prepare raTour for pass through command line (CL) arguments
+* ra_advance_arg::                  move to next CL argument
+* ra_retreat_arg::                  move CL argument pointer back one position
+* ra_advance_action::               move to next action
+* ra_current_arg::                  current CL argument
+* ra_current_action::               current action
+* ra_seek_raAction_by_letter::      find matching @code{raAction} instance with a letter.
+* ra_seek_raAction_by_label::       find matching @code{raAction} instance with a string.
+@end menu
+
 @node ra_start_tour
-@section ra_start_tour
+@subsection ra_start_tour
 
 @deftypefun {raTour *} ra_start_tour (raTour *@var{tour})
 
@@ -11,7 +30,7 @@ Initialize @var{tour} with starting positions of the global
 
 
 @node ra_advance_arg
-@section ra_advance_arg
+@subsection ra_advance_arg
 
 @deftypefun {const char *} ra_advance_arg (raTour *@var{tour})
 
@@ -22,7 +41,7 @@ option.
 @end deftypefun
 
 @node ra_retreat_arg
-@section ra_retreat_arg
+@subsection ra_retreat_arg
 
 @deftypefun raStatus ra_retreat_arg (raTour *@var{tour})
 
@@ -34,7 +53,7 @@ next option.
 @end deftypefun
 
 @node ra_advance_action
-@section ra_advance_action
+@subsection ra_advance_action
 
 @deftypefun raStatus ra_advance_action (@*@
             raTour *@var{tour},@*@
@@ -63,7 +82,7 @@ declined by calling @code{ra_retreat_arg}.
 @end deftypefun
 
 @node ra_current_arg
-@section ra_current_arg
+@subsection ra_current_arg
 
 @deftypefun {const char *} ra_current_arg (const raTour *@var{tour})
 
@@ -72,7 +91,7 @@ Points to the @code{argv} element currently being considered.
 @end deftypefun
 
 @node ra_current_action
-@section ra_current_action
+@subsection ra_current_action
 
 @deftypefun {const raAction *} ra_current_action (const raTour *@var{tour})
 
@@ -81,7 +100,7 @@ Returns the latest @code{raAction} element that matched a user argument.
 @end deftypefun
 
 @node ra_seek_raAction_by_letter
-@section ra_seek_raAction_by_letter
+@subsection ra_seek_raAction_by_letter
 
 @deftypefun {const raAction *} ra_seek_raAction_by_letter (const char @var{letter})
 
@@ -92,7 +111,7 @@ Returns the @code{raAction} instance whose @var{letter} member matches the
 
 
 @node ra_seek_raAction_by_label
-@section ra_seek_raAction_by_label
+@subsection ra_seek_raAction_by_label
 
 @deftypefun {const raAction *} ra_seek_raAction_by_label (const char *@var{str})
 
