@@ -1,5 +1,5 @@
-@node Code Listings
-@chapter Code Listings
+@node Demo Code
+@chapter Demo Code
 
 Learn how to use the readargs library with code, starting with
 an example that lets the library do nearly everything.  Nearly
