@@ -26,6 +26,7 @@ Copyright @copyright{} 2020 Charles P Jungmann
 @insertcopying
 @end titlepage
 
+@paragraphindent none
 
 @ifnottex
 @node Top
@@ -40,28 +41,57 @@ options and values according to the GNU/Posix standard.
 @contents
 @menu
 * Introduction::
-* Code Listings::             Instructive code for learning and reference
-* Quick Start::               Enough to get you started
-* Data Types::                Data types that support argument processing
-* Library Functions::         
+* Demo Code::               Code for teaching and reference
+* Quick Start::             Enough to get you started
+* Data Types::              Data types that support argument processing
+* Library Functions::       
 * Preparing Actions::
-* Builtin Action Agents::     
-* Custom Action Agents::      Extend the library with 
-* Actions Interpretation::    Explains how the library reads arguments
+* Builtin Action Agents::   
+* Custom Action Agents::    Extend the library with 
+* Actions Interpretation::  Explains how the library reads arguments
 * Index::
 @end menu
 
 @node Introduction
 @chapter Introduction
 
-This C library is designed to make it easy to handle command line
-arguments according to 
-@url{http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax, Posix standards with GNU long options}.
-Although powerful, the library is also extensible for unique
-requirements.
+This C library simplifies the essential task of collecting
+command line arguments.  It distinguishes itself from other
+command line libraries by offering the following benefits:
 
-A developer will create an array of structs that describe how
-to interpret the command line arguments entered by the user.
+@table @emph
+
+@item Follows Parsing Standards
+
+Command line arguments are parsed according to widely-recognized
+GNU long option extension to the POSIX standards for handling
+command line arguments.
+
+@url{http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax}
+
+@item Compact Code
+
+The basic code requirements are minimal, consisting of an @dfn{action map}
+array of action definitions, followed by a simple library initialization
+and call to @code{ra_process_arguments} to process the arguments.
+
+@xref{Simple and Complete}
+
+@item Generates Help and Example displays
+
+Using the @dfn{action map}, the library can construct both
+a template for calling the program as well as a help display
+listing all the available options.
+
+@item Extensible
+
+The library provides tools for processing integer and string
+arguments, which will cover most program needs.  However, it
+is also reasonably easy to create custom argument handling for
+other data types.
+
+@end table
+
 
 @include code.txi
 @include quickstart.txi
