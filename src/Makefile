@@ -24,7 +24,7 @@ endif
 LOCAL_LINK = -Wl,-R -Wl,. $(TARGET)
 
 define build_install_info
-	makeinfo docs/readargs.txi
+	makeinfo ../docs/readargs.txi
 	gzip readargs.info
 	mv readargs.info.gz /usr/share/info
 	install-info --add-once /usr/share/info/readargs.info.gz /usr/share/info/dir
