@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# This script exists to save and exhibit the results of several
+# command line programs with proper and improper arguments.
+#
+# The purpose of these tests is to see how well-known commands
+# handle ambiguous situations so I can respond in familiar ways
+# to similar inputs.
+#
+# If new experiences suggest new pitfalls, it should be easy to
+# add new tests to confirm the responses of well-known programs.
+
 # enum colors: { black=0, red, green, brown, blue, magenta, cyan, white }
 
 colargs="[36;1m"      # cyan
