@@ -10,48 +10,45 @@ functions, but to also allow customization for special cases.
 
 ## Why Use This Library?
 
-With standrd **getopt** and **getopt_long** and other argument
-processing tools, one might not consider yet another arguments
-library.  This library may entice you with the following features:
+With standrd **getopt** and **getopt_long** and countless other
+argument processing tools, one might not think we need another
+library.  The benefits of this library are:
 
-- Argument parsing follows the [GNU Arguments Standards](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax)
-  and the end user can put the options and non-options in any order.
+- **Follows Parsing Standards**
+  Command line arguments are parsed according to widely-recognized
+  GNU long option extension to the [POSIX standards for handling
+  command line arguments](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html\#Argument-Syntax).
 
-- Options are set up with an array of structs which can be much
-  easier to scan than extended switch code.
+- **Easy-to-scan Compact Code**
+  The basic code requirements are minimal.  The developer defines
+  an *action map* which a library function uses to set *state variables*
+  from the command line arguments.
 
-- The target variable is associated with the action struct, 
-  making it possible to read as well as write an action's value.
+- **Generates Help and Example Displays**
+  There are several tools from which the develper can generate
+  help and usage displays.
 
-- One element of the actions struct is an *agent* that handles the
-  interpretation of the action and may include a *writer* that is
-  used to display the action's current value.  There are some builtin
-  agents that handle flag, integer and string values, as well as
-  **help** and **show values** agents that notify the user:
+- **Extensible**
+  There are hooks in the code by which a developer can handle
+  unusual data or option types.
 
-  - The **help** agent calls library functions that generate command
-    usage and actions help displays.
-
-  - The **show values** agent prints the action values as affected
-    by the preceding arguments, and can be invoked multiple times
-    on the same set of arguments.  This is useful during
-    development, and may also be useful for end users to help
-    confirm appropriateness of action settings.
-
-- New agents can be designed to handle unusual needs.  Agents
-  can set variables, of course, but may also execute code
-  according to the developer's imagination.  There is a sample
-  C source file (*test_vargs.c*) that includes custom agents
-  for handling an optional-value option and a multiple-value
-  option.
+- **Debugging Tool**
+  The *state variables* registered in the *action map* can
+  be displayed by simply including a special action in the
+  *action map.*  This facility can be very useful for both
+  the developer and the end user to confirm *state variable*
+  settings.
 
 ## Documentation
 
-At first, the "documentation" will be sample C programs that
-demonstrate various customizations.  <strike>Eventually, I'll make
-simple **man** pages to help me remember syntax and variations.</strike>
-I am working on an **info** manual according to the recommendation
-in the [GNU Standards Document](https://www.gnu.org/prep/standards/html_node/GNU-Manuals.html)
+There is a set of **texinfo** files that generate an **info**
+file in which the documentation can be found.
+
+Beyond the **info** file, a developer can analyze included
+compilable C source files that demonstrate how to accomplish
+certain development goals.  These files are found with the
+rest of the project's source code, and they all have a prefix
+of **test_**.
 
 ## Simple Example
 
