@@ -42,13 +42,15 @@ options and values according to the GNU/Posix standard.
 @menu
 * Introduction::
 * Demo Code::               Code for teaching and reference
-* Quick Start::             Enough to get you started
 * Data Types::              Data types that support argument processing
 * Library Functions::       
 * Preparing Actions::
 * Builtin Action Agents::   
 * Custom Action Agents::    Extend the library with 
 * Actions Interpretation::  Explains how the library reads arguments
+
+* Quick Start::             Enough to get you started
+
 * Index::
 @end menu
 
@@ -56,8 +58,33 @@ options and values according to the GNU/Posix standard.
 @chapter Introduction
 
 This C library simplifies the essential task of collecting
-command line arguments.  It distinguishes itself from other
-command line libraries by offering the following benefits:
+command line arguments.
+
+@cindex state variable
+@cindex action map
+@cindex agent
+
+@enumerate
+@item
+Given that a @dfn{state variable} holds a value that dictates
+some aspect of how a program runs,
+
+@item
+an @dfn{agent} is a object that can be directed to set a type
+of variable, and
+
+@item
+an @dfn{action map} is an array of elements that associate
+option letters and names with state variables and the agents
+that set the state variables,
+@end enumerate
+
+this library sets a program's state variables by using an action
+map to interpret the command line arguments used to invoke the
+program.
+
+The library distinguishes itself from other command line libraries
+by offering the following benefits:
 
 @table @emph
 
@@ -90,17 +117,24 @@ arguments, which will cover most program needs.  However, it
 is also reasonably easy to create custom argument handling for
 other data types.
 
+@item Show State Variables
+
+The state variables registered in the action map can be
+displayed by simply including a special action in the action
+map.  This facility can be very useful for both the developer
+and the end user to confirm state variable settings.
+
 @end table
 
 
 @include code.txi
-@include quickstart.txi
 @include types.txi
 @include functions.txi
 @include actions.txi
 @include builtin_agents.txi
 @include custom_agents.txi
 @include interpretation.txi
+@include quickstart.txi
 
 @node Index
 @chapter Index
