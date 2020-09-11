@@ -14,25 +14,27 @@ With standrd **getopt** and **getopt_long** and countless other
 argument processing tools, one might not think we need another
 library.  The benefits of this library are:
 
-- **Follows Parsing Standards**
+- **Follows Parsing Standards**  
   Command line arguments are parsed according to widely-recognized
   GNU long option extension to the [POSIX standards for handling
   command line arguments](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html\#Argument-Syntax).
 
-- **Easy-to-scan Compact Code**
+- **Easy-to-scan Compact Code**  
   The basic code requirements are minimal.  The developer defines
   an *action map* which a library function uses to set *state variables*
-  from the command line arguments.
+  from the command line arguments.  Each line of an *action map*
+  represents one *state variable* and is easier to read than a
+  typical long *switch* statement.
 
-- **Generates Help and Example Displays**
+- **Generates Help and Example Displays**  
   There are several tools from which the develper can generate
   help and usage displays.
 
-- **Extensible**
+- **Extensible**  
   There are hooks in the code by which a developer can handle
   unusual data or option types.
 
-- **Debugging Tool**
+- **Debugging Tool**  
   The *state variables* registered in the *action map* can
   be displayed by simply including a special action in the
   *action map.*  This facility can be very useful for both
