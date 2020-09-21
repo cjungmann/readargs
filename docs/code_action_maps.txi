@@ -1,0 +1,32 @@
+@node Action Maps
+@section Action Maps
+
+The action map is a list of instructions for handling command line
+arguments.  The library scans the action map to find the matching
+action to apply.
+
+The map instructions are in the form of a @code{raAction} instance,
+or a derivation of an @code{raAction}.  The @code{raAction} defines
+
+@enumerate
+@item Rules that dictate when the action is matched,
+@item Text that describes the action to the user,
+@item An @emph{agent} that performs the action's task, and if necessary,
+@item A pointer to a state variable in which the option is recorded.
+@end enumerate
+
+Look at the following action map.
+
+@example
+raAction racts[] = @{
+   @{ 'd', "debug", "Use debug mode",  &ra_flag_agent,   &debug_flag, NULL @},
+   @{ 'n', "name",  "User name",       &ra_string_agent, &user_name,  NULL @},
+   @{ 'c', "count", "Loops requested", &ra_int_agent,    &count,      NULL @},
+
+   @{ -1, "*input", "Input file",      &ra_string_agent, &input_file, "FILENAME" @},
+
+   @{ 'h', "help",       "This help page",      &ra_show_help_agent   @},
+   @{ 's', "show state", "Show state variables, &ra_show_scene_values @},
+@};
+@end example
+
