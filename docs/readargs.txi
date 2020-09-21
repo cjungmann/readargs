@@ -35,7 +35,8 @@ Copyright @copyright{} 2020 Charles P Jungmann
 This manual is a reference for using the @emph{readargs} library.
 
 @emph{readargs} interprets command line arguments, identifying
-options and values according to the GNU/Posix standard.
+options and values according to the GNU extensions to the Posix
+standard.
 @end ifnottex
 
 @contents
@@ -44,6 +45,7 @@ options and values according to the GNU/Posix standard.
 * Demo Code::               Code for teaching and reference
 * Data Types::              Data types that support argument processing
 * Library Functions::       
+
 * Preparing Actions::
 * Builtin Action Agents::   
 * Custom Action Agents::    Extend the library with 
@@ -57,75 +59,21 @@ options and values according to the GNU/Posix standard.
 @node Introduction
 @chapter Introduction
 
-This C library simplifies the essential task of collecting
-command line arguments.
+Coding to process command line arguments for C programs can be
+a tedious task.  It is difficult to parse arguments according
+to platform standards, it is time consuming to prepare help and
+usage displays, and the code needed for implementation is often
+long and hard to scan.
 
-@cindex state variable
-@cindex action map
-@cindex agent
+The @code{readargs} C library addresses these issues with a new
+pattern for handling arguments.
 
-@enumerate
-@item
-Given that a @dfn{state variable} holds a value that dictates
-some aspect of how a program runs,
+The developer prepares an array of @code{raAction} instances called
+a @dfn{action map}.  Each @code{raAction} points to an @code{raAgent}
+object that handles the action's mission.
 
-@item
-an @dfn{agent} is a object that can be directed to set a type
-of variable, and
-
-@item
-an @dfn{action map} is an array of elements that associate
-option letters and names with state variables and the agents
-that set the state variables,
-@end enumerate
-
-this library sets a program's state variables by using an action
-map to interpret the command line arguments used to invoke the
-program.
-
-The library distinguishes itself from other command line libraries
-by offering the following benefits:
-
-@table @emph
-
-@item Follows Parsing Standards
-
-Command line arguments are parsed according to widely-recognized
-GNU long option extension to the POSIX standards for handling
-command line arguments.
-
-@url{http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax}
-
-@item Compact Code
-
-The basic code requirements are minimal, consisting of an @dfn{action map}
-array of action definitions, followed by a simple library initialization
-and call to @code{ra_process_arguments} to process the arguments.
-
-@xref{Simple and Complete}
-
-@item Generates Help and Example displays
-
-Using the @dfn{action map}, the library can construct both
-a template for calling the program as well as a help display
-listing all the available options.
-
-@item Extensible
-
-The library provides tools for processing integer and string
-arguments, which will cover most program needs.  However, it
-is also reasonably easy to create custom argument handling for
-other data types.
-
-@item Show State Variables
-
-The state variables registered in the action map can be
-displayed by simply including a special action in the action
-map.  This facility can be very useful for both the developer
-and the end user to confirm state variable settings.
-
-@end table
-
+The library matches the @code{raAction} from its letter or name
+according to the GNU extensions to the Posix standard
 
 @include code.txi
 @include types.txi
