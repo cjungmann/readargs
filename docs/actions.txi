@@ -2,22 +2,15 @@
 @chapter Preparing Actions
 
 The options to which your program will respond are determined
-by an array of @code{raAction} structs.
+by the action map, an array of @code{raAction} instances.
 
 @menu
-* Action Introduction::
 * Option Action::        invoked with a command line option argument
 * Non option Action::    first-come, first-served actions for arguments
                          that are not preceded by an option argument
 * Display Action::       displays information, including --help
 * Custom Action::        developers are not limited to these categories
 @end menu
-
-@node Action Introduction
-@section Action Introduction
-
-Actions are defined with a means to trigger, strings to describe the
-action, and information that allows execution to occur.
 
 @node Option Action
 @section Option Action
