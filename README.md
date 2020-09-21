@@ -41,6 +41,11 @@ library.  The benefits of this library are:
   the developer and the end user to confirm *state variable*
   settings.
 
+- **Interactive Support**
+  Elements of the *action map* can be used to request and
+  process user input interactively.  This may be used if a
+  user forgets to enter required information.
+
 ## Documentation
 
 There is a set of **texinfo** files that generate an **info**
