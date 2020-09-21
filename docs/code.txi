@@ -10,13 +10,15 @@ All code listings include links that lead to pages that help
 understand how to use and extend the library functions.
 
 @menu
-* Simple and Complete::     Start here to learn basics
+* Simple and Complete::     Minimum viable program, plus defining terms
+* Action Maps::             Breaking down action maps
 * An Array of Actions::     Defining responses to command line arguments
 * An Assortment of Agents:: Agents process users' biddings
 * Acquire Absent Answers::  Tools to ask users for missing information
 @end menu
 
 @include code_simple.txi
+@include code_action_maps.txi
 @include code_actions.txi
 @include code_agents.txi
 @include code_xaresp.txi
