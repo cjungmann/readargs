@@ -42,7 +42,7 @@ standard.
 @contents
 @menu
 * Introduction::
-* Demo Code::               Code for teaching and reference
+* Getting Started::         Learn how to use the library
 * Data Types::              Data types that support argument processing
 * Library Functions::       
 
@@ -75,7 +75,7 @@ object that handles the action's mission.
 The library matches the @code{raAction} from its letter or name
 according to the GNU extensions to the Posix standard
 
-@include code.txi
+@include starting.txi
 @include types.txi
 @include functions.txi
 @include actions.txi
