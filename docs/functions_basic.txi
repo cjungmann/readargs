@@ -6,7 +6,7 @@ are all the minimum requirements for creating an application
 that processes the users' command line arguments.
 
 There is a code listing that restricts itself to these
-functions.  (@pxref{Simple and Complete})
+functions.  (@pxref{Hello Library})
 
 @menu
 * ra_set_scene::                    register global variable with command line arguments
