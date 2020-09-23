@@ -2,6 +2,8 @@
 @setfilename readargs.info
 @settitle readargs library
 
+@include macros.txi
+
 @c @dircategory and @direntry signal how to incorporate
 @c this content into the larger info environment.
 @c Consult the root `info` for direction, but in general

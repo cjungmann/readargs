@@ -1,0 +1,45 @@
+@macro declRAACTION
+@example
+typedef struct @{
+  int           @var{letter};
+  const char    *@var{label};
+  const char    *@var{comment};
+  const raAgent *@var{agent};
+  void          *@var{target};
+  const char    *@var{type};
+@} raAction;
+@end example
+@end macro
+
+@macro declRAAGENT
+@example
+typedef struct _readargs_agent @{
+   int      @var{args_needed};
+   raReader @var{reader};
+   raWriter @var{writer};
+@} raAgent;
+@end example
+@end macro
+
+@macro declRASCENE
+@example
+typedef struct _readargs_scene @{
+   const char     **@var{args};
+   const char     **@var{args_end};
+   const raAction *@var{actions};
+   const raAction *@var{actions_end};
+@} raScene;
+@end example
+@end macro
+
+
+@macro declRATOUR
+@example
+typedef struct _readargs_tour @{
+   const char     **@var{current_arg};
+   const char     *@var{sub_arg_ptr};
+   const raAction *@var{current_action};
+   const raAction *@var{last_position_action};
+@} raTour;
+@end example
+@end macro

@@ -90,28 +90,22 @@ this purpose.
 Minimally, it contains three members, but customized
 versions can longer according to the action's needs.
 
-@verbatim
-typedef struct _readargs_agent {
-   int      args_needed;
-   raReader reader;
-   raWriter writer;
-} raAgent;
-@end verbatim
+@declRAAGENT
 
 @deftp {Data Type} raAgent
 
 @table @code
-@item int args_needed
+@item int @var{args_needed}
 Minimally, this can be @code{0} or not @code{0}, with @code{0}
 indicating a @emph{flag} action that takes no arguments.
 Some customized versions may differentiate between @code{1}
 and something else.
 
-@item raReader reader
+@item raReader @var{reader}
 This is a pointer to a function that processes the command
 line argument according to the matched action.
 
-@item raWriter writer
+@item raWriter @var{writer}
 If not @code{NULL}, the library will call this function
 pointer when displaying value the associated action.
 
@@ -130,44 +124,35 @@ with an option letter or long-option label.  An array of @code{raAction}
 instances defines the command line processing map which is used
 by the library to determine how to handle command line arguments.
 
-@verbatim
-typedef struct _readargs_action {
-   int           letter;
-   const char    *label;
-   const char    *comment;
-   const raAgent *agent;
-   void          *target;
-   const char    *type;
-} raAction;
-@end verbatim
+@declRAACTION
 
 @deftp {Data Type} raAction
 
 @table @code
-@item int letter
+@item int @var{letter}
 The letter that invokes the action.  If this value is @code{0}, there
 is no letter invocation.  If this value is @code{-1} and @var{label} is
 @code{NULL}, the action is a position action.
 
-@item const char *label
+@item const char *@var{label}
 This is the long-option invocation, matched when this string
 is preceded by a double-dash.  If this value if @code{NULL}, there will
 be no long-option access to this action.
 
-@item const char *comment
+@item const char *@var{comment}
 Used for the description of the action when showing the
 help display.
 
-@item const raAgent *agent
+@item const raAgent *@var{agent}
 A pointer to an @code{raAgent}, which coordinates the interaction
 of the command line settings and the application.
 
-@item void *target
+@item void *@var{target}
 A pointer that is cast to the appropriate data type by the reader
 to change a value or the write to display a value.  This member is
 not necessary for some actions like displaying help.
 
-@item const char *type
+@item const char *@var{type}
 A string to use in help displays to show the data type expected by
 a given action.  The string @code{VALUE} will be used if this value
 is @code{NULL}.
@@ -182,29 +167,22 @@ This data type describes a static singleton global
 variable that preserves the sets of command line arguments
 and action definitions.
 
-@verbatim
-typedef struct _readargs_scene {
-   const char     **args;
-   const char     **args_end;
-   const raAction *actions;
-   const raAction *actions_end;
-} raScene;
-@end verbatim
+@declRASCENE
 
 @deftp {Data Type} raScene
 
 @table @code
-@item const char **args
+@item const char **@var{args}
 Points to the first of the list of command line arguments
 
-@item const char **args_end
+@item const char **@var{args_end}
 Points to memory just past the last of the command line arguments.
 It is used to test if a given argument is within bounds.
 
-@item const raAction *actions
+@item const raAction *@var{actions}
 Points to the first of the list of action definitions
 
-@item const raAction *actions_end
+@item const raAction *@var{actions_end}
 Like @code{args_end}, this member is used to test if a given
 action is within bounds.
 
@@ -218,31 +196,24 @@ action is within bounds.
 This data type tracks progress through a given @emph{tour} of
 command line arguments.
 
-@verbatim
-typedef struct _readargs_tour {
-   const char     **current_arg;
-   const char     *sub_arg_ptr;
-   const raAction *current_action;
-   const raAction *last_position_action;
-} raTour;
-@end verbatim
+@declRATOUR
 
 @deftp {Data Type} raTour
 
 @table @code
-@item const char **current_arg
+@item const char **@var{current_arg}
 A pointer to one of the arguments found in the @code{raScene}.
 
-@item const cahr *sub_arg_ptr
+@item const char *@var{sub_arg_ptr}
 For arguments that are a list of single-letter options, this
 member tracks the progress through the set for each iteration
 of the actions parsing loop.
 
-@item const raAction *current_action
+@item const raAction *@var{current_action}
 Pointer to @code{raAction} on which the current processing is
 working.
 
-@item const raAction *last_position_action
+@item const raAction *@var{last_position_action}
 This keeps track of already processed position actions
 to know which is next and to ensure each position action
 is used only once.
