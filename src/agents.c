@@ -19,6 +19,9 @@ int confirm_action_target(const raAction *act) { return act->target != NULL; }
 /** ra_flag_agent function implementations */
 raStatus flag_reader(const raAction *act, const char *str, raTour *tour)
 {
+   if (!str)
+      return RA_MISSING_VALUE;
+
    if (confirm_action_target(act))
    {
       *(int*)act->target = 1;
@@ -37,6 +40,9 @@ void flag_writer(FILE *f, const raAction *act)
 /** ra_int_agent function implementations  */
 raStatus int_reader(const raAction *act, const char *str, raTour *tour)
 {
+   if (!str)
+      return RA_MISSING_VALUE;
+
    if (confirm_action_target(act))
    {
       if (str_is_number(str))
@@ -60,6 +66,9 @@ void int_writer(FILE *f, const raAction *act)
 /** ra_string_agent function implementations */
 raStatus string_reader(const raAction *act, const char *str, raTour *tour)
 {
+   if (!str)
+      return RA_MISSING_VALUE;
+
    if (confirm_action_target(act))
    {
       *(const char**)act->target = str;
