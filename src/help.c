@@ -60,10 +60,14 @@ void print_usage_flag_actions(FILE *f)
 
 /** Prints any value actions found for ra_describe_usage()
  * with RAU_LONG usage.
+ * 
+ * This is the part "[ -a age ]" or "[ --age=NUMBER ]" of a
+ * usage display
  */
 void print_usage_value_actions(FILE *f)
 {
    const raAction *ptr;
+   const char *val = NULL;
 
    ptr = g_scene.actions;
    while (ptr < g_scene.actions_end)
@@ -76,27 +80,40 @@ void print_usage_value_actions(FILE *f)
          else if (ptr->label)
             fprintf(f, "--%s=", ptr->label);
 
-         if (ptr->type)
-            fprintf(f, "%s]", ptr->type);
+         if (ptr->letter && ptr->label)
+            val = ptr->label;
+         else if (ptr->type)
+            val = ptr->type;
          else
-            fprintf(f, "%s]", "VALUE");
+            val = "VALUE";
+
+         fprintf(f, "%s]", val);
       }
 
       ++ptr;
    }
 }
 
+/**
+ * Print the positional arguments for the usage display
+ */
 void print_usage_arguments(FILE *f)
 {
    const raAction *ptr;
+   const char *val = NULL;
 
    ptr = g_scene.actions;
    while (ptr < g_scene.actions_end)
    {
       if (ra_is_positional_action(ptr))
       {
-         if (ptr->type)
-            fprintf(f, " %s", ptr->type);
+         if (ptr->label && *ptr->label == '*')
+            val = ptr->label + 1;
+         else if (ptr->type)
+            val = ptr->type;
+
+         if (val)
+            fprintf(f, " %s", val);
       }
       ++ptr;
    }
@@ -203,7 +220,7 @@ EXPORT void ra_describe_usage(FILE *f, int indent, raUsage usage)
 EXPORT void ra_show_help(FILE *f, int indent, raUsage usage)
 {
    int count_actions = ra_scene_actions_count();
-   int count_args = ra_scene_arguments_count();
+   int count_args = ra_scene_argument_actions_count();
 
    fputs("Usage:\n", f);
    ra_describe_usage(f, indent, usage);
