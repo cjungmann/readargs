@@ -126,6 +126,10 @@ spaces (`--action=simple`).  I noticed that **grep** recognizes
 a long option whose value is in the following argument
 (`grep --file patterns.txt` is the same as `grep --file=patterns.txt`).
 
+### Usage Message Syntax
+
+The most helpful document about usage syntax is a [wiki page](https://en.wikipedia.org/wiki/Usage_message)
+
 ### Standards Research
 
 While I have used command line options for a long time, I have
