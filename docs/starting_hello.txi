@@ -13,29 +13,44 @@ Follow links in the code comments to learn about each
 section.
 
 @example
+// Build with "gcc -o hello hello.c -lreadargs
 #include <stdio.h>
 #include <readargs.h>
 
 // @xref{State Variables definition,1}.
-const char *sname = NULL;
 int        nage = 0;
+int        fcolor = 0;
+const char *greeting = "Hello";
+const char *sname = NULL;
 
 // @xref{Action Map definition,2}.
 raAction actions[] = @{
-   @{ 'h', "help", "This help display", &ra_show_help_agent, NULL,   NULL @},
-   @{ 'n', "name", "Set name",          &ra_string_agent,    &sname, "STRING" @},
-   @{ 'a', "age",  "Set age",           &ra_int_agent,       &nage , "NUMBER" @}
+   @{ 'a', "age",     "Set age",      &ra_int_agent,    &nage ,    "NUMBER" @},
+   @{ 'c', "colorize","Colorize text",&ra_flag_agent,   &fcolor,   "TRUE"   @},
+   @{ 'g', "greeting","Set greeting" ,&ra_string_agent, &greeting, "STRING" @},
+   @{ -1,  "*name",   "Set name",     &ra_string_agent, &sname,    "STRING" @},
+   @{ 'h', "help",    "This display", &ra_show_help_agent   @},
+   @{ 's', "show",    "Show state",   &ra_show_values_agent @}
 @};
 
 int main(int argc, const char **argv)
 @{
+   const char *coloron = "";
+   const char *coloroff = "\e[m";
+
    // @xref{Initialize the library,3}.
    ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
 
    // @xref{Call library to process arguments,4}.
    if (ra_process_arguments())
    @{
-      printf("Hello, %d-year-old %s.\n", nage, sname);
+      if (fcolor)
+         coloron = "\e[32;1m";
+
+      printf("%s%s%s, %d-year-old %s%s%s.\n",
+             coloron, greeting, coloroff,
+             nage,
+             coloron, sname, coloroff);
    @}
    return 0;
 @}
@@ -61,7 +76,10 @@ command line call of the program.
 The action map, an array of @dfn{raAction} instances, is a blueprint
 for parsing command line arguments.  Each @code{raAction} instance
 includes the option's trigger, a description of the option, and
-for most cases, the way the option sets a linked state variable. @*
+for most cases, the way the option sets a linked state variable.
+
+The @code{raAgent} instances that set variables must support the data
+type of the state variable with which it shares the @code{raAction}.@*
 @xref{raAction} @*
 @xref{Defining an Action Map}
 
