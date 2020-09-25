@@ -176,8 +176,11 @@ void ra_write_warning(FILE *f,
 int arguments_required(const raAction *act);
 
 // Let the library do everything:
-int ra_process_tour_arguments(raTour *tour);
-int ra_process_arguments(void);
+int ra_process_tour_arguments(raTour *tour,
+                              int alert_no_args,
+                              int alert_unknown_option);
+int ra_process_arguments(int alert_no_args,
+                         int alert_unknown_option);
 void ra_show_no_args_message(void);
 
 

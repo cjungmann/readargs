@@ -212,11 +212,19 @@ EXPORT void ra_show_no_args_message(void)
  *
  * Errors are reported through stderr
  */
-EXPORT int ra_process_tour_arguments(raTour *tour)
+EXPORT int ra_process_tour_arguments(raTour *tour,
+                                     int alert_no_args,
+                                     int alert_unknown_option)
 {
    const raAction *action;
    const char     *value;
    raStatus       status;
+
+   if (alert_no_args && ra_scene_arguments_count() == 0)
+   {
+      ra_describe_usage(stdout, 0, RAU_SHORT);
+      return 0;
+   }
 
    while(1)
    {
@@ -236,11 +244,14 @@ EXPORT int ra_process_tour_arguments(raTour *tour)
 }
 
 /** Make raTour instance from g_scene and send out for processing. */
-EXPORT int ra_process_arguments(void)
+EXPORT int ra_process_arguments(int alert_no_args,
+                                int alert_unknown_option)
 {
    raTour tour;
    ra_start_tour(&tour);
-   return ra_process_tour_arguments(&tour);
+   return ra_process_tour_arguments(&tour,
+                                    alert_no_args,
+                                    alert_unknown_option);
 }
 
 /* Local Variables: */
