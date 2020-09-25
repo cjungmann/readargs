@@ -239,7 +239,13 @@ EXPORT int ra_process_tour_arguments(raTour *tour,
                || status == RA_END_OPTIONS) // encountered '--' argument
          return 1;                          // indicate successful tour of arguments
       else if (status != RA_SUCCESS)
+      {
          ra_write_warning(stderr, status, tour, action, value);
+         if (status >= RA_FATAL_ERROR)
+            return 0;
+         else
+            return 1;
+      }
    }
 }
 

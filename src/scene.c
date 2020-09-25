@@ -174,7 +174,7 @@ EXPORT int ra_scene_actions_count(void)
  * Use this function while displaying help to determine
  * if an arguments section is required.
  */
-EXPORT int ra_scene_arguments_count(void)
+EXPORT int ra_scene_argument_actions_count(void)
 {
    int count = 0;
    const raAction *ptr = g_scene.actions;
@@ -187,6 +187,14 @@ EXPORT int ra_scene_arguments_count(void)
    }
 
    return count;
+}
+
+/**
+ * Returns the number of command line arguments
+ */
+EXPORT int ra_scene_arguments_count(void)
+{
+   return g_scene.args_end - g_scene.args;
 }
 
 /**
@@ -407,14 +415,20 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_END_ARGS:
          fprintf(f, "reached the end of the arguments\n");
          break;
+      case RA_FATAL_ERROR:
+         fprintf(f, "generic fatal error\n");
+         break;
       case RA_UNKNOWN_OPTION:
-         fprintf(f, "%s\n", *tour->current_arg);
+         fprintf(f, "unknown option \"%s\"\n", *tour->current_arg);
          break;
       case RA_MALFORMED_OPTION:
          fprintf(f, "option value in bad form\n");
          break;
       case RA_INVALID_ARGUMENT:
          fprintf(f, "invalid argument\n");
+         break;
+      case RA_MISSING_ARGUMENT:
+         fprintf(f, "missing argument\n");
          break;
       case RA_MISSING_TARGET:
          fprintf(f, "action missing target\n");
@@ -424,6 +438,9 @@ EXPORT void ra_write_warning(FILE *f,
          break;
       case RA_MISSING_READER:
          fprintf(f, "action missing reader\n");
+         break;
+      case RA_MISSING_VALUE:
+         fprintf(f, "action missing value\n");
          break;
       default:
          fprintf(f, "unknown status number %d\n", (int)status);
