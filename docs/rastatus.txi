@@ -63,6 +63,11 @@ not appropriate for the selected action.
 For example, the @code{ra_int_agent} will return @code{RA_INVALID_ARGUMENT}
 if the string value cannot be converted to an integer.
 
+@item RA_MISSING_ARGUMENT
+
+Returned when there is no argument available for an option
+that expects an argument.
+
 @item RA_MISSING_TARGET
 
 For agents that set values, like builtin agents @code{ra_flag_agent}, 

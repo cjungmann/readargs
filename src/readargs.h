@@ -21,6 +21,7 @@ typedef enum {
    RA_UNKNOWN_OPTION,
    RA_MALFORMED_OPTION,
    RA_INVALID_ARGUMENT,
+   RA_MISSING_ARGUMENT,
    RA_MISSING_TARGET,
    RA_MISSING_AGENT,
    RA_MISSING_READER,
@@ -124,6 +125,7 @@ int ra_is_value_action(const raAction* opt);
 int ra_is_writable_action(const raAction* opt);
 
 int ra_scene_actions_count(void);
+int ra_scene_argument_actions_count(void);
 int ra_scene_arguments_count(void);
 
 raStatus ra_execute_action_read(const raAction *action, const char *str, raTour *tour);
@@ -179,8 +181,7 @@ int arguments_required(const raAction *act);
 int ra_process_tour_arguments(raTour *tour,
                               int alert_no_args,
                               int alert_unknown_option);
-int ra_process_arguments(int alert_no_args,
-                         int alert_unknown_option);
+int ra_process_arguments(void);
 void ra_show_no_args_message(void);
 
 
