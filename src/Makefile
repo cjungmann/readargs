@@ -59,6 +59,10 @@ install:
 	install -D --mode=755 readargs.h     $(DESTDIR)/include
 	$(call build_install_info)
 
+install-debug:
+	install -D --mode=755 libreadargs_debug.so $(DESTDIR)/lib/libreadargs.so
+	install -D --mode=755 readargs.h           $(DESTDIR)/include
+
 .PHONY: uninstall
 uninstall:
 	rm -f $(DESTDIR)/lib/libreadargs.so
