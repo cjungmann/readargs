@@ -44,6 +44,39 @@ the argument pointer before the argument list.
 
 @xref{ra_retreat_arg}
 
+@item RA_FATAL_ERROR
+
+This is mainly a marker beyond whose value all status values are
+considered fatal errors that trigger program termination.
+
+@item RA_MISSING_TARGET
+
+Programming error status
+
+For agents that set values, like builtin agents @code{ra_flag_agent}, 
+@code{ra_int_agent}, and @code{ra_string_agent}, this value is returned
+when the @code{raAction} instance does not include a @code{target}
+pointer.
+
+@xref{raAction}
+
+@item RA_MISSING_AGENT
+
+Programming error status
+
+Returned when a selected @code{raAction} instance has a NULL @code{raAgent}
+value.
+
+@item RA_MISSING_READER
+
+Programming error status
+
+Returned by the function @code{ra_execute_action_read} if the @code{raAgent}
+has a NULL @code{raReader} value.
+
+@xref{ra_execute_action_read}@*
+@xref{raAgent}
+
 @item RA_UNKNOWN_OPTION
 
 Returned when an argument appears to be an option, but the option
@@ -68,27 +101,9 @@ if the string value cannot be converted to an integer.
 Returned when there is no argument available for an option
 that expects an argument.
 
-@item RA_MISSING_TARGET
-
-For agents that set values, like builtin agents @code{ra_flag_agent}, 
-@code{ra_int_agent}, and @code{ra_string_agent}, this value is returned
-when the @code{raAction} instance does not include a @code{target}
-pointer.
-
-@xref{raAction}
-
-@item RA_MISSING_AGENT
-
-Returned when a selected @code{raAction} instance has a NULL @code{raAgent}
-value.
-
-@item RA_MISSING_READER
-
-Returned by the function @code{ra_execute_action_read} if the @code{raAgent}
-has a NULL @code{raReader} value.
-
-@xref{ra_execute_action_read}@*
-@xref{raAgent}
+NB This was added after RA_MISSING_VALUE, which is a more appropriate
+response.  This status value is kept in case we might later want to
+notify a user of a missing positional argument.
 
 @item RA_MISSING_VALUE
 
