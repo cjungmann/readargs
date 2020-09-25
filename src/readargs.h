@@ -14,18 +14,21 @@ typedef struct _readargs_scene raScene;
 typedef enum {
    RA_SUCCESS = 0,
    RA_FAIL,
+   // Non-error status values:
    RA_CANCEL,
    RA_END_OPTIONS,
    RA_END_ARGS,
    RA_BEFORE_ARGS,
    RA_FATAL_ERROR,
+   // Programming errors:
+   RA_MISSING_TARGET,
+   RA_MISSING_AGENT,
+   RA_MISSING_READER,
+   // User-entry errors:
    RA_UNKNOWN_OPTION,
    RA_MALFORMED_OPTION,
    RA_INVALID_ARGUMENT,
    RA_MISSING_ARGUMENT,
-   RA_MISSING_TARGET,
-   RA_MISSING_AGENT,
-   RA_MISSING_READER,
    RA_MISSING_VALUE
 } raStatus;
 

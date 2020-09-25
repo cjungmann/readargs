@@ -418,18 +418,8 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_FATAL_ERROR:
          fprintf(f, "generic fatal error\n");
          break;
-      case RA_UNKNOWN_OPTION:
-         fprintf(f, "unknown option \"%s\"\n", *tour->current_arg);
-         break;
-      case RA_MALFORMED_OPTION:
-         fprintf(f, "option value in bad form\n");
-         break;
-      case RA_INVALID_ARGUMENT:
-         fprintf(f, "invalid argument\n");
-         break;
-      case RA_MISSING_ARGUMENT:
-         fprintf(f, "missing argument\n");
-         break;
+
+         /* Programming errors */
       case RA_MISSING_TARGET:
          fprintf(f, "action missing target\n");
          break;
@@ -439,8 +429,26 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_MISSING_READER:
          fprintf(f, "action missing reader\n");
          break;
+
+         /* User-entry errors */
+      case RA_UNKNOWN_OPTION:
+         fprintf(f, "unknown option \"%s\"\n", *tour->current_arg);
+         break;
+      case RA_MALFORMED_OPTION:
+         fprintf(f, "option value in bad form\n");
+         break;
+      case RA_INVALID_ARGUMENT:
+         fprintf(f, "invalid argument\n");
+         if (action)
+            describe_single_action(f, action, 0, 0);
+         break;
+      case RA_MISSING_ARGUMENT:
+         fprintf(f, "missing argument\n");
+         break;
       case RA_MISSING_VALUE:
          fprintf(f, "action missing value\n");
+         if (action)
+            describe_single_action(f, action, 0, 0);
          break;
       default:
          fprintf(f, "unknown status number %d\n", (int)status);
