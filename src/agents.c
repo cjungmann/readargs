@@ -19,9 +19,6 @@ int confirm_action_target(const raAction *act) { return act->target != NULL; }
 /** ra_flag_agent function implementations */
 raStatus flag_reader(const raAction *act, const char *str, raTour *tour)
 {
-   if (!str)
-      return RA_MISSING_VALUE;
-
    if (confirm_action_target(act))
    {
       *(int*)act->target = 1;
