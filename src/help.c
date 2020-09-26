@@ -238,3 +238,24 @@ EXPORT void ra_show_help(FILE *f, int indent, raUsage usage)
    }
 }
 
+EXPORT void ra_suggest_help(FILE *f, int indent)
+{
+   const raAction *ptr = g_scene.actions;
+
+   while (ptr < g_scene.actions_end)
+   {
+      if (ptr->agent == &ra_show_help_agent)
+      {
+         fprintf(f, "%*sTry '%s ", indent, "", ra_command_name());
+
+         if (ptr->label)
+            fprintf(f, "--%s", ptr->label);
+         else if (ptr->letter)
+            fprintf(f, "-%c", ptr->letter);
+
+         fprintf(f, "' for more information.\n");
+         break;
+      }
+      ++ptr;
+   }
+}
