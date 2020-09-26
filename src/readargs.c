@@ -222,8 +222,10 @@ EXPORT int ra_process_tour_arguments(raTour *tour,
 
    if (alert_no_args && ra_scene_arguments_count() < 2)
    {
-      printf("Usage:\n");
-      ra_describe_usage(stdout, 3, RAU_DEFAULT);
+      FILE *pout = stderr;
+      fputs("Usage: ", pout);
+      ra_describe_usage(pout, 0, RAU_DEFAULT);
+      ra_suggest_help(pout, 0);
       return 0;
    }
 
