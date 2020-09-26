@@ -149,6 +149,7 @@ void ra_describe_arguments(FILE *f, int indent);
 void ra_describe_actions(FILE *f, int indent);
 void ra_describe_usage(FILE *f, int indent, raUsage usage);
 void ra_show_help(FILE *f, int indent, raUsage usage);
+void ra_suggest_help(FILE *f, int indent);
 
 // Post-processing tools for getting missing information
 int ra_count_str2args(const char *str);
