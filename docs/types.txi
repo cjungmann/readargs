@@ -90,16 +90,16 @@ this purpose.
 Minimally, it contains three members, but customized
 versions can longer according to the action's needs.
 
-@declRAAGENT
-
 @deftp {Data Type} raAgent
+
+@declRAAGENT
 
 @table @code
 @item int @var{args_needed}
 Minimally, this can be @code{0} or not @code{0}, with @code{0}
 indicating a @emph{flag} action that takes no arguments.
-Some customized versions may differentiate between @code{1}
-and something else.
+Some customized @code{raAgent} definitions may differentiate
+between @code{1} and something else.
 
 @item raReader @var{reader}
 This is a pointer to a function that processes the command
@@ -124,9 +124,9 @@ with an option letter or long-option label.  An array of @code{raAction}
 instances defines the command line processing map which is used
 by the library to determine how to handle command line arguments.
 
-@declRAACTION
-
 @deftp {Data Type} raAction
+
+@declRAACTION
 
 @table @code
 @item int @var{letter}
@@ -167,9 +167,9 @@ This data type describes a static singleton global
 variable that preserves the sets of command line arguments
 and action definitions.
 
-@declRASCENE
-
 @deftp {Data Type} raScene
+
+@declRASCENE
 
 @table @code
 @item const char **@var{args}
@@ -196,9 +196,9 @@ action is within bounds.
 This data type tracks progress through a given @emph{tour} of
 command line arguments.
 
-@declRATOUR
-
 @deftp {Data Type} raTour
+
+@declRATOUR
 
 @table @code
 @item const char **@var{current_arg}
