@@ -15,6 +15,7 @@ to the developer's needs.
 * ra_scene_arguments_count::        returns number of argument (non-options)
 * ra_show_help::                    builds full help screen with @code{ra_display_usage},
                                     @code{ra_display_options}, and @code{ra_display_arguments}
+* ra_suggest_help::                 Optional addition to usage display
 * ra_show_no_args_message::         boilerplate message for no arguments
 
 * ra_show_scene_values::            debugging display that shows current state values
@@ -125,6 +126,28 @@ line, a list of options (if any), and a list of arguments (if any).
 
 This function is called by the builtin @code{ra_show_help_agent}
 @code{raAgent}.
+
+@xref{ra_show_help_agent}
+@end deftypefun
+
+@node ra_suggest_help
+@subsection ra_suggest_help
+
+@deftypefun void ra_suggest_help (FILE *@var{f}, int @var{indent})
+
+This function writes a help suggestion that can be added
+to a usage display that is prompted by calling the command
+without arguments.
+
+It looks something like:
+
+@example
+Try 'program --help' for more information.
+@end example
+            
+It's a suggestion because the library only displays the text
+if it can find an @code{raAction} whose agent points to the
+builtin @code{ra_show_help_agent}.
 
 @xref{ra_show_help_agent}
 @end deftypefun
