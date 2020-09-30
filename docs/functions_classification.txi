@@ -22,8 +22,6 @@ Test for positional or non-option action.  Command line arguments
 that are not associated with command line options are assigned to
 positional actions in the order they are encountered.
 
-@xref{Non option Action}
-
 @end deftypefun
 
 @node ra_is_named_action
@@ -36,8 +34,6 @@ Test the @code{raAction} instance for either a short option
 (as defined by the @var{label} member).  Having either or
 both of these members allows the action to be triggered by
 a command line option.
-
-@xref{Option Action}
 
 @end deftypefun
 

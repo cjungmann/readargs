@@ -111,7 +111,6 @@ Returned by @code{ra_execute_action_read} from a @code{raReader} function
 if the reader didn't find an expected value.
 
 @xref{raReader}@*
-@xref{Float Agent}
 
 @end table
 

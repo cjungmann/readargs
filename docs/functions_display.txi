@@ -93,8 +93,6 @@ with an option letter or name.
 Call this function before calling @code{ra_describe_options} so
 @code{ra_describe_options} can be skipped if there are no options.
 
-@xref{Option Action}
-
 @end deftypefun
 
 @node ra_scene_arguments_count
@@ -108,8 +106,6 @@ of @code{raAction} instances not included in @code{ra_scene_options_count}.
 
 Call this function before calling @code{ra_describe_arguments} so
 @code{ra_describe_arguments} can be skipped if there are no arguments.
-
-@xref{Non option Action}
 
 @end deftypefun
 
