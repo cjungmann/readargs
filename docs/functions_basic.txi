@@ -11,7 +11,8 @@ functions.  (@pxref{Hello Library})
 @menu
 * ra_set_scene::                    register global variable with command line arguments
                                     list of option instructions
-* ra_process_arguments::            processes command line arguments
+* ra_process_arguments::            processes command line arguments, allow no arguments
+* ra_process_arguments_required::   processes command line arguments, warning for no arguments
 * ACTS_COUNT::                      macro that counts actions in action map
 @end menu
 
@@ -54,7 +55,6 @@ There is a helper macro for calculating this value,
 @code{ACTS_COUNT}.
 @end table
 
-@xref{def step 3,,,Use in code}
 @end deftypefun
 
 
@@ -79,13 +79,25 @@ This function writes warning and error messages to @var{stdout}.
 This is not typical library behavior, but it fulfills its mission
 to be a plug-in solution for someone making an application.
 
-If this behavior is not appropriate for your application, look at
-the @xref{Argument Processing} for a break-down of this function to
-see where @code{ra_write_warnings} is called and decide how you might
-otherwise handle user-entry errors.
+If this behavior is not appropriate for your application, you can
+easily implement your own version of @code{ra_process_tour_arguments}
+to handle your unique requirements.
 
-@xref{def step 4}@*
-@xref{Argument Processing}
+@xref{ra_process_tour_arguments}
+@end deftypefun
+
+@node ra_process_arguments_required
+@subsection ra_process_arguments_required
+@cindex functions @subentry basic
+
+@deftypefun int ra_process_arguments_required (void)
+
+This function is like @code{ra_process_arguments}, except
+that a warning and usage message is displayed and program
+termination is signaled if the user fails to include any
+command line arguments.
+
+@xref{ra_process_arguments}
 @end deftypefun
 
 
@@ -98,6 +110,5 @@ This macro calculates the number of actions in an array by dividing
 the @code{sizeof} the array by the @code{sizeof} an @code{raAction}.
 
 @xref{raAction} @*
-@xref{def step 2}
 
 @end defmac
