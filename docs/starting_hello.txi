@@ -10,47 +10,33 @@ below the code.  The material includes definitions and
 an introduction to @code{readargs} programming.
 
 Follow links in the code comments to learn about each
-section.
+section.  The following code can also be found in the
+@file{samples} directory in @file{hello.c}.
 
+@anchor{hello program}
 @example
 // Build with "gcc -o hello hello.c -lreadargs
 #include <stdio.h>
 #include <readargs.h>
 
 // @xref{State Variables definition,1}.
-int        nage = 0;
-int        fcolor = 0;
-const char *greeting = "Hello";
-const char *sname = NULL;
+const char *name = NULL;
 
 // @xref{Action Map definition,2}.
 raAction actions[] = @{
-   @{ 'a', "age",     "Set age",      &ra_int_agent,    &nage ,    "NUMBER" @},
-   @{ 'c', "colorize","Colorize text",&ra_flag_agent,   &fcolor,   "TRUE"   @},
-   @{ 'g', "greeting","Set greeting" ,&ra_string_agent, &greeting, "STRING" @},
-   @{ -1,  "*name",   "Set name",     &ra_string_agent, &sname,    "STRING" @},
-   @{ 'h', "help",    "This display", &ra_show_help_agent   @},
-   @{ 's', "show",    "Show state",   &ra_show_values_agent @}
+   @{ -1,  "*name", "Set name",     &ra_string_agent, &name, "STRING" @},
+   @{ 'h', "help",  "This display", &ra_show_help_agent   @},
 @};
 
 int main(int argc, const char **argv)
 @{
-   const char *coloron = "";
-   const char *coloroff = "\e[m";
-
    // @xref{Initialize the library,3}.
    ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
 
    // @xref{Call library to process arguments,4}.
    if (ra_process_arguments())
    @{
-      if (fcolor)
-         coloron = "\e[32;1m";
-
-      printf("%s%s%s, %d-year-old %s%s%s.\n",
-             coloron, greeting, coloroff,
-             nage,
-             coloron, sname, coloroff);
+      printf("Hello, %s.\n", name);
    @}
    return 0;
 @}
@@ -64,10 +50,9 @@ The state variables contain the values that the program uses to
 direct its execution.  State variables are typically initialized
 with values that support running the program in some form.
 
-The @code{readargs} library is designed to, where appropriate,
-set state variable values according to the instructions in the
-command line call of the program.
-
+State variables 
+values will be updated with user-preferences submitted through
+the command line arguments.
 
 @anchor{Action Map definition}
 @subheading Note 2: Action Map
