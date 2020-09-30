@@ -7,6 +7,13 @@
 Sets the value of an integer variable to 1.  It is assumed that
 variable had been initialized to 0 for the default value.
 
+@example
+int color = 0;
+raAction actions[] = @{
+   @{ 'c', "colorize", "Colorize text", &ra_flag_agent, &color, "TRUE" @}
+@};
+@end example
+
 @anchor{ra_int_agent}
 @item ra_int_agent
 Sets the value of an integer variable from the argument following
@@ -14,11 +21,25 @@ the option that invoked an @code{raAction} with an @code{ra_int_agent}.
 The variable can and should be set with a valid default value in
 case the option is not invoked.
 
+@example
+int age = 0;
+raAction actions[] = @{
+   @{ 'a', "age", "Set age", &ra_int_agent, &age, "NUMBER" @}
+@};
+@end example
+
 @anchor{ra_string_agent}
 @item ra_string_agent
 Sets the value of a @code{char*} to the address of the @code{char*}
 argument that follows the option that invoked the @code{raAction}
 with an @code{ra_string_agent}.
+
+@example
+const char *greeting = NULL;
+raAction actions[] = @{
+   @{ 'g', "greeting", "Set greeting", &ra_string_agent, &greeting, "STRING" @}
+@};
+@end example
 
 @anchor{ra_show_help_agent}
 @item ra_show_help_agent
@@ -27,6 +48,17 @@ a help screen generated from the actions map.  The
 @code{ra_show_help_agent} returns @var{RA_CANCEL} that is a
 directive requesting that the program be immediately terminated.
 
+@example
+raAction actions[] = @{
+   @{ 'h', "help", "This display", &ra_show_help_agent @}
+@};
+@end example
+
+Note that this action only initializes 4 elements, skipping the
+@var{target} and @var{type} elements.  This works because C sets
+uninitialized struct members to 0 as appropriate for the unset
+members.
+
 @anchor{ra_show_values_agent}
 @item ra_show_values_agent
 This is a debugging agent that may be useful to both developer and
@@ -34,6 +66,16 @@ the end user.  For each @code{raAction} whose @code{raAgent} provides
 an @code{raWriter}, this agent creates a two-column display with the
 option @code{letter} or @code{label} on the left and the value of the
 @code{target} element on the right.
+
+@example
+raAction actions[] = @{
+   @{ 's', "show", "Show state", &ra_show_values_agent @}
+@};
+@end example
+
+Note, for the same reasons as the preceding @code{ra_show_help_agent},
+actions using @code{ra_show_values_agent} can skip initializing the
+last two members.
 
 @end table
 
