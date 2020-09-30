@@ -1,21 +1,17 @@
 @node Action Maps
 @section Action Maps
 
-The action map is a list of instructions for handling command line
-arguments.  The library scans the action map to find the matching
-action to apply.
+The action map is the essential element required for use of the
+@code{readargs} library.  The library scans the command line
+arguments submitted to a program, using the action map to find
+and execute an appropriate action.
 
-The map instructions are in the form of a @code{raAction} instance,
-or a derivation of an @code{raAction}.  The @code{raAction} defines
+An action map is an array of @code{raAgent} instances.  Each
+@code{raAction} instance has an agent to do its work, triggers
+that invoke the action, and descriptive text for help displays.
 
-@enumerate
-@item Rules that dictate when the action is matched,
-@item Text that describes the action to the user,
-@item An @emph{agent} that performs the action's task, and if necessary,
-@item A pointer to a state variable in which the option is recorded.
-@end enumerate
-
-Look at the following action map.
+Most actions set variables, some do not.  The help display
+option is an example of an action that does not set a variable.
 
 @example
 raAction racts[] = @{
@@ -30,3 +26,4 @@ raAction racts[] = @{
 @};
 @end example
 
+Note that the fourth element is the @
