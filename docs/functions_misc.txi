@@ -6,6 +6,7 @@ These simple functions do not fit in any category.
 @menu
 * ra_execute_action_read::    calls appropriate @code{raAgent::reader} to process argument
 * ra_execute_action_write::   writes value of @code{raAction} using @code{raAgent::writer} if found
+* ra_process_tour_arguments:: default command line argument handler
 * ra_command_name::           name of currently running command
 @end menu
 
@@ -63,6 +64,34 @@ The selected @code{raAction} from which the value is to be retrieved.
 @end table
 
 @end deftypefun
+
+@node ra_process_tour_arguments
+@subsection  ra_process_tour_arguments
+
+@deftypefun int ra_process_tour_arguments (raTour *@var{tour},@*@
+            int @var{alert_no_args},
+            int @var{alert_unknown_option})
+
+@table @code 
+@item raTour *@var{tour}
+
+@item int @var{alert_no_args}
+
+@item int @var{alert_unknown_options}
+
+@end table
+
+This function uses the library functions to collect the
+command line arguments, interpret options and values, and
+display error messages and warnings where appropriate.
+
+It is called by functions @code{ra_process_arguments} and
+@code{ra_process_arguments_required}, either of which can
+serve to handle command line arguments for the majority of
+programs using this library.
+
+@end deftypefun
+
 
 @node ra_command_name
 @subsection ra_command_name
