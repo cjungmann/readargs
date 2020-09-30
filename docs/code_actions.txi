@@ -17,16 +17,7 @@ called the @dfn{action map}, to process command line arguments.
 
 @xref{raAction}
 
-@example
-typedef struct @{
-  int           @var{letter};
-  const char    *@var{label};
-  const char    *@var{comment};
-  const raAgent *@var{agent};
-  void          *@var{target};
-  const char    *@var{type};
-@} raAction;
-@end example
+@declRAACTION
 
 Here is a sample @code{raAction} array:
 
