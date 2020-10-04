@@ -80,11 +80,11 @@ uninstall-docs:
 
 .PHONY: html-docs
 html-docs:
-	cd docs; makeinfo --html readargs.txi
+	cd ../docs; makeinfo --html readargs.txi
 
 .PHONY: pdf-docs
 pdf-docs:
-	cd docs; texi2pdf readargs.txi
+	cd ../docs; texi2pdf readargs.txi
 
 .PHONY: clean
 clean:
@@ -92,6 +92,6 @@ clean:
 	rm -f *.so
 	rm -f *.o
 	rm -f $(patsubst test%.c,test%,$(wildcard test*.c))
-	rm -rf docs/readargs
-	rm -f docs/!(*.txi)
+	rm -rf ../docs/readargs
+	rm -f ../docs/!(*.txi)
 
