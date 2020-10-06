@@ -2,7 +2,40 @@
 #include <stdio.h>
 #include <readargs.h>
 
+#include <stdlib.h>  // for atof()
 #include <string.h>  // for strcasecmp()
+#include <errno.h>
+
+/**
+ * Custom agent: read a floating value
+ * Name:         float_agent
+ * Reference:    info readargs "Advanced Topics" "Floating Agent"
+ */
+
+raStatus float_reading(const raAction *act, const char *str, raTour *tour)
+{
+   float val = 0.0;
+   
+   if (!str)
+      return RA_MISSING_VALUE;
+
+   char *endptr = NULL;
+   val = strtof(str, &endptr);
+
+   if (val == 0.0 && errno != 0)
+      return RA_INVALID_ARGUMENT;
+
+   *(float*)act->target = val;
+   return RA_SUCCESS;
+}
+
+void float_writer(FILE *f, const raAction *act)
+{
+   float *target = (float*)act->target;
+   fprintf(f, "%f", *target);
+}
+
+raAgent float_agent = { 1, float_reading, float_writer };
 
 /**
  * Custom agent: read two arguments
@@ -169,11 +202,13 @@ void display_friends(void)
 }
 
 
-struct VAR_PAIR vpair = {};
 const char *name = NULL;
 const char *friend = NULL;
-const char *greeting = NULL;
+
+float temperature = 0.0;
 const char *colstart = NULL;
+const char *greeting = NULL;
+struct VAR_PAIR vpair = {};
 
 raAction actions[] = {
    { 'h', "help", "Show this display", &ra_show_help_agent },
@@ -183,6 +218,7 @@ raAction actions[] = {
    { 'f', "friend", "Add friend.  May use multiple times.", &ra_string_agent, &friend, "NAME" },
 
    // Using custom agents
+   { 't', "temperature", "Set temperature", &float_agent, &temperature, "TEMP" },
    { 'c', "color", "Set output color", &color_agent, &colstart, "COLOR" },
    { 'g', "greet", "Greet user", &greeting_agent, &greeting, "GREETING" },
    { 'v', "var", "Set variable value", &var_agent, &vpair, "NAME VALUE" }
@@ -200,17 +236,21 @@ int main(int argc, const char **argv)
       if (colstart)
          printf("%s", colstart);
 
-      // Carry out -g option
+      // Display value from -g option
       if (greeting)
          printf("%s\n", greeting);
 
-      // Carry out -v option
+      // Display value from -v option
       if (vpair.name)
          printf("%s = \"%s\"\n", vpair.name, vpair.value);
 
-      // Carry out -n option
+      // Display value from -n option
       if (name)
          printf("The name is \"%s\"\n", name);
+
+      // Display value from -t option
+      if (temperature != 0.0)
+         printf("The temperature is %f.\n", temperature);
 
       // Display 0 or more -f options
       display_friends();
