@@ -180,7 +180,8 @@ void ra_write_warning(FILE *f,
                       const raAction *action,
                       const char *value);
 
-void ra_show_no_args_message(void);
+void ra_show_no_args_message(FILE *f);
+void ra_show_unknown_option_message(FILE *f, const raTour *tour);
 
 // Let the library do everything:
 int ra_process_tour_arguments(raTour *tour,

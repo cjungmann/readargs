@@ -201,12 +201,20 @@ EXPORT void ra_show_scene_values(FILE *f)
   }
 }
 
-EXPORT void ra_show_no_args_message(void)
+EXPORT void ra_show_no_args_message(FILE *f)
 {
-   fprintf(stderr, "Usage: ");
-   ra_describe_usage(stderr, 0, RAU_DEFAULT);
-   fprintf(stderr, "Try '%s --help' for more information.\n", ra_command_name());
+   fprintf(f, "Usage: ");
+   ra_describe_usage(f, 0, RAU_DEFAULT);
+   ra_suggest_help(f, 0);
 }
+
+EXPORT void ra_show_unknown_option_message(FILE *f, const raTour* tour)
+{
+   fprintf(f, "%s: unrecognized option '%s'\n", ra_command_name(), *tour->current_arg);
+   ra_describe_usage(f, 0, RAU_DEFAULT);
+   ra_suggest_help(f, 0);
+}
+
 
 /** Loop through arguments with builtin processing
  *
@@ -222,10 +230,7 @@ EXPORT int ra_process_tour_arguments(raTour *tour,
 
    if (alert_no_args && ra_scene_arguments_count() < 2)
    {
-      FILE *pout = stderr;
-      fputs("Usage: ", pout);
-      ra_describe_usage(pout, 0, RAU_DEFAULT);
-      ra_suggest_help(pout, 0);
+      ra_show_no_args_message(stderr);
       return 0;
    }
 
@@ -241,6 +246,15 @@ EXPORT int ra_process_tour_arguments(raTour *tour,
       else if (status == RA_END_ARGS        // no more arguments to read
                || status == RA_END_OPTIONS) // encountered '--' argument
          return 1;                          // indicate successful tour of arguments
+      else if (status == RA_UNKNOWN_OPTION)
+      {
+         // Warn and terminate if flag set, otherwise ignore:
+         if (alert_unknown_option)
+         {
+            ra_show_unknown_option_message(stderr, tour);
+            return 0;
+         }
+      }
       else if (status != RA_SUCCESS)
       {
          ra_write_warning(stderr, status, tour, action, value);
@@ -257,14 +271,14 @@ EXPORT int ra_process_arguments(void)
 {
    raTour tour;
    ra_start_tour(&tour);
-   return ra_process_tour_arguments(&tour, 0, 1);
+   return ra_process_tour_arguments(&tour, 0, 0);
 }
 
 EXPORT int ra_process_arguments_required(void)
 {
    raTour tour;
    ra_start_tour(&tour);
-   return ra_process_tour_arguments(&tour, 1, 1);
+   return ra_process_tour_arguments(&tour, 1, 0);
 }
 
 /* Local Variables: */
