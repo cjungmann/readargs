@@ -1,0 +1,88 @@
+@node Hello Library
+@chapter Hello Library
+
+This code sample presents a minimal implementation to
+illustrate the fundamentals of a @code{readargs} enabled
+application.
+
+The code includes references to the material that comes
+below the code.  The material includes definitions and
+an introduction to @code{readargs} programming.
+
+Follow links in the code comments to learn about each
+section.  The following code can also be found in the
+@file{samples} directory in @file{hello.c}.
+
+@anchor{hello program}
+@example
+// Build with "gcc -o hello hello.c -lreadargs
+#include <stdio.h>
+#include <readargs.h>
+
+// @xref{State Variables definition,1}.
+const char *name = "World";
+
+// @xref{Action Map definition,2}.
+raAction actions[] = @{
+   @{ 'n', "name", "Set name",     &ra_string_agent, &name, "STRING" @},
+   @{ 'h', "help", "This display", &ra_show_help_agent   @},
+@};
+
+int main(int argc, const char **argv)
+@{
+   // @xref{Initialize the library,3}.
+   ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
+
+   // @xref{Call library to process arguments,4}.
+   if (ra_process_arguments())
+   @{
+      printf("Hello, %s.\n", name);
+   @}
+   return 0;
+@}
+@end example
+
+@anchor{State Variables definition}
+@subheading Note 1: State Variables
+@cindex definitions, State Variables
+
+The state variables contain the values that the program uses to
+direct its execution.  State variables are typically initialized
+with values that support running the program in some form.
+
+State variable values will be updated with user preferences
+submitted through the command line arguments.
+
+@anchor{Action Map definition}
+@subheading Note 2: Action Map
+@cindex definitions, Action Map
+
+The action map, an array of @dfn{raAction} instances, is a blueprint
+for parsing command line arguments.  Each @code{raAction} instance
+includes the option's trigger, a description of the option, and
+for most cases, the way the option sets a linked state variable.
+
+The @code{raAgent} instances that set variables must support the data
+type of the state variable with which it shares the @code{raAction}.@*
+@c @xref{raAction} @*
+
+@anchor{Initialize the library}
+@subheading Note 3: Initialize the library
+
+The library needs to have access to the command line arguments and
+the action map.
+
+@xref{ra_set_scene}
+
+@anchor{Call library to process arguments}
+@subheading Note 4: Call library to process arguments
+
+For most implementations, using this do-it-all function will
+be sufficient to process the command line arguments.  The
+function returns 0 (@code{false}) if the program should be
+terminated.  Otherwise, upon return from this function, the
+state variable will be set according to the rules set out in
+the action map.
+
+@xref{ra_process_arguments}
+
