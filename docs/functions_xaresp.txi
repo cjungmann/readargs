@@ -27,7 +27,7 @@ result of this function indicates the size of the @code{char*}
 array needed to access individual arguments.
 
 @xref{ra_str2args}@*
-@xref{Acquire Absent Answers}
+@xref{Interactive Action Use}
 
 @end deftypefun
 
@@ -70,7 +70,7 @@ argument.  This number should be taken from the result of the
 @code{ra_count_str2args} function.
 @end table
 
-@xref{Acquire Absent Answers}
+@xref{Interactive Action Use}
 
 @end deftypefun
 
@@ -87,7 +87,7 @@ Use the @code{ra_copy_user_response} function with an
 appropriately-sized buffer to collect the response into
 persistent memory that can be used by @code{ra_process_arguments}.
 
-@xref{Acquire Absent Answers}
+@xref{Interactive Action Use}
 
 @end deftypefun
 
@@ -109,7 +109,7 @@ char *buffer = (char*)alloca(len_ur);
 ra_copy_user_response(buffer, len_ur);
 @end example
 
-@xref{Acquire Absent Answers}
+@xref{Interactive Action Use}
 
 @node ra_print_interactive_prompt
 @subsection ra_print_interactive_prompt
@@ -121,7 +121,7 @@ Displays a generic prompt for data entry using the @code{label}
 an @code{raAction} instance.
 
 @xref{raAction}@*
-@xref{Acquire Absent Answers}
+@xref{Interactive Action Use}
 
 @end deftypefun
 
@@ -136,6 +136,6 @@ After splitting @var{response} into arguments, this function
 uses the @code{raAction} instance to process the arguments
 submitted by the user to set the target of the @code{raAction}.
 
-@xref{Acquire Absent Answers}
+@xref{Interactive Action Use}
 
 @end deftypefun
