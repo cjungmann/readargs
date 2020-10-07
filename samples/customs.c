@@ -6,23 +6,23 @@
 #include <string.h>  // for strcasecmp()
 #include <errno.h>
 
-/**
+/****************************************************************
  * Custom agent: read a floating value
  * Name:         float_agent
  * Reference:    info readargs "Advanced Topics" "Floating Agent"
  */
 
-raStatus float_reading(const raAction *act, const char *str, raTour *tour)
+raStatus float_reader(const raAction *act, const char *str, raTour *tour)
 {
-   float val = 0.0;
-   
    if (!str)
       return RA_MISSING_VALUE;
 
+   float val = 0.0;
    char *endptr = NULL;
+
    val = strtof(str, &endptr);
 
-   if (val == 0.0 && errno != 0)
+   if (val == 0.0 && str == endptr)
       return RA_INVALID_ARGUMENT;
 
    *(float*)act->target = val;
@@ -35,9 +35,9 @@ void float_writer(FILE *f, const raAction *act)
    fprintf(f, "%f", *target);
 }
 
-raAgent float_agent = { 1, float_reading, float_writer };
+const raAgent float_agent = { 1, float_reader, float_writer };
 
-/**
+/****************************************************************
  * Custom agent: read two arguments
  * Name:         var_agent
  * Reference:    info readargs "Advanced Topics" "Multi-value Agent"
@@ -66,7 +66,7 @@ void var_writer(FILE *f, const raAction *act)
    fprintf(f, "%s = \"%s\"", pair->name, pair->value);
 }
 
-raAgent var_agent = { 2, var_reader, var_writer };
+const raAgent var_agent = { 2, var_reader, var_writer };
 
 
 /** color_agent support code: */
@@ -95,7 +95,7 @@ const char *get_console_code(const char *str)
    return NULL;
 }
 
-/**
+/****************************************************************
  * Custom agent: optional argument, MUST be last option if argument omitted
  * Name:         color_agent
  * Reference:    info readargs "Advanced Topics" "Optional-value Agent"
@@ -121,11 +121,11 @@ void color_writer(FILE *f, const raAction *act)
    fprintf(f, "%s", *target);
 }
 
-raAgent color_agent = { 1, color_reader, color_writer };
+const raAgent color_agent = { 1, color_reader, color_writer };
 
 
 
-/**
+/****************************************************************
  * Custom agent: optional argument, other options can follow
  * Name:         greeting_agent
  * Reference:    info readargs "Advanced Topics" "Optional-value Agent"
@@ -155,12 +155,13 @@ void greeting_writer(FILE *f, const raAction *act)
    fprintf(f, "%s", *target);
 }
 
-raAgent greeting_agent = { 1, greeting_reader, greeting_writer };
+const raAgent greeting_agent = { 1, greeting_reader, greeting_writer };
 
-/**
+/****************************************************************
  * Demonstration of processing a repeating option
  * Reference: info "Advanced Topics" "Repeating Option"
  */
+
 void display_friends(void)
 {
    raTour tour;
