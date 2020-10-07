@@ -15,8 +15,9 @@ to the developer's needs.
 * ra_scene_arguments_count::        returns number of argument (non-options)
 * ra_show_help::                    builds full help screen with @code{ra_display_usage},
                                     @code{ra_display_options}, and @code{ra_display_arguments}
-* ra_suggest_help::                 Optional addition to usage display
+* ra_suggest_help::                 optional addition to usage display
 * ra_show_no_args_message::         boilerplate message for no arguments
+* ra_show_unknown_option_message::  boilerplate message for unknown option
 
 * ra_show_scene_values::            debugging display that shows current state values
 
@@ -151,7 +152,7 @@ builtin @code{ra_show_help_agent}.
 @node ra_show_no_args_message
 @subsection ra_show_no_args_message
 
-@deftypefun void ra_show_no_args_message (void)
+@deftypefun void ra_show_no_args_message (FILE *@var{f})
 
 Show the usage line along with advice to try the @option{-h} option
 for help.
@@ -159,6 +160,17 @@ for help.
 This is a convenience function that can be called after an obvious
 error in calling the program, like calling it without any arguments.
 
+@end deftypefun
+
+
+@node ra_show_unknown_option_message
+@subsection ra_show_unknown_option_message
+
+@deftypefun void ra_show_unknown_option_message (FILE *@var{f}, const raTour *@var{tour})
+
+Generates a message identifying the program name and the
+unknown option invocation, taken from the @var{tour}
+function argument.
 @end deftypefun
 
 
