@@ -107,18 +107,23 @@ raStatus color_reader(const raAction *act, const char *str, raTour *tour)
 
    if (!str || !*str)
       str = "red";
-   *target = get_console_code(str);
 
-   if (str)
+   if (get_console_code(str))
+   {
+      *target = str;
       return RA_SUCCESS;
+   }
    else
       return RA_INVALID_ARGUMENT;
 }
 
 void color_writer(FILE *f, const raAction *act)
 {
-   const char **target = (const char **)act->target;
-   fprintf(f, "%s", *target);
+   const char *target = *(const char **)act->target;
+   if (target)
+      fprintf(f, "%s", target);
+   else
+      fprintf(f, "n/a");
 }
 
 const raAgent color_agent = { 1, color_reader, color_writer };
@@ -205,6 +210,7 @@ void display_friends(void)
 
 const char *name = NULL;
 const char *friend = NULL;
+int show = 0;
 
 float temperature = 0.0;
 const char *colstart = NULL;
@@ -214,15 +220,16 @@ struct VAR_PAIR vpair = {};
 raAction actions[] = {
    { 'h', "help", "Show this display", &ra_show_help_agent },
    { 'n', "name", "Set the name", &ra_string_agent, &name },
+   { 's', "show", "Show values", &ra_flag_agent, &show },
 
    // Repeating option
    { 'f', "friend", "Add friend.  May use multiple times.", &ra_string_agent, &friend, "NAME" },
 
    // Using custom agents
-   { 't', "temperature", "Set temperature", &float_agent, &temperature, "TEMP" },
-   { 'c', "color", "Set output color", &color_agent, &colstart, "COLOR" },
-   { 'g', "greet", "Greet user", &greeting_agent, &greeting, "GREETING" },
-   { 'v', "var", "Set variable value", &var_agent, &vpair, "NAME VALUE" }
+   { 't', "temperature", "Set temperature (float_agent, float value)", &float_agent, &temperature, "TEMP" },
+   { 'c', "color", "Set output color (color_agent, optional argument, must be at end)", &color_agent, &colstart, "COLOR" },
+   { 'g', "greet", "Greet user (greeting_agent, optional argument, need not be at end)", &greeting_agent, &greeting, "GREETING" },
+   { 'v', "var", "Set variable value (var_agent, two string arguments)", &var_agent, &vpair, "NAME VALUE" }
 };
 
 
@@ -233,9 +240,16 @@ int main(int argc, const char **argv)
 
    if (ra_process_arguments())
    {
+      if (show)
+      {
+         printf("Showing scene values:\n");
+         ra_show_scene_values(stdout);
+         putchar('\n');
+      }
+
       // Carry out -c option
       if (colstart)
-         printf("%s", colstart);
+         printf("%s", get_console_code(colstart));
 
       // Display value from -g option
       if (greeting)
