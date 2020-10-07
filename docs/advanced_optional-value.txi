@@ -60,8 +60,12 @@ raStatus color_reader(const raAction *act, const char *str, raTour *tour)
 
 void color_writer(FILE *f, const raAction *act)
 @{
-   const char **target = (const char **)act->target;
-   fprintf(f, "%s", *target);
+   const char *target = *(const char **)act->target;
+   if (target)
+      fprintf(f, "%s", target);
+   else
+      // handle unset value
+      fputs("n/a", f);
 @}
 
 raAgent color_agent = @{ 1, color_reader, color_writer @};
@@ -118,8 +122,11 @@ raStatus greeting_reader(const raAction *act, const char *str, raTour *tour)
 
 void greeting_writer(FILE *f, const raAction *act)
 @{
-   const char **target = (const char**)act->target;
-   fprintf(f, "%s", *target);
+   if (target)
+      fprintf(f, "%s", target);
+   else
+      // handle unset value
+      fputs("n/a", f);
 @}
 
 raAgent greeting_agent = @{ 1, greeting_reader, greeting_writer @};

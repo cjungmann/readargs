@@ -123,7 +123,8 @@ void color_writer(FILE *f, const raAction *act)
    if (target)
       fprintf(f, "%s", target);
    else
-      fprintf(f, "n/a");
+      // handle unset value
+      fputs("n/a", f);
 }
 
 const raAgent color_agent = { 1, color_reader, color_writer };
@@ -156,8 +157,11 @@ raStatus greeting_reader(const raAction *act, const char *str, raTour *tour)
 
 void greeting_writer(FILE *f, const raAction *act)
 {
-   const char **target = (const char**)act->target;
-   fprintf(f, "%s", *target);
+   const char *target = *(const char**)act->target;
+   if (target)
+      fprintf(f, "%s", target);
+   else
+      fputs("n/a", f);
 }
 
 const raAgent greeting_agent = { 1, greeting_reader, greeting_writer };
