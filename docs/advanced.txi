@@ -1,0 +1,29 @@
+@node Advanced Topics
+@chapter Advanced Topics
+
+@menu
+* Custom Agents::
+* Floating Agent::        Introduction to custom agents
+* Multi-value Agent::     Custom agent that reads two values
+* Optional-value Agent::  Custom agents handling optional values
+* Repeating Option::      Post-processing handler of repeated option
+@end menu
+
+@node Custom Agents
+@section Custom Agents
+
+Each @code{raAction} instance includes an agent that processes the
+matching command line argument.  @xref{raAction}
+
+If there is no builtin @code{raAgent} that handles a required input
+of a program, the library supports building a custom @code{raAgent}
+to interpret user input.  @xref{raAgent}
+
+
+
+
+
+@include advanced_floating.txi
+@include advanced_multi-value.txi
+@include advanced_optional-value.txi
+@include advanced_repeating_option.txi

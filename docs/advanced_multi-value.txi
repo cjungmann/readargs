@@ -1,0 +1,54 @@
+@node Multi-value Agent
+@section Multi-value Agent
+
+There are applications where an option takes two values.
+@command{xsltproc} is an example, where options @option{param}
+and @option{stringparam} take two values.
+
+The @option{-v} in @command{awk} infers two values from a string
+that includes an equals sign.  We will reimagine this as a two-value
+options.
+
+The following example is a bare-bones solution without much
+interpretation or error-checking.  Production-strength code
+would likely be more complex.
+
+@example
+struct VAR_PAIR @{ const char *name; const char *value; @};
+
+raStatus var_reader(const raAction *act, const char *str, raTour *tour)
+@{
+   struct VAR_PAIR *pair = (struct VAR_PAIR*)act->target;
+
+   pair->name = str;
+   // Safely collect the next argument value
+   pair->value = ra_advance_arg(tour);
+
+   if (pair->value)
+      return RA_SUCCESS;
+   else
+      return RA_MISSING_VALUE;
+@}
+
+void var_writer(FILE *f, const raAction *act)
+@{
+   struct VAR_PAIR *pair = (struct VAR_PAIR*)act->target;
+   fprintf(f, "%s = \"%s\"", pair->name, pair->value);
+@}
+
+raAgent var_agent = @{ 2, var_reader, var_writer @};
+@end example
+
+Note on example:
+
+@enumerate
+@item
+Function @code{ra_advance_arg} requests the next argument.
+
+@item
+The developer must prepare a target in which the two values
+can be saved.  In this example, the @code{var_pair} struct
+declaration will be used to define an @code{raAction} target.
+
+@end enumerate
+

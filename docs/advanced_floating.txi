@@ -1,0 +1,66 @@
+@node Floating Agent
+@section Floating Agent
+
+For the first example of custom @code{raAgent} we'll create an
+agent to handle the library-neglected @code{float} data type.
+
+@declRAAGENT
+
+The following code fragment can be found in @file{samples/customs.c}.
+
+@example
+/**
+ * Custom agent: read a floating value
+ * Name:         float_agent
+ * Reference:    info readargs "Advanced Topics" "Floating Agent"
+ */
+
+raStatus float_reader(const raAction *act, const char *str, raTour *tour)
+@{
+   if (!str)
+      return RA_MISSING_VALUE;
+
+   float val = 0.0;
+   char *endptr = NULL;
+
+   val = strtof(str, &endptr);
+
+   if (val == 0.0 && str == endptr)
+      return RA_INVALID_ARGUMENT;
+
+   *(float*)act->target = val;
+   return RA_SUCCESS;
+@}
+
+void float_writer(FILE *f, const raAction *act)
+@{
+   float *target = (float*)act->target;
+   fprintf(f, "%f", *target);
+@}
+
+const raAgent float_agent = @{ 1, float_reader, float_writer @};
+@end example
+
+Notes on the code:
+
+@table @asis
+@item @var{args_needed} is set to 1.
+Having awakened the @code{raAction}, the library reads the next
+argument to submit a value to the @code{raAgent}.
+
+@item Using @code{strtof} to convert argument
+This example uses @code{strtof} instead of @code{atof} in order
+to detect and send a warning if the argument cannot be converted.
+
+@item Providing a reader and writer
+All agents need to provide a @var{reader} member, but the
+@var{writer} member is optional.  The library uses @var{writer}
+to display action values with the the display-oriented
+@code{ra_show_values_agent}.  @var{writer} can be NULL if
+there is nothing to display (for display type agents like
+@code{ra_show_help_agent} and @code{ra_show_values_agent}),
+if the data type is not easily represented, or if the
+developer doesn't want or doesnt' care if the value will not
+be shown by @code{ra_show_help_agent}.
+@end table
+

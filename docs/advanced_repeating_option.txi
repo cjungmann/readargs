@@ -1,0 +1,67 @@
+@node Repeating Option
+@section Repeating Option
+
+There are several possible solutions to the challenge of
+handling repeated command line options.  Here are two:
+
+@enumerate
+@item
+A set of values can be stored when encountered during
+@code{ra_process_arguments}, which would require a custom
+@code{raAgent}.
+
+@item
+Rescan the arguments list when the program is prepared
+to deal with them.   The following code fragment shows how
+this can be done.
+@end enumerate
+
+Here is the code fragment:
+
+@example
+/**
+ * Demonstration of processing a repeating option
+ * Reference: info "Advanced Topics" "Repeating Option"
+ */
+ 
+void display_friends(void)
+@{
+   raTour tour;
+   ra_start_tour(&tour);
+
+   const raAction *action;
+   const char     *value;
+   raStatus       status;
+
+   // First count friends to see if we need to display anything
+   int friend_count = 0;
+
+   while (1)
+   @{
+      status = ra_advance_action(&tour, &action, &value);
+      if (status == RA_SUCCESS && action->letter == 'f')
+         ++friend_count;
+
+      if (status == RA_END_ARGS || status == RA_END_OPTIONS)
+         break;
+   @}
+
+   if (friend_count)
+   @{
+      printf("\nFriends list:\n");
+      ra_start_tour(&tour);
+      while (1)
+      @{
+         status = ra_advance_action(&tour, &action, &value);
+         if (status == RA_SUCCESS && action->letter == 'f')
+            printf("  - %s\n", value);
+
+         if (status == RA_END_ARGS || status == RA_END_OPTIONS)
+            break;
+      @}
+   @}
+   else
+      printf("\nNo friends\n");
+@}
+
+@end example

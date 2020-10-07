@@ -1,0 +1,126 @@
+@node Optional-value Agent
+@section Optional-value Agent
+
+There are two optional-value examples in this section, one that must
+be the last option, and another that can be followed by other options.
+
+Optional value options seem to be pretty rare.  The few examples I found
+allowed the last option on the command line to be optional.  The first
+example here will be an agent of that type.
+
+Once you are considering optional value options, it is not hard to imagine
+a situation where there would be more than one in a single program.  Only
+one option can be last, so if more than one optional value option is
+possible, one of them will @strong{not} be the last option.  The program must
+determine if the argument following the option invocation is a value or
+another option
+
+@menu
+* Final Option Optional Value::
+* Flexible-position Optional Value::
+@end menu
+
+
+
+@node Final Option Optional Value
+@subsection Final Option Optional Value
+
+This approach is easier.  The @var{str} argument will be NULL if no
+value is being provided.
+
+The target should have an initial state that is different from the
+default value that would be applied if the option is invoked without
+an argument.  In the following example, the target is initialized
+to NULL, set to ``red'' if the agent is called without an argument,
+or set to the argument value if an argument is provided.
+
+In this case, we do emit an error if the requested color is not
+available.
+
+@example
+/**
+ * Custom agent: optional argument, MUST be last option if argument omitted
+ * Name:         color_agent
+ * Reference:    info readargs "Advanced Topics" "Optional-value Agent"
+ */
+
+raStatus color_reader(const raAction *act, const char *str, raTour *tour)
+@{
+   const char **target = (const char **)act->target;
+
+   if (!str || !*str)
+      str = "red";
+   *target = get_console_code(str);
+
+   if (str)
+      return RA_SUCCESS;
+   else
+      return RA_INVALID_ARGUMENT;
+@}
+
+void color_writer(FILE *f, const raAction *act)
+@{
+   const char **target = (const char **)act->target;
+   fprintf(f, "%s", *target);
+@}
+
+raAgent color_agent = @{ 1, color_reader, color_writer @};
+
+@end example
+
+
+
+
+@node Flexible-position Optional Value
+@subsection Flexible-position Optional Value
+
+This is a more complicated problem to solve.  Since the
+argument following the option invocation may or may not be
+intended for the option.
+
+In this example, the code uses the following argument only
+if it is not another recognized option invocation.  If the
+argument is a recognized option, it is necessary to call
+@code{ra_retreat_arg} so the library can reconsider the
+argument as an option.
+
+Variations on this code will likely center on how to
+determine if the @var{str} value is usable or not.
+
+Like the other example, the target is initialized to NULL,
+set to a default value if the option is invoked without an
+argument, or set to the argument value if appropriate.
+
+@example
+/**
+ * Custom agent: optional argument, other options can follow
+ * Name:         greeting_agent
+ * Reference:    info readargs "Advanced Topics" "Optional-value Agent"
+ */
+
+raStatus greeting_reader(const raAction *act, const char *str, raTour *tour)
+@{
+   const char **target = (const char**)act->target;
+
+   *target = "Hello";
+
+   if (str && *str)
+   @{
+      // Only use the value if it cannot be an option call
+      if (!ra_seek_raAction(str,tour))
+         *target = str;
+      else
+         ra_retreat_arg(tour);
+   @}
+
+   return RA_SUCCESS;
+@}
+
+void greeting_writer(FILE *f, const raAction *act)
+@{
+   const char **target = (const char**)act->target;
+   fprintf(f, "%s", *target);
+@}
+
+raAgent greeting_agent = @{ 1, greeting_reader, greeting_writer @};
+@end example
