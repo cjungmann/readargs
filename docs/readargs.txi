@@ -44,16 +44,19 @@ standard.
 @contents
 @menu
 * Introduction::
-* Getting Started::         Learn how to use the library
+* Hello Library::           The customary starting program
+* Action Maps::             Define set of program options
 * Data Types::              Data types that support argument processing
-* Library Functions::       
+* Library Functions::       Catalog of library functions
+* Builtin Action Agents::   The executable heart of an action
+* Advanced Topics::         Customization and other stuff
+* Interactive Action Use::  Interactive use of actions
 
-* Preparing Actions::
-* Builtin Action Agents::   
-* Custom Action Agents::    Extend the library with 
-* Actions Interpretation::  Explains how the library reads arguments
+@c * Preparing Actions::
+@c * Custom Action Agents::    Extend the library with 
+@c * Actions Interpretation::  Explains how the library reads arguments
 
-* Quick Start::             Enough to get you started
+@c * Quick Start::             Enough to get you started
 
 * Index::
 @end menu
@@ -77,14 +80,17 @@ object that handles the action's mission.
 The library matches the @code{raAction} from its letter or name
 according to the GNU extensions to the Posix standard
 
-@include starting.txi
+@include hellolib.txi
+@include action_maps.txi
 @include types.txi
 @include functions.txi
-@include actions.txi
 @include builtin_agents.txi
-@include custom_agents.txi
-@include interpretation.txi
-@include quickstart.txi
+@include advanced.txi
+@include interactive_use.txi
+@c @include actions.txi
+@c @include custom_agents.txi
+@c @include interpretation.txi
+@c @include quickstart.txi
 
 @node Index
 @chapter Index
