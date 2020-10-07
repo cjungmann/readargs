@@ -43,3 +43,24 @@ typedef struct _readargs_tour @{
 @} raTour;
 @end example
 @end macro
+
+@macro raActionNameSample
+@format
+@t{@{'n', "name", "Set name", &ra_string_agent, &name, "STRING"@}} @*@
+   (sample @code{raAction} @xref{Hello Library})
+@end format
+@end macro
+
+@macro raActionNonPosSample
+@format
+@t{@{-1, "*name", "Set name", &ra_string_agent, &name, "STRING"@}} @*@
+   (sample @emph{non positional} @code{raAction} @xref{mapdemo Listing})
+@end format
+@end macro
+
+@macro raActionDisplaySample
+@format
+@t{@{'h', "help", "This display", &ra_show_help_agent@}} @*@
+   (sample @emph{display} @code{raAction} @xref{mapdemo Listing})
+@end format
+@end macro
