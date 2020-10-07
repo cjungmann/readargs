@@ -257,6 +257,13 @@ EXPORT int ra_process_arguments(void)
 {
    raTour tour;
    ra_start_tour(&tour);
+   return ra_process_tour_arguments(&tour, 0, 1);
+}
+
+EXPORT int ra_process_arguments_required(void)
+{
+   raTour tour;
+   ra_start_tour(&tour);
    return ra_process_tour_arguments(&tour, 1, 1);
 }
 
