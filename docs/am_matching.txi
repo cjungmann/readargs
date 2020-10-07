@@ -1,0 +1,138 @@
+@node Matching Actions
+@section Matching Actions
+
+Actions in the action map are activated explicitely, having been
+invoked with a short or long option argument, or implicitely,
+based on argument order.  This section shows how to prepare the
+@code{raAction} for each activation method.
+
+@menu
+* Explicit Action Match::         Triggered by short or long option arguments
+* Implicit Action Match::         Triggered by argument position
+* GNU/Posix Matching Guidelines:: Library conformance to standards
+* Repeated Options::              Library handling of repeated options
+@end menu
+
+@node Explicit Action Match
+@subsection Explicit Action Match
+
+An explicit @code{raAction} match is triggered by the short
+or long option argument.  The following @code{raAction}
+definition is an example of an explicit @code{raAction}.
+
+@raActionNameSample
+
+In this example, the action will be performed if short
+option @option{-n} or long option @option{--name}.
+
+Note that it is not necessary to include both @var{letter}
+and @var{label} members.  Set @var{letter} to 0 if a
+short option should not be recognized, and set @var{label}
+to NULL (aka 0) if a long option should not be recognized.
+
+
+@node Implicit Action Match
+@subsection Implicit Action Match
+
+An implicit @code{raAction} match is triggered by argument
+positions.  For command line options not consumed by explicit
+@code{raAction} instances, the implicit @code{raActions} are
+matched in the order they appear in the action map.
+
+@raActionNonPosSample
+
+The value of @var{letter} is set to -1 to indicate that the
+@code{raAction} instance is a non positional, implicit action.
+The @var{label} value, which must have an asterisk prefix,
+will be used (minus the asterisk) on the help and usage displays.
+
+
+
+
+@node GNU/Posix Matching Guidelines
+@subsection GNU/Posix Matching Guidelines
+
+The POSIX @emph{Program Argument Syntax Conventions} document
+defines the standard for handling standard options, and includes
+information about handling GNU extensions.
+
+@url{https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax}
+
+In this section, by @dfn{short option}, I am referring to the option
+argument form of a hyphen followed by a single character (@option{-a}).  A @dfn{long option}
+is a double-hyphen followed by a string of characters (@option{--name}).
+
+@subsubheading Short Options
+
+The short option, in the form of a hyphen followed by a character
+@code{-a}, is the traditional form of specifying command line
+options.
+
+@table @asis
+
+@item @code{-a value} is the same as @code{-avalue}
+Both examples will apply the value @code{value} to option @option{-a}.  
+
+@item @code{-a -b -c} is the same as @code{-abc} if -a, -b, and -c are flag types
+Several options can be combined after a single hyphen if
+the options do not take arguments.
+
+@item @code{-abc} is the same as @code{-a -b c} if @code{-b} takes a value
+If flag-type options precede a argument-taking option in
+a grouped option argument, each leading flag-type option
+will be treated as as if it were a separate option.
+
+@end table
+
+@subsubheading Long Options
+
+Long options are a GNU extension to the POSIX standard.  Long
+options are introduced by a double-dash, like ``--name'' or
+``--help''.  Long options are generally easier to remember
+and solve collision problems when multiple options would logically
+use the same short option letter.
+
+@table @asis
+
+@item @code{--name=Tom} is the same as @code{-name Tom}
+
+The @code{readargs} library processes a long option argument
+with or without the '=' character.
+
+@end table
+
+In the GNU Standards document, there is a page of long options
+use by GNU programs.  A developer can consult this list to
+help select option names that are familiar to most users.
+
+@url{https://www.gnu.org/prep/standards/html_node/Option-Table.html#Option-Table}
+
+
+@node Repeated Options
+@subsection Repeated Options
+
+By default, the library allows an option to be entered more
+than once.  When the same option is used more than once on a
+command line call, the value is set anew each time, resulting
+in the state variable being set with the last value.
+
+There are times when each call to an option must be respected.
+The @code{sed} option @option{-e} is an example where each
+@option{-e} is processed by the program.
+
+There are two recommended solutions for handling this requirement
+with the @code{readargs} library:
+
+@enumerate
+@item
+Create a custom argument processing loop that can be used after
+the @code{ra_process_arguments} is called.  Code that implements
+the approach is found in this info manual (@pxref{Repeating Option}),
+and in the file @file{samples/customs.c}.
+
+@item
+Create a custom agent that saves each value in a way that allows
+access after the completion of @code{ra_process_arguments}.
+
+@end enumerate
+

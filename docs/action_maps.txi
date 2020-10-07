@@ -1,0 +1,21 @@
+@node Action Maps
+@chapter Action Maps
+
+The action map is the heart of the execution of the @code{readargs}
+library.  The library consults the action map to decide how to
+respond to command line arguments.
+
+The action map is an array of @code{raAction}.  Each @code{raAction}
+instance is a definition of how it is called, how to
+describe it for a help screen, and how it is executed.
+
+@menu
+* raAction Intro::   What action maps are made of
+* Matching Actions:: Variations on matching
+
+* mapdemo Listing::  Demonstrate chapter's concepts
+@end menu
+
+@include am_raaction_intro.txi
+@include am_matching.txi
+@include mapdemo.txi

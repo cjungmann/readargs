@@ -69,7 +69,7 @@ The selected @code{raAction} from which the value is to be retrieved.
 @subsection  ra_process_tour_arguments
 
 @deftypefun int ra_process_tour_arguments (raTour *@var{tour},@*@
-            int @var{alert_no_args},
+            int @var{alert_no_args}, @*@
             int @var{alert_unknown_option})
 
 @table @code 

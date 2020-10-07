@@ -1,0 +1,49 @@
+@node mapdemo Listing
+@section mapdemo Listing
+
+The following code listing includes at least one action based on
+every builtin agent.  This code can be used as a reference from
+which developers can familiarize themselves with the library
+while building new applications using the library.
+
+@example
+// Build with "gcc -o mapdemo mapdemo.c -lreadargs
+#include <stdio.h>
+#include <readargs.h>
+
+// State Variables definitions
+int        age = 0;
+int        color = 0;
+const char *greeting = "Hello";
+const char *name = NULL;
+
+// Action Map definition
+raAction actions[] = @{
+   @{ -1,  "*name", "Set name",     &ra_string_agent, &name,     "STRING" @},
+   @{ 'a', "age",   "Set age",      &ra_int_agent,    &age,      "NUMBER" @},
+   @{ 0,   "color", "Colorize text",&ra_flag_agent,   &color,    "TRUE"   @},
+   @{ 'g', NULL,    "Set greeting", &ra_string_agent, &greeting, "STRING" @},
+   @{ 'h', "help",  "This display", &ra_show_help_agent   @},
+   @{ 's', "show",  "Show state",   &ra_show_values_agent @}
+@};
+
+int main(int argc, const char **argv)
+@{
+   const char *coloron = "";
+   const char *coloroff = "\e[m";
+
+   ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
+
+   if (ra_process_arguments())
+   @{
+      if (color)
+         coloron = "\e[32;1m";
+
+      printf("%s%s%s, %d-year-old %s%s%s.\n",
+             coloron, greeting, coloroff,
+             age,
+             coloron, name, coloroff);
+   @}
+   return 0;
+@}
+@end example

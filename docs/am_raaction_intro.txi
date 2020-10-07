@@ -1,0 +1,61 @@
+@node raAction Intro
+@section raAction Intro
+
+Writing @code{raAction} instances is very easy.  This section
+breaks down the members of an @code{raAction} instance to
+illustrate how each member contributes to the purpose of
+@code{raAction}.
+
+Here is a @code{raAction} definition from the @file{hello.c}
+code listing found in the @code{samples} directory:
+
+@raActionNameSample
+
+On a help display, this action will be shown as:
+
+@example
+  -n, --name=STRING  Set name
+@end example
+
+The following table explains each element of the @code{raAction}
+definition above:
+
+@table @asis
+
+@item 'n', "name"
+The @var{letter} and @var{label} value of this @code{raAction}
+will be matched with a command line argument of @option{-n}
+or @option{--name}.
+
+@item "Set name"
+The @var{comment} member is a @code{const char*} variable
+to a string that explains what the option does on the
+help display.
+
+@item &ra_string_agent
+The @var{agent} member is a pointer to an @code{raAgent}
+that executes the action.  In most cases, this means interpreting
+and saving the argument following the option invocation.
+
+The library include @code{raAgent} instances for handling string,
+integer, and boolean/flag values, as well as display agents
+for help and values displays.
+
+@xref{Builtin Action Agents}
+
+@item &greeting
+This member is the @var{target} member, and it is 
+@code{&name} is a pointer to a @code{const char*} variable in
+which the @code{ra_string_agent} will save the argument.  The
+agent type must match the data type of the target variable.  This
+member is not necessary for display agents like @code{ra_show_help_agent}
+and @code{ra_show_values_agent}.
+
+@item "STRING"
+The final @var{type} member is an optional @code{const char*}
+string that is used on the help display to help illustrate the
+expected option value.
+
+@end table
+
+
