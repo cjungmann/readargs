@@ -1,5 +1,8 @@
 cache
 readargs
+samples/customs
+samples/hello
+samples/mapdemo
 str2args
 test_ask
 test_simple
