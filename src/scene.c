@@ -323,6 +323,8 @@ EXPORT raStatus ra_advance_action(raTour *tour, const raAction **action, const c
 
                      return RA_SUCCESS;
                   }
+                  else
+                     return RA_UNKNOWN_OPTION;
                }
                else       // actions terminator, naked double-dash "--"
                   return RA_END_OPTIONS;
@@ -342,7 +344,7 @@ EXPORT raStatus ra_advance_action(raTour *tour, const raAction **action, const c
          }
       }
    }
-      
+
    if (*actions_str)
    {
       char letter = **actions_str;
@@ -440,7 +442,10 @@ EXPORT void ra_write_warning(FILE *f,
       case RA_INVALID_ARGUMENT:
          fprintf(f, "invalid argument\n");
          if (action)
+         {
             describe_single_action(f, action, 0, 0);
+            ra_suggest_help(f,0);
+         }
          break;
       case RA_MISSING_ARGUMENT:
          fprintf(f, "missing argument\n");
