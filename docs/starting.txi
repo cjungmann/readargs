@@ -11,13 +11,17 @@ understand how to use and extend the library functions.
 
 @menu
 * Hello Library::           Minimum viable program, plus defining terms
+* Expanded Action Map::
+* raAction Intro::
 * Action Maps::             Breaking down action maps
 * An Array of Actions::     Defining responses to command line arguments
 * An Assortment of Agents:: Agents process users' biddings
 * Acquire Absent Answers::  Tools to ask users for missing information
 @end menu
 
-@include code_hello_library.txi
+@include starting_hello.txi
+@include starting_expandmap.txi
+@include starting_raaction.txi
 @include code_action_maps.txi
 @include code_actions.txi
 @include code_agents.txi
