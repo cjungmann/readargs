@@ -63,7 +63,10 @@ raStatus var_reader(const raAction *act, const char *str, raTour *tour)
 void var_writer(FILE *f, const raAction *act)
 {
    struct VAR_PAIR *pair = (struct VAR_PAIR*)act->target;
-   fprintf(f, "%s = \"%s\"", pair->name, pair->value);
+   if (pair->name && pair->value)
+      fprintf(f, "%s = \"%s\"", pair->name, pair->value);
+   else
+      fputs("n/a", f);
 }
 
 const raAgent var_agent = { 2, var_reader, var_writer };
@@ -231,8 +234,8 @@ raAction actions[] = {
 
    // Using custom agents
    { 't', "temperature", "Set temperature (float_agent, float value)", &float_agent, &temperature, "TEMP" },
-   { 'c', "color", "Set output color (color_agent, optional argument, must be at end)", &color_agent, &colstart, "COLOR" },
-   { 'g', "greet", "Greet user (greeting_agent, optional argument, need not be at end)", &greeting_agent, &greeting, "GREETING" },
+   { 'c', "color", "Set output color (color_agent, optional argument, naked option must be at end)", &color_agent, &colstart, "COLOR" },
+   { 'g', "greet", "Greet user (greeting_agent, optional argument, naked option need not be at end)", &greeting_agent, &greeting, "GREETING" },
    { 'v', "var", "Set variable value (var_agent, two string arguments)", &var_agent, &vpair, "NAME VALUE" }
 };
 
