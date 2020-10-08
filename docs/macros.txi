@@ -47,7 +47,7 @@ typedef struct _readargs_tour @{
 @macro raActionNameSample
 @format
 @t{@{'n', "name", "Set name", &ra_string_agent, &name, "STRING"@}} @*@
-   (sample @code{raAction} @xref{Hello Library})
+   (sample @code{raAction} @xref{Hello Library}, @xref{raAction})
 @end format
 @end macro
 
