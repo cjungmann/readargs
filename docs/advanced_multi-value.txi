@@ -33,7 +33,10 @@ raStatus var_reader(const raAction *act, const char *str, raTour *tour)
 void var_writer(FILE *f, const raAction *act)
 @{
    struct VAR_PAIR *pair = (struct VAR_PAIR*)act->target;
-   fprintf(f, "%s = \"%s\"", pair->name, pair->value);
+   if (pair->name && pair->value)
+      fprintf(f, "%s = \"%s\"", pair->name, pair->value);
+   else
+      fputs("n/a", f);
 @}
 
 raAgent var_agent = @{ 2, var_reader, var_writer @};
