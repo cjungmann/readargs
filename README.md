@@ -8,6 +8,37 @@ a useful help screen to document the available actions.
 My goal is to allow for a simple use case using only a few library
 functions, but to also allow customization for special cases.
 
+## Example
+
+Let the library parse the command line argument.  Define an action
+map of options, initialize the library, then call `ra_process_arguments()`.
+
+~~~c
+#include <stdio.h>
+#include <readargs.h>
+
+const char *greeting = "Hello";
+const char *name = "World";
+
+raAction action_map[] = {
+   { 'g', "greeting", "Set greeting", &ra_string_agent, &greeting, "STRING" }
+   { 'n', "name", "Set name", &ra_string_agent, &name },
+   { 'h', "help", "This display", &ra_show_help_agent },
+};
+
+int main(int argc, const char **argv)
+{
+   ra_set_scene(argv, argc, action_map, ACTS_COUNT(action_map));
+
+   if (ra_process_arguments())
+   {
+      printf("%s, %s.\n", greeting, name);
+   }
+   return 0;
+}
+
+~~~
+
 ## Why Use This Library?
 
 With standrd **getopt** and **getopt_long** and countless other
