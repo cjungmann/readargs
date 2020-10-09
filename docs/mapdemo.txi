@@ -6,6 +6,8 @@ every builtin agent.  This code can be used as a reference from
 which developers can familiarize themselves with the library
 while building new applications using the library.
 
+This code is also saved to @file{samples/mapdemo.c}.
+
 @example
 // Build with "gcc -o mapdemo mapdemo.c -lreadargs
 #include <stdio.h>
