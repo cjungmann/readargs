@@ -15,7 +15,7 @@ section.  The following code can also be found in the
 
 @anchor{hello program}
 @example
-// Build with "gcc -o hello hello.c -lreadargs
+// Build with "gcc -o hello hello.c -lreadargs"
 #include <stdio.h>
 #include <readargs.h>
 
@@ -36,7 +36,10 @@ int main(int argc, const char **argv)
    // @xref{Call library to process arguments,4}.
    if (ra_process_arguments())
    @{
-      printf("Hello, %s.\n", name);
+      if (name)
+         printf("Hello, %s.\n", name);
+      else
+         printf("Hello, world.\n");
    @}
    return 0;
 @}
