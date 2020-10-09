@@ -25,7 +25,7 @@ const char *name = "World";
 // @xref{Action Map definition,2}.
 raAction actions[] = @{
    @{ 'n', "name", "Set name",     &ra_string_agent, &name, "STRING" @},
-   @{ 'h', "help", "This display", &ra_show_help_agent   @},
+   @{ 'h', "help", "This display", &ra_show_help_agent   @}
 @};
 
 int main(int argc, const char **argv)
@@ -36,10 +36,7 @@ int main(int argc, const char **argv)
    // @xref{Call library to process arguments,4}.
    if (ra_process_arguments())
    @{
-      if (name)
-         printf("Hello, %s.\n", name);
-      else
-         printf("Hello, world.\n");
+      printf("Hello, %s.\n", name);
    @}
    return 0;
 @}
