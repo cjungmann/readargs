@@ -94,10 +94,13 @@ use the same short option letter.
 
 @table @asis
 
-@item @code{--name=Tom} is the same as @code{-name Tom}
+@item @code{--name=Tom} is the same as @code{--name Tom}
 
 The @code{readargs} library processes a long option argument
-with or without the '=' character.
+with or without the '=' character.  Although the GNU guidelines
+seem to prefer using the '=', the omission of which could signal
+a missing optional argument, several commands accept long options
+followed by another argument with a space instead of an '='.
 
 @end table
 
