@@ -4,20 +4,21 @@
 There are two optional-value examples in this section, one that must
 be the last option, and another that can be followed by other options.
 
-Optional value options seem to be pretty rare.  The few examples I found
-allowed the last option on the command line to be optional.  The first
-example here will be an agent of that type.
+Optional value options seem to be pretty rare.  I haven't even found
+any in the wild.  The standard expectation seems to be that if an
+argument is optional and omitted, it must be at the end of the
+command line arguments.  The first item below works this way.
 
-Once you are considering optional value options, it is not hard to imagine
-a situation where there would be more than one in a single program.  Only
-one option can be last, so if more than one optional value option is
-possible, one of them will @strong{not} be the last option.  The program must
-determine if the argument following the option invocation is a value or
-another option
+Once you are considering optional value options, it is not hard to
+imagine a situation where there would be more than one in a single
+program.  Only one option can be last, so if more than one optional
+value option is possible, one of them will @strong{not} be the last
+option.  The program must determine if the argument following the
+option invocation is a value or another option.
 
 @menu
-* Final Option Optional Value::
-* Flexible-position Optional Value::
+* Final Option Optional Value::      simpler version
+* Flexible-position Optional Value:: complicated handling of following argument
 @end menu
 
 
@@ -89,11 +90,20 @@ argument is a recognized option, it is necessary to call
 argument as an option.
 
 Variations on this code will likely center on how to
-determine if the @var{str} value is usable or not.
+determine if the @var{str} value is usable or not.  For
+example, if it were an optional color option, the
+reader might treat any non-color value as belonging to
+the next argument.
 
 Like the other example, the target is initialized to NULL,
 set to a default value if the option is invoked without an
 argument, or set to the argument value if appropriate.
+
+NOTE: It's best to leave @var{letter} = 0 for an optional-value
+@code{raAction} instance, especially for the flexible-position
+variety..  Allowing invocation with a short option invites 
+invoking it in a combined option where the complicated rules of
+interpretation may confuse the user.
 
 @example
 /**
