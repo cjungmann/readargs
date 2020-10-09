@@ -19,7 +19,10 @@ int main(int argc, const char **argv)
    // *Note 4: Call library to process arguments.
    if (ra_process_arguments())
    {
-      printf("Hello, %s.\n", name);
+      if (name)
+         printf("Hello, %s.\n", name);
+      else
+         printf("Hello, world.\n");
    }
    return 0;
 }
