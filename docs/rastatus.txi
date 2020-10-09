@@ -27,7 +27,7 @@ if the action should not continue.
 @xref{raAgent}
 
 @item RA_END_OPTIONS
-Returned when a double-dash (--) is encountered in the argument list.
+Returned when a double-dash (@code{--}) is encountered in the argument list.
 All arguments following this marker should be treated as positional,
 or non-option actions.
 
