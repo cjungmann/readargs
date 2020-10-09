@@ -29,6 +29,9 @@ This is a @strong{mandatory} member of the @ref{raAgent} struct.
 The @code{raReader} is a function pointer of type @*
 @code{raStatus (*)(const raAction *act, const char *str, raTour *tour)}.
 
+You can find a simple @code{raReader} implementation in section
+@xref{Floating Agent}, which is also found in @file{samples/customs.c}.
+
 @table @code
 @item const raAction *act
 This is the @code{raAction} instance that provided the @code{raReader}
@@ -47,8 +50,11 @@ invocation.
 The @code{raTour} object that is tracking the progress through
 the command line arguments.  This argument is rarely accessed,
 but is useful when it's necessary to return the @code{*str} to
-the argument tour or if the action needs to consume more than
-one argument.
+the argument tour for an optional-value option,  or if the action
+needs to consume more than one argument.@*@
+@xref{Optional-value Agent}  @*@
+@xref{Multi-value Agent}
+
 @end table
 
 @end deftp
@@ -61,6 +67,9 @@ to print out the action's value.  This is an @emph{optional}
 member of the @ref{raAgent} struct because some actions are
 not associated with any value, like showing the help or usage
 display.
+
+You can find a simple @code{raWriter} implementation in section
+@xref{Floating Agent}, which is also found in @file{samples/customs.c}.
 
 @deftp {Function Pointer Type} raWriter
 
@@ -87,6 +96,9 @@ which the library can execute the action's mission.  Each
 instance of @code{raAction} needs an @code{raAgent} for
 this purpose.
 
+You can find a simple @code{raAgent} implementation in section
+@xref{Floating Agent}, which is also found in @file{samples/customs.c}.
+
 Minimally, it contains three members, but customized
 versions can longer according to the action's needs.
 
@@ -112,9 +124,12 @@ pointer when displaying value the associated action.
 @end table
 @end deftp
 
+Learn about the members of an @code{raAgent} instance (@pxref{raAgent})
+
 There are several builtin agents, @xref{Builtin Action Agents}.
 
-Developers can also make custom agents.  @xref{raAgent}.
+Developers can also make custom agents @xref{Advanced Topics, for several custom agent examples}.
+
 
 @c raAction 
 @node raAction
@@ -127,6 +142,9 @@ by the library to determine how to handle command line arguments.
 @deftp {Data Type} raAction
 
 @declRAACTION
+
+We have had an earlier discussion about how the members affect
+the user experience (@pxref{raAction Intro}).
 
 @table @code
 @item int @var{letter}
@@ -165,7 +183,10 @@ is @code{NULL}.
 @section raScene
 This data type describes a static singleton global
 variable that preserves the sets of command line arguments
-and action definitions.
+and action definitions.  This member is typically initialized
+in function @code{main}.@*@
+@xref{ra_set_scene}@*@
+@xref{Hello Library}
 
 @deftp {Data Type} raScene
 
@@ -194,7 +215,14 @@ action is within bounds.
 @section raTour
 
 This data type tracks progress through a given @emph{tour} of
-command line arguments.
+command line arguments.  An @code{raTour} instance is usually
+initialized just before processing the command line arguments,
+but a generated @code{raTour} may also be created for collecting
+argument values interactively.@*@
+@xref{ra_start_tour} @*@
+@xref{Interactive Action Use}
+
+initialized
 
 @deftp {Data Type} raTour
 
