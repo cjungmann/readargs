@@ -1,6 +1,6 @@
 # Project readargs
 
-This is a command line arguments processing library, written in
+This is a command line arguments processing library written in,
 and intended for use with, the C langauge.  It provides both
 a means to parse and save command line arguments **and** to generate
 a useful help screen to document the available actions.
@@ -41,7 +41,7 @@ int main(int argc, const char **argv)
 
 ## Why Use This Library?
 
-With standrd **getopt** and **getopt_long** and countless other
+With standard **getopt** and **getopt_long** and countless other
 argument processing tools, one might not think we need another
 library.  The benefits of this library are:
 
