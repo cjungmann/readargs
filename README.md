@@ -12,6 +12,8 @@ functions, but to also allow customization for special cases.
 
 Let the library parse the command line argument.  Define an action
 map of options, initialize the library, then call `ra_process_arguments()`.
+The following code lising is a complete program that can be compiled with
+the **gcc** `-lreadargs` option.
 
 ~~~c
 #include <stdio.h>
@@ -50,133 +52,35 @@ library.  The benefits of this library are:
   GNU long option extension to the [POSIX standards for handling
   command line arguments](http://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html\#Argument-Syntax).
 
-- **Easy-to-scan Compact Code**  
-  The basic code requirements are minimal.  The developer defines
-  an *action map* which a library function uses to set *state variables*
-  from the command line arguments.  Each line of an *action map*
-  represents one *state variable* and is easier to read than a
-  typical long *switch* statement.
+- **Easy-to-scan, Compact Code**  
+  Code all argument handling in a single, easy-to-scan structure.
+  Short- and long-options and non-optional arguments handled
+  in a consistent manner.
 
-- **Generates Help and Example Displays**  
-  There are several tools from which the develper can generate
-  help and usage displays.
+- **Generates Help and Usage Displays**  
+  Allow display generator to provide help, or use library tools
+  to build a custom help or usage display.
 
-- **Extensible**  
-  There are hooks in the code by which a developer can handle
-  unusual data or option types.
+- **Flexible**  
+  If builtin features neglect a project's needs, the developer
+  can exploit library hooks to handle custom data types.  The
+  documentation shows how to code for new data types, optional
+  argument, and multiple argument options.
+
+- **Easy to learn**  
+  Info page document included that serves as a learning tool for
+  novice users and as quick reference for experienced users.
 
 - **Debugging Tool**  
-  The *state variables* registered in the *action map* can
-  be displayed by simply including a special action in the
-  *action map.*  This facility can be very useful for both
-  the developer and the end user to confirm *state variable*
+  A feature that displays the values of the variables under
+  the library's control is helpful to developers and end users
+  to confirm that the program is running with appropriate
   settings.
 
 - **Interactive Support**
   Elements of the *action map* can be used to request and
   process user input interactively.  This may be used if a
   user forgets to enter required information.
-
-## Documentation
-
-There is a set of **texinfo** files that generate an **info**
-file in which the documentation can be found.
-
-Beyond the **info** file, a developer can analyze included
-compilable C source files that demonstrate how to accomplish
-certain development goals.  These files are found with the
-rest of the project's source code, and they all have a prefix
-of **test_**.
-
-## Simple Example
-
-The following is a minimal example of a program using
-**readargs** to process the command line arguments. It is
-a shortened version of the **test_simple.c** file included
-in the project.
-
-One of the features of this library is generated documentation
-displays.  There are functions for generating a usage display
-and a help display.  In this program listing, these functions
-called by the *ra_show_help_agent* which is invoked when a user
-enters a *-h* or *--help** option.
-
-~~~c
-#include <stdio.h>
-#include <readargs.h>
-
-const char *filepath = NULL;
-int        iterations = 1;
-
-raAction actions[] = {
-   {'h', "help",     "This help output",   &ra_show_help_agent,   NULL,        NULL       },
-   {'s', "show",     "Show action values", &ra_show_values_agent, NULL,        NULL       },
-   {'p', "filepath", "Set file path.",     &ra_string_agent,      &filepath,   "FILEPATH" },
-   { -1, "*iter",    "iterations",         &ra_int_agent,         &iterations, "NUMBER"   }
-};
-
-int main(int argc, const char **argv)
-{
-   ra_set_scene(argv, argc, actions, ACTS_COUNT(actions));
-   if (argc > 1)
-   {
-      if (ra_process_arguments())
-      {
-         // The variables are set, begin the program.
-
-         // This function just shows the current action values.
-         ra_show_scene_values(stdout);
-      }
-   }
-   else
-      ra_show_no_args_message();
-
-   return 0;
-}
-~~~
-
-## Sample Files
-
-The sample source files will be named **test_.c**, starting with
-**test_simple.c** for a standard case.
-
-## Standards Followed
-
-This project processes the command line arguments strictly
-according to the rules set out for GNU option processing,
-which handles single-letter options preceded by a single dash,
-as well as more free-form option names that are preceded by
-a double-dash.
-
-[GNU Arguments Standards](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax)
-
-The library allows for an exception from these standards:
-the standard says that a long option should be followed
-by an '*=*' character and the option value, without intervening
-spaces (`--action=simple`).  I noticed that **grep** recognizes
-a long option whose value is in the following argument
-(`grep --file patterns.txt` is the same as `grep --file=patterns.txt`).
-
-### Usage Message Syntax
-
-The most helpful document about usage syntax is a [wiki page](https://en.wikipedia.org/wiki/Usage_message)
-
-### Standards Research
-
-While I have used command line options for a long time, I have
-never paid much attention to how command line options work.  While
-I add features to my version, I am referring to other established
-commands to see how they handle bad or incomplete options entry.
-
-I have used the following examples.  Type the `highlighted text`
-into a Linux console to see what I'm considering.
-
-- `grep --help` for an example of *--help* output
-- `help` alone to see builtin commands, from which some
-  examples might be found.
-- `help cd` get help on one of the *help* builtins
-- `xsltproc --help` to see options, especially *--param*,
-  which takes two values.
 
 ## Installation
 
@@ -185,11 +89,93 @@ environment.  If there is any interest, I may consider supporting
 other environments.  Given an appropriate system, these steps
 will install this library:
 
-- `git clone https://github.com/cjungmann/readargs`
-- `cd readargs`
-- `make`
-- Run test commands without further installation
-- Install for system-wide use: `sudo make install`
-- Install documentation only: `sudo make install-docs`
-  - Call `info readargs` to read the info file.
-- Uninstall with `sudo make uninstall`
+~~~sh
+git clone https://github.com/cjungmann/readargs
+cd readargs
+make
+sudo make install
+~~~
+
+For the undecided, there are program examples in the `src` directory
+that are prefixed with *test_*.  These programs are compiled
+along with the rest of the library when calling `sudo make install`.
+
+The documentation can be installed separately for those who
+would like to preview the software before installing it.  The documentation
+refers to additional sample programs in the `samples` directory.
+
+Install and read the info file without installing the library:
+
+~~~sh
+sudo make install-docs
+info readargs
+~~~
+
+## Using the Library
+
+There are three requirements for using the library:
+
+1 Build and install the library.
+2 Add `#include <readargs.h>` statement to your C or C++ code.
+3 Add the `-lreadargs` to your link options.
+
+Refer to `sample/*.c` and `src/test_*.c` files for development models.
+
+## Standards and Conventions
+
+I began by attempting to faithfully follow the guidelines presented in the
+[GNU Arguments Standards](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html#Argument-Syntax).
+I looked at various command line programs to find conventions where
+the standards are slient or ambiguous.
+
+For example, the standard says that a long option should be followed
+by an '*=*' character and the option value, without intervening
+spaces (`--action=simple`).  I noticed that **grep** recognizes
+a long option whose value is in the following argument
+(`grep --file patterns.txt` is the same as `grep --file=patterns.txt`).
+The library handles long options like **grep**.
+
+### Usage Message Syntax
+
+The most helpful document about usage syntax is a [wiki page](https://en.wikipedia.org/wiki/Usage_message)
+
+### Standards Research
+
+While I have used command line options for a long time, I have
+never paid much attention to how command line options work.  The
+following command are among those considered when deciding how
+to interpret various option constructions:
+
+- **Commands References**  
+  `help` without arguments shows a list of builtin commands.
+  I experimented with commands in the list to see how GNU standard
+  commands handle conform to the GNU argument syntax standards.
+
+- **Extension: Multiple Argument Options**  
+  `xsltproc` has options that takes two arguments.  I referred to
+  `xsltproc --help` to see how these options, especially *--param*,
+  are used and how they are documented.  Refer to
+  `info readargs "Advanced Topics" "Multi-value Agent"` for an
+  implementation of this feature.
+
+- **Extension: Optional Argument Options**  
+  I was unable to find examples of this construction.   Although
+  this feature may be rare, the info file includes two examples
+  of how one might implement optional value arguments.  Look at
+  `info readargs "Advanced Topics" "Optional-value Agent"`
+
+- **Repeated Options**  
+  The GNU standards allow for repeated options.  By default, The
+  *readargs* library overwrites the target variable with each
+  repitition, ultimately leaving the target variable set to the
+  last setting.
+
+  `sed` recognizes multiple invocations of the `-e` option.  The info
+  file includes an example of how a developer might process repeated
+  options in `info readargs "Advanced Topics" "Repeating Option"`.
+  
+
+- **Help Display**  
+  I looked at the `--help` option of `grep`, `sed`, `xsltproc`,
+  and others, for help display models, especially for long options.
+
