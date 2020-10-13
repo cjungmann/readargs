@@ -12,7 +12,7 @@ functions, but to also allow customization for special cases.
 
 Let the library parse the command line argument.  Define an action
 map of options, initialize the library, then call `ra_process_arguments()`.
-The following code lising is a complete program that can be compiled with
+The following code listing is a complete program that can be compiled with
 the <span style="white-space:nowrap">**gcc** `-lreadargs`</span> option.
 
 ~~~c
