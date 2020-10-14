@@ -43,7 +43,7 @@ int main(int argc, const char **argv)
       }
    }
    else
-      ra_show_no_args_message();
+      ra_show_no_args_message(stderr);
 
    return 0;
    
