@@ -17,7 +17,7 @@ OBJ_FILES := $(patsubst %.c, %.o, $(OBJ_FILES))
 
 ifeq ($(MAKECMDGOALS),debug)
 OBJ_FILES := $(patsubst %.o, %_debug.o, $(OBJ_FILES))
-CFLAGS += -ggdb -DDEBUG
+CFLAGS += -g -ggdb -DDEBUG
 TARGET := $(subst .so,_debug.so, $(TARGET))
 endif
 
