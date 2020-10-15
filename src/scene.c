@@ -38,8 +38,9 @@ EXPORT const raAction *ra_seek_raAction_by_label(const char *str)
 {
    char *lstr = strchr(str,'=');
 
-   // We can't change terminate str at '=' because it's constant.
-   // So we make a copy stopping before '=' and pretend it's str.
+   // In a non-const string, I would break the string at '='
+   // by changing '=' to '\0'.  Since it is const, here we
+   // make a copy of *str that we can harmlessly change.
    if (lstr)
    {
       int len = lstr - str;
