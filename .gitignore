@@ -7,5 +7,6 @@ str2args
 test_ask
 test_simple
 test_vargs
+*.a
 *.o
 *.so
