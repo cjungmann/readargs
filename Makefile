@@ -1,5 +1,5 @@
-.SHELL=${/bin/env bash}
-# .SHELLFLAGS=-O extglob -c
+# .SHELL=${/bin/env bash}
+.SHELL=${/bin/bash}
 .SUFFIXES:
 .SUFFIXES: .c .o
 
