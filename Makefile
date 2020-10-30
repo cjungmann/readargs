@@ -34,6 +34,24 @@ LIB_MODULES != ls -1 src/*.c | grep -v 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|
 TEST_SOURCE != ls -1 src/*.c | grep 'src/test_'
 TEST_MODULES != ls -1 src/*.c | grep 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/|obj\/|g'
 
+BUILD_INFO_RECIPE = makeinfo docs/readargs.txi; \
+	gzip readargs.info; \
+	mv readargs.info.gz /usr/share/info; \
+	install-info --add-once /usr/share/info/readargs.info.gz /usr/share/info/dir
+
+REMOVE_INFO_RECIPE = rm -f /usr/share/info/readargs.info.gz; \
+	install-info --delete /usr/share/info/readargs.info.gz /usr/share/info/dir
+
+BUILD_INFO != { if [ which makeinfo 2&> /dev/null ]; \
+	then echo $(BUILD_INFO_RECIPE); \
+	else echo ""; \
+	fi; }
+REMOVE_INFO != { if [ which makeinfo 2&> /dev/null ];  \
+	then echo $(REMOVE_INFO_RECIPE); \
+	else echo ""; \
+	fi; }
+
+
 
 all: $(TARGET_SHARED) $(TARGET_STATIC)
 
@@ -55,3 +73,19 @@ test_re:
 	@echo LIB_MODULES = $(LIB_MODULES)
 	@echo TEST_SOURCE = $(TEST_SOURCE)
 	@echo TEST_MODULES = $(TEST_MODULES)
+
+.PHONY: clean
+clean:
+	rm -rf obj
+	rm -rf *.a
+	rm -fr *.so
+	rm -rf docs/readargs.info
+
+.PHONY: install-docs
+install-docs:
+	$(BUILD_INFO)
+
+.PHONY: uninstall-docs
+	$(REMOVE_INFO)
+
+$(shell mkdir -p obj)
