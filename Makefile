@@ -1,7 +1,6 @@
 .SHELL: ${/usr/bin/env bash}
-.OBJDIR: ./
-.SUFFIXES:
-.SUFFIXES: .c .o
+# .SUFFIXES:
+# .SUFFIXES: .c .o
 
 DESTDIR = /usr
 
@@ -16,55 +15,48 @@ TARGET_STATIC = ${TARGET}.a
 
 #### Select .c files for compilation
 LIB_SOURCE != ls -1 src/*.c | grep -v 'src/test_'
-LIB_MODULES != ls -1 src/*.c | grep -v 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/|obj\/|g'
+LIB_MODULES != ls -1 src/*.c | grep -v 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/||g'
 TEST_SOURCE != ls -1 src/*.c | grep 'src/test_'
-TEST_MODULES != ls -1 src/*.c | grep 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/|obj\/|g'
+TEST_MODULES != ls -1 src/*.c | grep 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/||g'
 
 # Recipe variables defining how to do things
-BUILD_INFO_RECIPE = makeinfo docs/readargs.txi
+BUILD_INFO_RECIPE = makeinfo docs/readargs.txi; gzip readargs.info
 
-INSTALL_INFO_RECIPE = gzip readargs.info; \
-	mv readargs.info.gz /usr/share/info/readargs.info.gz; \
+INSTALL_INFO_RECIPE = mv readargs.info.gz /usr/share/info; \
 	install-info --add-once /usr/share/info/readargs.info.gz /usr/share/info/dir
 
-REMOVE_INFO_RECIPE =install-info --delete /usr/share/info/readargs.info.gz /usr/share/info/dir; \
+REMOVE_INFO_RECIPE = install-info --delete /usr/share/info/readargs.info.gz /usr/share/info/dir; \
 	rm -f /usr/share/info/readargs.info.gz
 
 
 # Macro variables set according to environment (if certain progams are available)
 BUILD_INFO != which makeinfo > /dev/null 2>/dev/null; \
 	if [ "$$?" -eq 0 ] ; \
-	then echo ${BUILD_INFO_RECIPE}; \
+	then echo "${BUILD_INFO_RECIPE}"; \
 	else echo ""; \
 	fi;
-INSTALL_INFO != if [ -f readargs.info ] ; \
-	then echo ${INSTALL_INFO_RECIPE}; \
+INSTALL_INFO != if [ -f readargs.info.gz ] ; \
+	then echo "${INSTALL_INFO_RECIPE}"; \
 	fi;
-REMOVE_INFO != if [ which makeinfo > /dev/null 2>/dev/null ] ;  \
-	then echo ${REMOVE_INFO_RECIPE}; \
+REMOVE_INFO != if [ -f /usr/share/info/readargs.info.gz ] ;  \
+	then echo "${REMOVE_INFO_RECIPE}"; \
 	else echo ""; \
 	fi;
 
 
-all: obj ${TARGET_SHARED} ${TARGET_STATIC}
+all: ${TARGET_SHARED} ${TARGET_STATIC}
 
 ${TARGET_SHARED}: $(LIB_MODULES)
-	@echo LIB_SOURCE = ${LIB_SOURCE}
-	echo LIB_MODULES = ${LIB_MODULES}
 	@echo Building the shared library ${TARGET_SHARED}
 	${CC} ${CFLAGS} ${DLFLAGS} -o $@ ${LIB_MODULES}
 	${BUILD_INFO}
 
 ${TARGET_STATIC}: ${LIB_MODULES}
-	@echo Building the shared library ${TARGET_STATIC}
+	@echo Building the static library ${TARGET_STATIC}
 	${CC} ${CFLAGS} ${DLFLAGS} -o $@ ${LIB_MODULES}
 
-obj/%.o: src/%.c src/readargs.h src/invisible.h
+%.o: src/%.c src/readargs.h src/invisible.h
 	${CC} ${CFLAGS} ${LIBFLAGS} -c -o $@ $<
-
-# Make the obj directory if necessary
-obj:
-	mkdir obj
 
 .PHONY: install
 install:
@@ -78,7 +70,6 @@ uninstall:
 	rm -f ${DESTDIR}/lib/libreadargs.so
 	rm -f ${DESTDIR}/lib/libreadargs.a
 	rm -f ${DESTDIR}/lib/readargs.h
-	rm -f /usr/share/info/readargs.info.gz
 	${REMOVE_INFO}
 
 .PHONY: test_re
@@ -88,9 +79,10 @@ test_re:
 	@echo TEST_SOURCE = ${TEST_SOURCE}
 	@echo TEST_MODULES = ${TEST_MODULES}
 	@echo
-	@echo BUILD_INFO = ${BUILD_INFO}
-	@echo INSTALL_INFO = ${INSTALL_INFO}
-	@echo REMOVE_INFO = ${REMOVE_INFO}
+	@echo BUILD_INFO_RECIPE = "${BUILD_INFO_RECIPE}"
+	@echo BUILD_INFO = "${BUILD_INFO}"
+	@echo INSTALL_INFO = "${INSTALL_INFO}"
+	@echo REMOVE_INFO = "${REMOVE_INFO}"
 
 # Unconditional build/install.  Allow error messages
 # warn inappropriate use of this target.
@@ -107,9 +99,34 @@ uninstall-docs:
 
 .PHONY: clean
 clean:
-	rm -rf obj
+	rm -rf *.o
 	rm -rf *.a
 	rm -fr *.so
-	rm -rf readargs.info
+	rm -rf readargs.info*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
