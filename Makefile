@@ -1,5 +1,5 @@
 # .SHELL=${/bin/env bash}
-.SHELL=${/bin/bash}
+.SHELL = ${/usr/bin/env bash}
 .SUFFIXES:
 .SUFFIXES: .c .o
 
@@ -34,26 +34,31 @@ LIB_MODULES != ls -1 src/*.c | grep -v 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|
 TEST_SOURCE != ls -1 src/*.c | grep 'src/test_'
 TEST_MODULES != ls -1 src/*.c | grep 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/|obj\/|g'
 
-BUILD_INFO_RECIPE = makeinfo docs/readargs.txi; \
-	gzip readargs.info; \
-	mv readargs.info.gz /usr/share/info; \
-	install-info --add-once /usr/share/info/readargs.info.gz /usr/share/info/dir
+BUILD_INFO_RECIPE = makeinfo docs/readargs.txi
+
+INSTALL_INFO_RECIPE = mv readargs.info /usr/share/info; \
+	gzip /usr/share/info/readargs.info; \
+	install-info --add-once /usr/share/info/readargs.info/gz /usr/share/info/dir
 
 REMOVE_INFO_RECIPE = rm -f /usr/share/info/readargs.info.gz; \
 	install-info --delete /usr/share/info/readargs.info.gz /usr/share/info/dir
 
-BUILD_INFO != { if [ which makeinfo 2&> /dev/null ]; \
+BUILD_INFO != which makeinfo > /dev/null 2>/dev/null; \
+	if [ "$$?" -eq 0 ] ; \
 	then echo $(BUILD_INFO_RECIPE); \
 	else echo ""; \
-	fi; }
-REMOVE_INFO != { if [ which makeinfo 2&> /dev/null ];  \
+	fi;
+INSTALL_INFO != if [ -f readargs.info ] ; \
+	then echo $(INSTALL_INFO_RECIPE); \
+	fi;
+REMOVE_INFO != if [ which makeinfo > /dev/null 2>/dev/null ] ;  \
 	then echo $(REMOVE_INFO_RECIPE); \
 	else echo ""; \
-	fi; }
+	fi;
 
 
 
-all: $(TARGET_SHARED) $(TARGET_STATIC)
+all: obj $(TARGET_SHARED) $(TARGET_STATIC)
 
 $(TARGET_SHARED): $(LIB_MODULES)
 	@echo LIB_SOURCE = $(LIB_SOURCE)
@@ -68,22 +73,46 @@ $(TARGET_STATIC): $(LIB_MODULES)
 obj/%.o: src/%.c src/readargs.h src/invisible.h
 	$(CC) $(CFLAGS) $(LIBFLAGS) -c -o $@ $<
 
+# Make the obj directory if necessary
+obj:
+	mkdir obj
+
+.PHONY: install
+install:
+	install -D --mode=755 libreadargs.so $(DESTDIR)/lib
+	install -D --mode=755 libreadargs.a  $(DESTDIR)/lib
+	install -D --mode=755 readargs.h     $(DESTDIR)/include
+	$(INSTALL_INFO)
+
+.PHONY: uninstall
+uninstall:
+	rm -f $(DESTDIR)/lib/libreadargs.so
+	rm -f $(DESTDIR)/lib/libreadargs.a
+	rm -f $(DESTDIR)/lib/readargs.h
+	rm -f /usr/share/info/readargs.info.gz
+	$(REMOVE_INFO)
+
 test_re:
 	@echo LIB_SOURCE = $(LIB_SOURCE)
 	@echo LIB_MODULES = $(LIB_MODULES)
 	@echo TEST_SOURCE = $(TEST_SOURCE)
 	@echo TEST_MODULES = $(TEST_MODULES)
+	@echo
+	@echo BUILD_INFO = $(BUILD_INFO)
+	@echo INSTALL_INFO = $(INSTALL_INFO)
+	@echo REMOVE_INFO = $(REMOVE_INFO)
 
 .PHONY: clean
 clean:
 	rm -rf obj
 	rm -rf *.a
 	rm -fr *.so
-	rm -rf docs/readargs.info
+	rm -rf readargs.info
 
 .PHONY: install-docs
 install-docs:
 	$(BUILD_INFO)
+	$(INSTALL_INFO)
 
 .PHONY: uninstall-docs
 	$(REMOVE_INFO)
