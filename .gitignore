@@ -1,5 +1,6 @@
 cache
 readargs
+readargs.info*
 samples/customs
 samples/hello
 samples/mapdemo
