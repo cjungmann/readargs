@@ -104,7 +104,6 @@ EXPORT int ra_str2args(char *str, const char **args, int arg_count)
 #ifdef STR2ARGS_MAIN
 
 #include <stdio.h>
-#include <alloca.h>
 #include <string.h>
 
 typedef int(*weemain_t)(int argc, const char **argv);
@@ -140,10 +139,10 @@ int parse_string_to_new_main(const char *command_name, const char *str, weemain_
       // Leave room for command line name
       ++count;
       
-      char *copy_of_str = (char*)(alloca(1+strlen(str)));
+      char copy_of_str[strlen(str)+1];
       strcpy(copy_of_str, str);
 
-      const char **argv = (const char **)alloca(count * sizeof(char*));
+      const char *argv[count];
       argv[0] = command_name;
 
       string2args(copy_of_str, &argv[1], count-1);

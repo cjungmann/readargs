@@ -2,7 +2,6 @@
 #include "invisible.h"
 
 #include <string.h>
-#include <alloca.h>
 
 EXPORT int ra_is_positional_action(const raAction* act)
 {
@@ -44,7 +43,8 @@ EXPORT const raAction *ra_seek_raAction_by_label(const char *str)
    if (lstr)
    {
       int len = lstr - str;
-      lstr = (char*)alloca(len+1);
+      char rstr[len+1];
+      lstr = rstr;
       memcpy(lstr, str, len);
       lstr[len] = '\0';
       str = lstr;

@@ -1,5 +1,4 @@
 #include <string.h>
-#include <alloca.h>
 #include "readargs.h"
 
 char response_buffer[1024];
@@ -68,7 +67,7 @@ EXPORT void ra_print_interactive_prompt(const raAction *action)
 EXPORT raStatus ra_process_action_with_response(const raAction *action, char *response)
 {
    int count_args = ra_count_str2args(response);
-   const char **args = (const char **)alloca(count_args * sizeof(char*));
+   const char *args[count_args];
    ra_str2args(response, args, count_args);
 
    const raAction *ppact = action;

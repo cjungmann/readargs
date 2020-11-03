@@ -2,7 +2,6 @@
 #include "invisible.h"
 
 #include <string.h>
-#include <alloca.h>
 
 /** Prints available action IDs, either or both the letter and label
  * Called by describe_single_action().
@@ -10,17 +9,17 @@
 void print_action_names(FILE *f, const raAction *act, int max_label, ActFilter set)
 {
    int len_label = get_label_length(act, set);
-   char *str = (char*)alloca(len_label+1);
+   char str[len_label+1];
    set_label_value(act, set, str, len_label+1);
 
    if (act->letter > 0)
    {
-      if (str)
+      if (*str)
          fprintf(f, "-%c, --%-*s  ", act->letter, max_label, str);
       else
          fprintf(f, "-%c    %-*s  ", act->letter, max_label, "");
    }
-   else if (str)
+   else if (*str)
       fprintf(f, "    --%-*s  ", max_label, str);
 }
 

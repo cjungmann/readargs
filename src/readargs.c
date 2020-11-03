@@ -2,7 +2,6 @@
 #include "invisible.h"
 
 #include <string.h>
-#include <alloca.h>
 
 EXPORT raScene g_scene;
 
@@ -183,7 +182,7 @@ EXPORT void ra_show_scene_values(FILE *f)
 {
   int len_max = get_max_label_length(ROF_ACTIONS);
   int len_buffer = len_max + 1;
-  char *buffer = (char*)alloca(len_buffer);
+  char buffer[len_buffer];
 
   const raAction *ptr = g_scene.actions;
   while ( ptr < g_scene.actions_end )
