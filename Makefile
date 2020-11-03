@@ -3,6 +3,8 @@
 # .SUFFIXES: .c .o
 
 DESTDIR = /usr
+OBJ_DIR = bobj
+SRC_TO_OBJ = "s|src\/|${OBJ_DIR}\/|g"
 
 CFLAGS = -Wall -Werror -std=c99 -pedantic -m64 -fvisibility=hidden
 
@@ -15,9 +17,9 @@ TARGET_STATIC = ${TARGET}.a
 
 #### Select .c files for compilation
 LIB_SOURCE != ls -1 src/*.c | grep -v 'src/test_'
-LIB_MODULES != ls -1 src/*.c | grep -v 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/||g'
+LIB_MODULES != ls -1 src/*.c | grep -v 'src/test_' | sed -e 's/\.c/\.o/g' -e ${SRC_TO_OBJ}
 TEST_SOURCE != ls -1 src/*.c | grep 'src/test_'
-TEST_MODULES != ls -1 src/*.c | grep 'src/test_' | sed -e 's/\.c/\.o/g' -e 's|src\/||g'
+TEST_MODULES != ls -1 src/*.c | grep 'src/test_' | sed -e 's/\.c/\.o/g' -e ${SRC_TO_OBJ}
 
 # Recipe variables defining how to do things
 BUILD_INFO_RECIPE = makeinfo docs/readargs.txi; gzip readargs.info
@@ -44,7 +46,7 @@ REMOVE_INFO != if [ -f /usr/share/info/readargs.info.gz ] ;  \
 	fi;
 
 
-all: ${TARGET_SHARED} ${TARGET_STATIC}
+all: ${OBJ_DIR} ${TARGET_SHARED} ${TARGET_STATIC}
 
 ${TARGET_SHARED}: $(LIB_MODULES)
 	@echo Building the shared library ${TARGET_SHARED}
@@ -55,8 +57,11 @@ ${TARGET_STATIC}: ${LIB_MODULES}
 	@echo Building the static library ${TARGET_STATIC}
 	${CC} ${CFLAGS} ${DLFLAGS} -o $@ ${LIB_MODULES}
 
-%.o: src/%.c src/readargs.h src/invisible.h
+${OBJ_DIR}/%.o: src/%.c src/readargs.h src/invisible.h
 	${CC} ${CFLAGS} ${LIBFLAGS} -c -o $@ $<
+
+${OBJ_DIR}:
+	mkdir ${OBJ_DIR}
 
 .PHONY: install
 install:
@@ -99,7 +104,7 @@ uninstall-docs:
 
 .PHONY: clean
 clean:
-	rm -rf *.o
+	rm -rf ${OBJ_DIR}
 	rm -rf *.a
 	rm -fr *.so
 	rm -rf readargs.info*
