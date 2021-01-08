@@ -10,6 +10,7 @@ void print_action_names(FILE *f, const raAction *act, int max_label, ActFilter s
 {
    int len_label = get_label_length(act, set);
    char str[len_label+1];
+   memset(str, 0, len_label+1);
    set_label_value(act, set, str, len_label+1);
 
    if (act->letter > 0)
