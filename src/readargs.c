@@ -44,17 +44,20 @@ int action_labeler(const raAction *ptr, ActFilter set, char *buffer, int len_buf
    const char *str = NULL;
    len_label = len_value = 0;
 
-   if (set & ROF_TYPES)
+   if (ptr->label != NULL)
    {
-      if (!(str = ptr->type))
+      if (set & ROF_TYPES)
+      {
+         if (!(str = ptr->type))
+            str = ptr->label;
+      }
+      else if (set & ROF_ACTIONS)
          str = ptr->label;
-   }
-   else if (set & ROF_ACTIONS)
-      str = ptr->label;
-   else if (set & ROF_ARGS)
-   {
-      if (!(str = ptr->type))
-         str = ptr->label;
+      else if (set & ROF_ARGS)
+      {
+         if (!(str = ptr->type))
+            str = ptr->label;
+      }
    }
 
    if (str)
@@ -72,7 +75,8 @@ int action_labeler(const raAction *ptr, ActFilter set, char *buffer, int len_buf
       }
    }
 
-   if (set & ROF_VALUES && ra_is_value_action(ptr))
+   // Don't add the label type if there is no label name
+   if (str && set & ROF_VALUES && ra_is_value_action(ptr))
    {
       if (!(str = ptr->type))
          str = "VALUE";
