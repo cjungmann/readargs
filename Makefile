@@ -4,7 +4,9 @@
 
 DESTDIR = /usr
 
-CFLAGS = -Wall -Werror -std=c99 -pedantic -m64 -fvisibility=hidden
+DEBUG_FLAGS != if [ "${debug}" ] && [ "${debug}" -eq 1 ]; then echo "-ggdb"; fi
+
+CFLAGS = -Wall -Werror -std=c99 -pedantic -m64 -fvisibility=hidden ${DEBUG_FLAGS}
 
 DLFLAGS = -fPIC
 
@@ -32,7 +34,6 @@ INSTALL_INFO_RECIPE = mv readargs.info.gz ${INFO_DIR}; \
 
 REMOVE_INFO_RECIPE = install-info --delete ${INFO_READARGS} ${INFO_DIR}/dir; \
 	rm -f ${INFO_READARGS}
-
 
 # Macro variables set according to environment (if certain progams are available)
 BUILD_INFO != which makeinfo > /dev/null 2>/dev/null; \
