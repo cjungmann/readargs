@@ -1,8 +1,4 @@
-.SHELL: ${/usr/bin/env bash}
-# .SUFFIXES:
-# .SUFFIXES: .c .o
-
-DESTDIR = /usr
+PREFIX ?= /usr/local
 
 DEBUG_FLAGS != if [ "${debug}" ] && [ "${debug}" -eq 1 ]; then echo "-ggdb"; fi
 
@@ -23,8 +19,9 @@ TEST_SOURCE != ls -1 src/*.c | grep 'src/test_'
 TEST_MODULES != ls -1 src/*.c | grep 'src/test_' | sed -e 's/\.c/\.o/g'
 
 # Anticipate 
-INFO_DIR != ID=$$( info -w info ); echo $${ID%/*}
-INFO_READARGS != info -w readargs
+INFO_AVAIL != if which info >/dev/null; then echo 1; else echo 0; fi
+INFO_DIR != a=${INFO_AVAIL}; if [ "$$a" -ne 0 ]; then ID=$$( info -w info ); echo $${ID%/*}; fi
+INFO_READARGS != a=${INFO_AVAIL}; if [ "$$a" -ne 0 ]; then info -w readargs; fi
 
 # Recipe variables defining how to do things
 BUILD_INFO_RECIPE = makeinfo docs/readargs.txi; gzip readargs.info
@@ -66,16 +63,16 @@ ${TARGET_STATIC}: ${LIB_MODULES}
 
 .PHONY: install
 install:
-	install -D --mode=755 libreadargs.so ${DESTDIR}/lib
-	install -D --mode=755 libreadargs.a  ${DESTDIR}/lib
-	install -D --mode=755 src/readargs.h ${DESTDIR}/include
+	install -D --mode=755 libreadargs.so ${PREFIX}/lib
+	install -D --mode=755 libreadargs.a  ${PREFIX}/lib
+	install -D --mode=755 src/readargs.h ${PREFIX}/include
 	${INSTALL_INFO}
 
 .PHONY: uninstall
 uninstall:
-	rm -f ${DESTDIR}/lib/libreadargs.so
-	rm -f ${DESTDIR}/lib/libreadargs.a
-	rm -f ${DESTDIR}/lib/readargs.h
+	rm -f ${PREFIX}/lib/libreadargs.so
+	rm -f ${PREFIX}/lib/libreadargs.a
+	rm -f ${PREFIX}/lib/readargs.h
 	${REMOVE_INFO}
 
 .PHONY: test_re
