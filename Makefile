@@ -63,16 +63,18 @@ ${TARGET_STATIC}: ${LIB_MODULES}
 
 .PHONY: install
 install:
+	install -D --mode=755 src/readargs.h ${PREFIX}/include
 	install -D --mode=755 libreadargs.so ${PREFIX}/lib
 	install -D --mode=755 libreadargs.a  ${PREFIX}/lib
-	install -D --mode=755 src/readargs.h ${PREFIX}/include
+	ldconfig ${PREFIX}/lib
 	${INSTALL_INFO}
 
 .PHONY: uninstall
 uninstall:
+	rm -f ${PREFIX}/lib/readargs.h
 	rm -f ${PREFIX}/lib/libreadargs.so
 	rm -f ${PREFIX}/lib/libreadargs.a
-	rm -f ${PREFIX}/lib/readargs.h
+	ldconfig ${PREFIX}/lib
 	${REMOVE_INFO}
 
 .PHONY: test_re
