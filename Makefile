@@ -61,12 +61,17 @@ ${TARGET_STATIC}: ${LIB_MODULES}
 %.o: %.c src/readargs.h src/invisible.h
 	${CC} ${CFLAGS} -c -o $@ $<
 
+# This include must come after the default rule or
+# its included rule will become the default rule:
+include make_need_ld_so.mk
+
 .PHONY: install
 install:
 	install -D --mode=755 src/readargs.h ${PREFIX}/include
 	install -D --mode=755 libreadargs.so ${PREFIX}/lib
 	install -D --mode=755 libreadargs.a  ${PREFIX}/lib
-	ldconfig ${PREFIX}/lib
+	${NEED_LD_SO_WARN1}
+	${NEED_LD_SO_WARN2}
 	${INSTALL_INFO}
 
 .PHONY: uninstall
