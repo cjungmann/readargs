@@ -56,7 +56,7 @@ ${TARGET_SHARED}: $(LIB_MODULES)
 
 ${TARGET_STATIC}: ${LIB_MODULES}
 	@echo Building the static library ${TARGET_STATIC}
-	${CC} ${CFLAGS} --shared -o $@ ${LIB_MODULES}
+	ar rcs $@ ${LIB_MODULES}
 
 %.o: %.c src/readargs.h src/invisible.h
 	${CC} ${CFLAGS} -c -o $@ $<
