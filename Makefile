@@ -2,7 +2,7 @@ PREFIX ?= /usr/local
 
 DEBUG_FLAGS != if [ "${debug}" ] && [ "${debug}" -eq 1 ]; then echo "-ggdb"; fi
 
-CFLAGS = -Wall -Werror -std=c99 -pedantic -m64 -fvisibility=hidden ${DEBUG_FLAGS}
+CFLAGS = -Wall -Werror -std=c99 -pedantic -fvisibility=hidden ${DEBUG_FLAGS}
 
 DLFLAGS = -fPIC
 
