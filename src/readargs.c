@@ -85,7 +85,10 @@ int action_labeler(const raAction *ptr, ActFilter set, char *buffer, int len_buf
 
       if (len_value < len_buffer)
       {
+         // decrement by one both target and bytes to copy:
          *buffer++ = '=';
+         --len_value;
+
          memcpy(buffer, str, len_value);
          buffer[len_value] = '\0';
       }
