@@ -76,7 +76,7 @@ install:
 
 .PHONY: uninstall
 uninstall:
-	rm -f ${PREFIX}/lib/readargs.h
+	rm -f ${PREFIX}/include/readargs.h
 	rm -f ${PREFIX}/lib/libreadargs.so
 	rm -f ${PREFIX}/lib/libreadargs.a
 	ldconfig ${PREFIX}/lib
